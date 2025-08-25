@@ -2,9 +2,9 @@
 
 import importlib
 import json
+import time
 import pkgutil
 import traceback
-import asyncio  # Add this import at the top
 from typing import Dict, Any, List, Optional
 
 import rclpy
@@ -189,9 +189,8 @@ class BehaviorNode(Node):
         return v
 
 
-    async def _execute_action(self, goal_handle):
+    def _execute_action(self, goal_handle):
         """Action server execute callback - runs behavior steps continuously."""
-        goal_handle.accept_goal()
         goal = goal_handle.request
         req_name = getattr(goal, 'behavior_name', None)
         params_list = list(getattr(goal, 'params', [])) if hasattr(goal, 'params') else []
@@ -203,7 +202,7 @@ class BehaviorNode(Node):
             return result
 
         # Run continuous execution loop
-        return await self._run_behavior_loop(behavior_instance, req_name, goal_handle, result)
+        return self._run_behavior_loop(behavior_instance, req_name, goal_handle, result)
 
     def _setup_behavior(self, req_name, params_list, goal_handle, result):
         """Setup and validate behavior for execution."""
@@ -219,17 +218,18 @@ class BehaviorNode(Node):
         params_dict = self._parse_params(params_list, descriptor)
         self._safe_call(inst, 'set_params', params_dict, req_name)
         self._safe_call(inst, 'reset', None, req_name)
+        self._safe_call(inst, 'setup_communication', self, req_name)
 
         return inst
 
-    async def _run_behavior_loop(self, inst, req_name, goal_handle, result):
+    def _run_behavior_loop(self, inst, req_name, goal_handle, result):
         """Run the continuous behavior execution loop."""
         step_count = 0
         execution_rate = 10.0  # Hz
         sleep_duration = 1.0 / execution_rate
 
         try:
-            while rclpy.ok() and not goal_handle.is_cancel_requested:
+            while rclpy.ok():
                 if goal_handle.is_cancel_requested:
                     return self._handle_cancellation(req_name, step_count, goal_handle, result)
 
@@ -250,7 +250,7 @@ class BehaviorNode(Node):
                 if not success:
                     return self._handle_failure(req_name, step_count, message, goal_handle, result)
 
-                await asyncio.sleep(sleep_duration)
+                time.sleep(sleep_duration)
 
         except Exception as e:
             self.get_logger().error(f'Behavior "{req_name}" execution failed:\n{traceback.format_exc()}')
@@ -286,12 +286,13 @@ class BehaviorNode(Node):
                 self.get_logger().error(f'{method_name} failed for "{behavior_name}":\n{traceback.format_exc()}')
 
     def _publish_feedback(self, step_count, message, goal_handle):
-        """Publish feedback if available."""
-        if hasattr(Behavior, 'Feedback'):
-            feedback = Behavior.Feedback()
-            feedback.current_step = step_count
-            feedback.status = message
-            goal_handle.publish_feedback(feedback)
+        # """Publish feedback if available."""
+        # if hasattr(Behavior, 'Feedback'):
+        #     feedback = Behavior.Feedback()
+        #     feedback.current_step = step_count
+        #     feedback.status = message
+        #     goal_handle.publish_feedback(feedback)
+        pass
 
     def _handle_completion(self, req_name, step_count, message, goal_handle, result):
         """Handle successful behavior completion."""

@@ -10,7 +10,7 @@ class BehaviorBase(ABC):
         """Return metadata: name, params, description"""
 
     @abstractmethod
-    def setup_listeners(self, node) -> None:
+    def setup_communication(self, node) -> None:
         """Attach pubs/subs to provided rclpy.Node"""
 
     @abstractmethod

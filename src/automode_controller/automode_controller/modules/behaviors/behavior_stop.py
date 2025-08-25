@@ -39,30 +39,30 @@ class Behavior(BehaviorBase):
             if self._node is not None:
                 self._node.get_logger().warning('behavior_stop robotState callback error')
 
-    def setup_listeners(self, node) -> None:
+    def setup_communication(self, node) -> None:
         self._node = node
         try:
             from std_msgs.msg import Float32MultiArray, String  # type: ignore
         except ImportError:
             if self._node is not None:
-                self._node.get_logger().warning('Required std_msgs not available; setup_listeners aborted')
+                self._node.get_logger().warning('Required std_msgs not available; setup_communication aborted')
             return
         self._Float32MultiArray = Float32MultiArray
         self._pub = self._node.create_publisher(Float32MultiArray, 'wheels_speed', 10)
         self._sub = self._node.create_subscription(String, 'robotState', self._robot_state_cb, 10)
 
-    def execute_step(self) -> Tuple[bool, str]:
+    def execute_step(self) -> Tuple[bool, str, bool]:
         if self._node is None or self._pub is None:
-            return False, "behavior_stop not initialised; call setup_listeners(node) first"
+            return False, "behavior_stop not initialised; call setup_communication(node) first"
         try:
             msg = self._Float32MultiArray()
             msg.data = [0.0, 0.0]
             self._pub.publish(msg)
-            return True, "published [0.0, 0.0] to wheels_speed"
+            return True, "published [0.0, 0.0] to wheels_speed", False
         except Exception as e:
             if self._node is not None:
                 self._node.get_logger().error(f'behavior_stop publish failed: {e}')
-            return False, f'publish failed: {e}'
+            return False, f'publish failed: {e}', False
 
     def reset(self) -> None:
         if self._node is None:
