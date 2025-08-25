@@ -1,3 +1,0 @@
-# automodeROS
-Hello world
-

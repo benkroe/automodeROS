@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'behavior_node = automode_controller.behavior_node:main',
         ],
     },
 )

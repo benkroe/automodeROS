@@ -1,0 +1,10 @@
+# Goal
+string condition_name
+string[] params
+---
+# Result
+bool success
+string message
+---
+# Feedback
+string current_status
