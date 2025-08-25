@@ -4,6 +4,7 @@ import importlib
 import json
 import pkgutil
 import traceback
+import asyncio  # Add this import at the top
 from typing import Dict, Any, List, Optional
 
 import rclpy
@@ -57,9 +58,8 @@ class BehaviorNode(Node):
         self.get_logger().info('Discovered behaviors: %s' % (', '.join(sorted(self._behaviors.keys()))))
 
     def _discover_behaviors(self) -> None:
-
         try:
-            import automode_controller.modules.behaviors as bh_pkg  # package containing behavior modules
+            import automode_controller.modules.behaviors as bh_pkg
         except Exception:
             self.get_logger().warning('No automode_controller.modules.behaviors package found; nothing to discover')
             return
@@ -71,50 +71,32 @@ class BehaviorNode(Node):
                 self.get_logger().error(f'Failed to import behavior module "{mod_name}":\n{traceback.format_exc()}')
                 continue
 
-            behavior_instance = None
-            descriptor: Dict[str, Any] = {}
+            # Only support class-based API: a class named 'Behavior'
+            if not hasattr(mod, 'Behavior'):
+                self.get_logger().warning(f'Behavior module "{mod_name}" missing required Behavior class')
+                continue
 
-            # Prefer class-based API: a class named 'Behavior'
-            if hasattr(mod, 'Behavior'):
-                try:
-                    cls = getattr(mod, 'Behavior')
-                    behavior_instance = cls()  # instantiate
-                except Exception:
-                    self.get_logger().error(f'Failed to instantiate Behavior class in "{mod_name}":\n{traceback.format_exc()}')
-                    continue
-            else:
-                # Fallback to legacy module-level API: functions get_description/execute_step
-                if hasattr(mod, 'get_description') and hasattr(mod, 'execute_step'):
-                    # create a thin wrapper object to present a consistent interface
-                    class _Wrapper:
-                        pass
-
-                    wrapper = _Wrapper()
-                    wrapper.get_description = mod.get_description
-                    wrapper.execute_step = mod.execute_step
-                    wrapper.setup_listeners = getattr(mod, 'setup_listeners', None)
-                    wrapper.set_params = getattr(mod, 'set_params', None)
-                    behavior_instance = wrapper
-                else:
-                    self.get_logger().warning(f'Behavior module "{mod_name}" missing required API (Behavior class or get_description/execute_step)')
-                    continue
-
-            # obtain descriptor
             try:
-                # get_description may be a staticmethod on the class or a function on the module/wrapper
+                cls = getattr(mod, 'Behavior')
+                behavior_instance = cls()
+            except Exception:
+                self.get_logger().error(f'Failed to instantiate Behavior class in "{mod_name}":\n{traceback.format_exc()}')
+                continue
+
+            # Get descriptor
+            try:
                 descriptor = behavior_instance.get_description() or {}
             except Exception:
                 self.get_logger().error(f'get_description() failed for "{mod_name}":\n{traceback.format_exc()}')
                 descriptor = {}
 
-            # Determine canonical behavior name (use descriptor.name if provided)
+            # Determine canonical behavior name
             behavior_name = descriptor.get('name') if isinstance(descriptor, dict) and descriptor.get('name') else mod_name
 
-            # attempt to attach module listeners to our node (if provided)
-            setup_fn = getattr(behavior_instance, 'setup_listeners', None)
-            if callable(setup_fn):
+            # Setup listeners
+            if hasattr(behavior_instance, 'setup_listeners') and callable(behavior_instance.setup_listeners):
                 try:
-                    setup_fn(self)
+                    behavior_instance.setup_listeners(self)
                 except Exception:
                     self.get_logger().error(f'setup_listeners failed for "{behavior_name}" ({mod_name}):\n{traceback.format_exc()}')
 
@@ -122,12 +104,10 @@ class BehaviorNode(Node):
                 'instance': behavior_instance,
                 'descriptor': descriptor,
                 'module_name': mod_name,
-            }
+        }
 
     def _publish_list(self) -> None:
-        """
-        Publish available behaviors as JSON on 'behaviors/list'.
-        """
+        # Publish available behaviors as JSON on 'behaviors/list'.
         overview = {k: v.get('descriptor', {}) for k, v in self._behaviors.items()}
         msg = String()
         try:
@@ -137,9 +117,7 @@ class BehaviorNode(Node):
         self._list_pub.publish(msg)
 
     def _handle_list_srv(self, request, response):
-        """
-        Trigger service handler returning JSON overview in response.message
-        """
+        # Trigger service handler returning JSON overview in response.message
         overview = {k: v.get('descriptor', {}) for k, v in self._behaviors.items()}
         try:
             response.success = True
@@ -210,81 +188,142 @@ class BehaviorNode(Node):
             pass
         return v
 
-    async def _execute_action(self, goal_handle):
-        """
-        Action server execute callback.
 
-        Expects Behavior action:
-          goal.behavior_name : string
-          goal.params : string[]
-        """
-        # accept goal
+    async def _execute_action(self, goal_handle):
+        """Action server execute callback - runs behavior steps continuously."""
         goal_handle.accept_goal()
         goal = goal_handle.request
         req_name = getattr(goal, 'behavior_name', None)
         params_list = list(getattr(goal, 'params', [])) if hasattr(goal, 'params') else []
-
         result = Behavior.Result() if Behavior is not None else None
 
-        # lookup behavior by name
+        # Validate and setup behavior
+        behavior_instance = self._setup_behavior(req_name, params_list, goal_handle, result)
+        if behavior_instance is None:
+            return result
+
+        # Run continuous execution loop
+        return await self._run_behavior_loop(behavior_instance, req_name, goal_handle, result)
+
+    def _setup_behavior(self, req_name, params_list, goal_handle, result):
+        """Setup and validate behavior for execution."""
+        # Lookup behavior
         if not req_name or req_name not in self._behaviors:
-            msg = f'Unknown behavior: {req_name}'
-            self.get_logger().warning(msg)
-            if result is not None:
-                goal_handle.abort()
-                result.success = False
-                result.message = msg
-                return result
-            return None
+            return self._abort_with_message(f'Unknown behavior: {req_name}', goal_handle, result)
 
         entry = self._behaviors[req_name]
         inst = entry['instance']
         descriptor = entry.get('descriptor', {})
 
-        # parse params into dict and call set_params if provided
+        # Parse params and setup
         params_dict = self._parse_params(params_list, descriptor)
-        if hasattr(inst, 'set_params') and callable(getattr(inst, 'set_params')):
-            try:
-                inst.set_params(params_dict)
-            except Exception:
-                self.get_logger().error(f'set_params failed for "{req_name}":\n{traceback.format_exc()}')
+        self._safe_call(inst, 'set_params', params_dict, req_name)
+        self._safe_call(inst, 'reset', None, req_name)
 
-        # execute: if instance has execute_step(), call it and return its tuple
+        return inst
+
+    async def _run_behavior_loop(self, inst, req_name, goal_handle, result):
+        """Run the continuous behavior execution loop."""
+        step_count = 0
+        execution_rate = 10.0  # Hz
+        sleep_duration = 1.0 / execution_rate
+
         try:
-            if hasattr(inst, 'execute_step') and callable(getattr(inst, 'execute_step')):
-                ret = inst.execute_step()
-                if isinstance(ret, tuple) and len(ret) == 2:
-                    success, message = ret
-                else:
-                    success, message = bool(ret), str(ret)
-            # fallback to run(params) style if provided
-            elif hasattr(inst, 'run') and callable(getattr(inst, 'run')):
-                try:
-                    ret = inst.run(params_list)
-                except TypeError:
-                    ret = inst.run(params_dict)
-                if isinstance(ret, tuple) and len(ret) == 2:
-                    success, message = ret
-                else:
-                    success, message = bool(ret), str(ret)
-            else:
-                success, message = False, 'module has no execute_step/run method'
-        except Exception:
-            self.get_logger().error(f'Behavior "{req_name}" execution failed:\n{traceback.format_exc()}')
-            success, message = False, f'exception during execution: {traceback.format_exc()}'
+            while rclpy.ok() and not goal_handle.is_cancel_requested:
+                if goal_handle.is_cancel_requested:
+                    return self._handle_cancellation(req_name, step_count, goal_handle, result)
 
-        # finalize action result
-        if result is not None:
-            if success:
-                goal_handle.succeed()
-                result.success = True
-                result.message = str(message)
+                # Execute one step
+                step_result = self._execute_behavior_step(inst, req_name, step_count)
+                if step_result is None:
+                    return self._abort_with_message('module has no execute_step method', goal_handle, result)
+
+                success, message, completed = step_result
+                step_count += 1
+
+                # Publish feedback
+                self._publish_feedback(step_count, message, goal_handle)
+
+                # Check completion or failure
+                if completed:
+                    return self._handle_completion(req_name, step_count, message, goal_handle, result)
+                if not success:
+                    return self._handle_failure(req_name, step_count, message, goal_handle, result)
+
+                await asyncio.sleep(sleep_duration)
+
+        except Exception as e:
+            self.get_logger().error(f'Behavior "{req_name}" execution failed:\n{traceback.format_exc()}')
+            return self._abort_with_message(f'Exception at step {step_count}: {str(e)}', goal_handle, result)
+
+        return self._abort_with_message('Behavior execution loop ended unexpectedly', goal_handle, result)
+
+    def _execute_behavior_step(self, inst, req_name, step_count):
+        """Execute a single behavior step and return (success, message, completed)."""
+        if not (hasattr(inst, 'execute_step') and callable(getattr(inst, 'execute_step'))):
+            return None
+
+        try:
+            ret = inst.execute_step()
+            if isinstance(ret, tuple) and len(ret) >= 2:
+                success, message = ret[0], ret[1]
+                completed = ret[2] if len(ret) > 2 else success  # Default: complete if successful
             else:
-                goal_handle.abort()
-                result.success = False
-                result.message = str(message)
-            return result
-        return None
+                success, message = bool(ret), str(ret)
+                completed = success
+            return success, message, completed
+        except Exception as e:
+            self.get_logger().error(f'Behavior "{req_name}" step {step_count} failed:\n{traceback.format_exc()}')
+            return False, f'Exception: {str(e)}', True  # Complete on error
+
+    def _safe_call(self, inst, method_name, arg, behavior_name):
+        """Safely call a method on behavior instance."""
+        if hasattr(inst, method_name) and callable(getattr(inst, method_name)):
+            try:
+                method = getattr(inst, method_name)
+                method(arg) if arg is not None else method()
+            except Exception:
+                self.get_logger().error(f'{method_name} failed for "{behavior_name}":\n{traceback.format_exc()}')
+
+    def _publish_feedback(self, step_count, message, goal_handle):
+        """Publish feedback if available."""
+        if hasattr(Behavior, 'Feedback'):
+            feedback = Behavior.Feedback()
+            feedback.current_step = step_count
+            feedback.status = message
+            goal_handle.publish_feedback(feedback)
+
+    def _handle_completion(self, req_name, step_count, message, goal_handle, result):
+        """Handle successful behavior completion."""
+        self.get_logger().info(f'Behavior "{req_name}" completed after {step_count} steps')
+        if result is not None:
+            goal_handle.succeed()
+            result.success = True
+            result.message = f'Completed: {message}'
+        return result
+
+    def _handle_failure(self, req_name, step_count, message, goal_handle, result):
+        """Handle behavior failure."""
+        self.get_logger().warning(f'Behavior "{req_name}" failed at step {step_count}: {message}')
+        return self._abort_with_message(f'Failed at step {step_count}: {message}', goal_handle, result)
+
+    def _handle_cancellation(self, req_name, step_count, goal_handle, result):
+        """Handle behavior cancellation."""
+        self.get_logger().info(f'Behavior "{req_name}" cancelled after {step_count} steps')
+        goal_handle.canceled()
+        if result is not None:
+            result.success = False
+            result.message = f'Cancelled after {step_count} steps'
+        return result
+
+    def _abort_with_message(self, message, goal_handle, result):
+        """Helper to abort action with message."""
+        self.get_logger().warning(message)
+        if result is not None:
+            goal_handle.abort()
+            result.success = False
+            result.message = message
+        return result
 
 
 def main(args=None):
