@@ -7,9 +7,12 @@ import pkgutil
 import traceback
 from typing import Dict, Any, List, Optional
 
+
 import rclpy
 from rclpy.node import Node
-from rclpy.action import ActionServer
+from rclpy.executors import MultiThreadedExecutor
+from rclpy.action import ActionServer, GoalResponse, CancelResponse
+from rclpy.executors import ExternalShutdownException
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 
@@ -47,8 +50,23 @@ class BehaviorNode(Node):
 
         # create action server if generated action exists
         if Behavior is not None:
-            self._action_server = ActionServer(self, Behavior, 'behavior_action', self._execute_action)
+            self._action_server = ActionServer(
+                node=self, 
+                action_type=Behavior, 
+                action_name='behavior_action', 
+                execute_callback=self._execute_action, 
+                cancel_callback=self.cancel_callback)
+
+            # Debug: Check if cancel callback is registered
             self.get_logger().info('Behavior action server created at "behavior_action"')
+            self.get_logger().info(f'Cancel callback registered: {hasattr(self._action_server, "_cancel_callback")}')
+            # Test the cancel callback method exists
+            if hasattr(self, 'cancel_callback'):
+                self.get_logger().info('cancel_callback method exists on node')
+            else:
+                self.get_logger().error('cancel_callback method does NOT exist on node')
+
+
         else:
             self._action_server = None
             self.get_logger().warning(
@@ -56,6 +74,13 @@ class BehaviorNode(Node):
             )
 
         self.get_logger().info('Discovered behaviors: %s' % (', '.join(sorted(self._behaviors.keys()))))
+
+
+    # cancel calback example i thought i woudl not need that but lets see
+    def cancel_callback(self, goal_handle):
+        self.get_logger().info('Cancel request received')
+        return CancelResponse.ACCEPT
+
 
     def _discover_behaviors(self) -> None:
         try:
@@ -189,17 +214,18 @@ class BehaviorNode(Node):
         return v
 
 
-    def _execute_action(self, goal_handle):
+    async def _execute_action(self, goal_handle):
         """Action server execute callback - runs behavior steps continuously."""
         goal = goal_handle.request
         req_name = getattr(goal, 'behavior_name', None)
         params_list = list(getattr(goal, 'params', [])) if hasattr(goal, 'params') else []
         result = Behavior.Result() if Behavior is not None else None
 
+        self.get_logger().info(f'Received goal for behavior "{req_name}" with params: {params_list}')
         # Validate and setup behavior
         behavior_instance = self._setup_behavior(req_name, params_list, goal_handle, result)
         if behavior_instance is None:
-            return result
+            return result 
 
         # Run continuous execution loop
         return self._run_behavior_loop(behavior_instance, req_name, goal_handle, result)
@@ -230,6 +256,10 @@ class BehaviorNode(Node):
 
         try:
             while rclpy.ok():
+                # Add debug output
+                if step_count % 10 == 0:  # Every 1 second
+                    self.get_logger().info(f'Behavior "{req_name}" step {step_count}, cancel_requested: {goal_handle.is_cancel_requested}')
+                
                 if goal_handle.is_cancel_requested:
                     return self._handle_cancellation(req_name, step_count, goal_handle, result)
 
@@ -330,8 +360,9 @@ class BehaviorNode(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = BehaviorNode()
+    executor = MultiThreadedExecutor()
     try:
-        rclpy.spin(node)
+        rclpy.spin(node, executor=executor)
     finally:
         # clean up action server if created
         if getattr(node, '_action_server', None) is not None:

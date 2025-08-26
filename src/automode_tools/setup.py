@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'automode_controller'
+package_name = 'automode_tools'
 
 setup(
     name=package_name,
@@ -14,13 +14,13 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='ben',
-    maintainer_email='ben@todo.todo',
+    maintainer_email='ben.kroener@uni-kn.de',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'behavior_node = automode_controller.behavior_node:main',
+            'action_test_node = automode_tools.action_test_node:main',
         ],
     },
 )
