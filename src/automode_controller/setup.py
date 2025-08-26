@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'behavior_node = automode_controller.behavior_node:main',
+            'action_test_node = automode_controller.tools.action_test_node:main',
         ],
     },
 )
