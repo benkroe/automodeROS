@@ -11,8 +11,7 @@ from typing import Dict, Any, List, Optional
 import rclpy
 from rclpy.node import Node
 from rclpy.executors import MultiThreadedExecutor
-from rclpy.action import ActionServer, GoalResponse, CancelResponse
-from rclpy.executors import ExternalShutdownException
+from rclpy.action import ActionServer, CancelResponse
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 
@@ -56,22 +55,6 @@ class BehaviorNode(Node):
                 action_name='behavior_action', 
                 execute_callback=self._execute_action, 
                 cancel_callback=self.cancel_callback)
-
-            # Debug: Check if cancel callback is registered
-            self.get_logger().info('Behavior action server created at "behavior_action"')
-            self.get_logger().info(f'Cancel callback registered: {hasattr(self._action_server, "_cancel_callback")}')
-            # Test the cancel callback method exists
-            if hasattr(self, 'cancel_callback'):
-                self.get_logger().info('cancel_callback method exists on node')
-            else:
-                self.get_logger().error('cancel_callback method does NOT exist on node')
-
-
-        else:
-            self._action_server = None
-            self.get_logger().warning(
-                'Behavior action definition not available (automode_controller.action.Behavior). Action server not created.'
-            )
 
         self.get_logger().info('Discovered behaviors: %s' % (', '.join(sorted(self._behaviors.keys()))))
 
@@ -297,14 +280,14 @@ class BehaviorNode(Node):
             ret = inst.execute_step()
             if isinstance(ret, tuple) and len(ret) >= 2:
                 success, message = ret[0], ret[1]
-                completed = ret[2] if len(ret) > 2 else success  # Default: complete if successful
+                completed = ret[2] if len(ret) > 2 else success  
             else:
                 success, message = bool(ret), str(ret)
                 completed = success
             return success, message, completed
         except Exception as e:
             self.get_logger().error(f'Behavior "{req_name}" step {step_count} failed:\n{traceback.format_exc()}')
-            return False, f'Exception: {str(e)}', True  # Complete on error
+            return False, f'Exception: {str(e)}', True  
 
     def _safe_call(self, inst, method_name, arg, behavior_name):
         """Safely call a method on behavior instance."""
