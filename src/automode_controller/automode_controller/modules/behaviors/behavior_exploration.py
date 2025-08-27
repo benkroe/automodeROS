@@ -28,7 +28,7 @@ class Behavior(BehaviorBase):
             "type": 0,
             "description": "Walks around random. Goes in one direction until obtacle is seen turns around a random angle and goes forward again.",
             "params": [
-                {"name": "Max angle", "type": "int", "required": False, "default": 100}
+                {"name": "rwm", "type": "int", "required": False, "default": 100}
                  ]
         }
 
