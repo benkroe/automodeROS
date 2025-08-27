@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'action_test_node = automode_tools.action_test_node:main',
+            'robotState_test_pub = automode_tools.robotState_test_pub:main'
         ],
     },
 )
