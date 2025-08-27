@@ -76,13 +76,12 @@ class Behavior(BehaviorBase):
 
             rwm = int(self._params.get("rwm", 100))
             self._turning_time = time.time() + (random.uniform(0, rwm))/10
-                
+
 
             # Debug log
             if self._node is not None:
                 self._node.get_logger(
-                    f"Turning: angle={proximity_angle}, magnitude={proximity_magnitude}, "
-                    f"turning_time={self._turning_time}"
+                    'Turning because of Obstacle'
                 )
 
 
