@@ -13,7 +13,7 @@ class Behavior(BehaviorBase):
         self._pub = None
         self._sub = None
         self._params: Dict[str, Any] = {}
-        self._last_robot_state: Optional[str] = None
+        self._last_robot_state: Optional[RobotState] = None
         self._Float32MultiArray = None
         self._turning_time = time.time()
 
@@ -38,16 +38,7 @@ class Behavior(BehaviorBase):
         self._params.update(params)
 
     def _robot_state_cb(self, msg) -> None:
-        try:
-            if hasattr(msg, "data"):
-                self._last_robot_state = str(msg.data)
-            else:
-                self._last_robot_state = repr(msg)
-            if self._node is not None:
-                self._node.get_logger().debug(f'behavior_stop robotState: {self._last_robot_state}')
-        except Exception:
-            if self._node is not None:
-                self._node.get_logger().warning('behavior_stop robotState callback error')
+        self._last_robot_state = msg
 
     def setup_communication(self, node) -> None:
         self._node = node
@@ -66,10 +57,13 @@ class Behavior(BehaviorBase):
         if self._turning_time > time.time():
             return True, "turning", False
 
-        if hasattr(self, '_last_robot_state_parsed') and self._last_robot_state_parsed:
-            proximity_magnitude = getattr(self._last_robot_state_parsed, 'proximity_magnitude', 0.0)
-            proximity_angle = getattr(self._last_robot_state_parsed, 'proximity_angle', 0.0)
-        
+        proximity_magnitude = 0.0
+        proximity_angle = 0.0
+
+        if self._last_robot_state:
+            proximity_magnitude = self._last_robot_state.proximity_magnitude
+            proximity_angle = self._last_robot_state.proximity_angle
+
         msg = self._Float32MultiArray()
 
         # Check if obstacle ahead and we need to turn
@@ -79,14 +73,15 @@ class Behavior(BehaviorBase):
                 msg.data = [-self._turn_speed, self._turn_speed]  # Turn left
             else:
                 msg.data = [self._turn_speed, -self._turn_speed]  # Turn right
-            self._turning_time = time.time() + random.uniform(0, getattr(self._last_robot_state_parsed, 'turn_duration')*5)  
+
+            rwm = int(self._params.get("rwm", 100))
+            self._turning_time = time.time() + random.uniform(0, rwm)
             
 
             # Debug log
             if self._node is not None:
                 self._node.get_logger().debug(
                     f"Turning: angle={proximity_angle}, magnitude={proximity_magnitude}, "
-                    f"turn_duration={getattr(self._last_robot_state_parsed, 'turn_duration', 'N/A')}, "
                     f"turning_time={self._turning_time}"
                 )
 
@@ -106,8 +101,7 @@ class Behavior(BehaviorBase):
         self._params = {}
         
         # Reset parsed robot state if it exists
-        if hasattr(self, '_last_robot_state_parsed'):
-            self._last_robot_state_parsed = None
+        self._last_robot_state = None
         
         # Clean up ROS2 resources if node exists
         if self._node is not None:
