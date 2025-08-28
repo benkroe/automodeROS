@@ -10,16 +10,16 @@ import threading
 import time
 import os
 
-class ActionTestNode(Node):
+class BehaviorTestNode(Node):
     def __init__(self):
-        super().__init__('action_test_node')
+        super().__init__('behavior_test_node')
         self._action_client = ActionClient(self, Behavior, 'behavior_action')
         self._current_goal_handle = None
         self._goal_lock = threading.Lock()
         self._running = True
         self._executor = None
         
-        self.get_logger().info('Action Test Node started')
+        self.get_logger().info('Behavior Test Node started')
         self.get_logger().info('Available commands:')
         self.get_logger().info('  start <behavior_name> [param1] [param2] ... - Start a behavior')
         self.get_logger().info('  stop - Cancel current behavior')

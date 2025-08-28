@@ -7,4 +7,5 @@ bool success
 string message
 ---
 # Feedback
+bool condition_met
 string current_status

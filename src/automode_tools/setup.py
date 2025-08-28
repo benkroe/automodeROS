@@ -20,8 +20,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'action_test_node = automode_tools.action_test_node:main',
-            'robotState_test_pub = automode_tools.robotState_test_pub:main'
+            'behavior_test_node = automode_tools.behavior_test_node:main',
+            'condition_test_node = automode_tools.condition_test_node:main',
+            'robotState_test_pub = automode_tools.robotState_test_pub:main',
         ],
     },
 )

@@ -274,15 +274,10 @@ class ConditionNode(Node):
                 if step_result is None:
                     return self._abort_with_message(f'Condition "{req_name}" step execution failed', goal_handle, result)
                 
-                success, message, completed = step_result
+                condition_met, message = step_result
                 step_count += 1
 
-                self._publish_feedback(step_count, message, goal_handle)
-
-                if completed:
-                    return self._handle_completion(req_name, step_count, message, goal_handle, result)
-                if not success:
-                    return self._handle_failure(req_name, step_count, message, goal_handle, result)
+                self._publish_feedback(step_count, message, goal_handle, condition_met)
 
                 time.sleep(sleep_duration)
             
@@ -295,20 +290,41 @@ class ConditionNode(Node):
         try: 
             ret = inst.execute_step()
             if isinstance(ret, tuple) and len(ret) >= 2:
-                success, message = ret[0], ret[1]
-                completed = ret[2] if len(ret) > 2 else False
+                condition_met, message = ret[0], ret[1]
             else:
-                success, message = bool(ret), str(ret)
-                completed = success
-            return success, message, completed
+                condition_met, message = bool(ret), str(ret)
+            return condition_met, message
         except Exception as e:
             self.get_logger().error(f'Condition "{req_name}" step execution error:\n{traceback.format_exc()}')
             return False, f'Exception: {str(e)}', True
 
 
-    def _publish_feedback(self, step_count, message, goal_handle):
-        # need to implement her
-        pass
+    def _publish_feedback(self, step_count, message, goal_handle, condition_met):
+        # feedback important here
+        try:
+            feedback_msg = Condition.Feedback()
+            
+            # Get condition info for better feedback
+            goal_id = str(goal_handle.goal_id)
+            condition_name = "unknown"
+            
+            with self._condition_lock:
+                if goal_id in self._active_conditions:
+                    condition_name = self._active_conditions[goal_id].get('name', 'unknown')
+            
+            # Format status message with condition name and step info
+            feedback_msg.condition_met = condition_met
+            feedback_msg.current_status = f"[{condition_name}] Step {step_count}: {message}"
+            
+            # Publish the feedback
+            goal_handle.publish_feedback(feedback_msg)
+            
+            # Log feedback periodically to avoid spam (every 20 steps)
+            if step_count % 20 == 0:
+                self.get_logger().debug(f'Condition "{condition_name}" step {step_count}: {message}')
+                
+        except Exception as e:
+            self.get_logger().warning(f'Failed to publish feedback for step {step_count}: {e}')
 
     def _abort_with_message(self, message, goal_handle, result):
         # used above to abort in exeptions. Makes the abortion above shorter (oneline)
@@ -319,21 +335,6 @@ class ConditionNode(Node):
             result.message = message
         return result
 
-    def _handle_completion(self, req_name, step_count, message, goal_handle, result):
-        """Handle successful condition completion (condition met)."""
-        self.get_logger().info(f'Condition "{req_name}" met after {step_count} steps')
-        goal_handle.succeed()
-        result.success = True
-        result.message = f'Condition met: {message}'
-        return result
-
-    def _handle_cancellation(self, req_name, step_count, message, goal_handle, result):
-        """Handle condition cancellation."""
-        self.get_logger().info(f'Condition "{req_name}" cancelled after {step_count} steps')
-        goal_handle.canceled()
-        result.success = False
-        result.message = f'Cancelled after {step_count} steps'
-        return result
 
     def _handle_failure(self, req_name, step_count, message, goal_handle, result):
         """Handle condition failure."""
