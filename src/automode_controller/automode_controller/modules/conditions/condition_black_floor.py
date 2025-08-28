@@ -36,7 +36,7 @@ class Condition(ConditionBase):
     def _robot_state_cb(self, msg) -> None:
         self._last_robot_state = msg
 
-    def execute_step(self) -> Tuple[bool, str]:
+    def execute_reading(self) -> Tuple[bool, str]:
         if self._last_robot_state is None:
             return False, "Waiting for robot state..."
         

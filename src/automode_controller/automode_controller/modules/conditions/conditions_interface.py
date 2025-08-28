@@ -18,7 +18,7 @@ class ConditionBase(ABC):
         """Configure behavior instance"""
 
     @abstractmethod
-    def execute_step(self) -> Tuple[bool, str, bool]:
+    def execute_reading(self) -> Tuple[bool, str, bool]:
         """Publish/act for one controller tick; return (success, message)"""
 
     def reset(self) -> None:

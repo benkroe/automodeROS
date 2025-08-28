@@ -288,7 +288,7 @@ class ConditionNode(Node):
     def _execute_condition_step(self, inst, req_name, step_count):
         # exec one evaluation step
         try: 
-            ret = inst.execute_step()
+            ret = inst.execute_reading()
             if isinstance(ret, tuple) and len(ret) >= 2:
                 condition_met, message = ret[0], ret[1]
             else:
