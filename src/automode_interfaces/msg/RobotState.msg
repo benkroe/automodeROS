@@ -6,5 +6,5 @@ float64 proximity_magnitude        # Strength of the detected obstacle vector
 float64 proximity_angle           # Direction of the strongest proximity signal
 float64 light_magnitude           # Magnitude of detected ambient light
 float64 light_angle              # Direction of the light source
-float64 attraction_angle         # Direction toward neighboring robots
-uint32 neighbor_count            # Number of neighboring robots detected
+float64 attraction_angle         # Direction toward neighbouring robots
+uint32 neighbour_count            # Number of neighbouring robots detected

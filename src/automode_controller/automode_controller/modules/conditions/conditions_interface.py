@@ -18,8 +18,8 @@ class ConditionClass(ABC):
         """Configure behavior instance"""
 
     @abstractmethod
-    def execute_reading(self) -> Tuple[bool, str, bool]:
-        """Publish/act for one controller tick; return (success, message)"""
+    def execute_reading(self) -> Tuple[bool, str]:
+        """Publish/act for one controller tick; return (condition_met, message)"""
 
     def reset(self) -> None:
         """Optional: tear down publishers/subscriptions"""
