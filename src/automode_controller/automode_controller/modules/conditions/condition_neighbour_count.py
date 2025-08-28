@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 from typing import Dict, Any, Tuple
-from .conditions_interface import BehaviorBase  # Following black_floor pattern
+from .conditions_interface import ConditionBase  # Following black_floor pattern
 from automode_interfaces.msg import RobotState
 
-class Condition(BehaviorBase):
+class Condition(ConditionBase):
     def __init__(self) -> None:
         self._node = None
         self._sub = None

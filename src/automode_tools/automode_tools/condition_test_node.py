@@ -20,7 +20,9 @@ class ConditionTestNode(Node):
         self._running = True
         self._executor = None
         self._next_goal_id = 1
-        
+        self._feedback_counters = {}
+        self._show_feedback = True
+
         self.get_logger().info('Condition Test Node started')
         self.get_logger().info('Available commands:')
         self.get_logger().info('  start <condition_name> [param1] [param2] ... - Start a condition')
@@ -28,6 +30,7 @@ class ConditionTestNode(Node):
         self.get_logger().info('  stop all - Cancel all conditions')
         self.get_logger().info('  list - Show all running conditions')
         self.get_logger().info('  status - Show current status')
+        self.get_logger().info('  quiet - Disables or enables the feedback output')
         self.get_logger().info('  quit - Exit the test node')
 
     def start_interactive_mode(self, executor):
@@ -83,6 +86,12 @@ class ConditionTestNode(Node):
                     if self._executor:
                         self._executor.shutdown()
                     os._exit(0)
+
+                elif cmd == 'quiet':
+                    self._show_feedback = not self._show_feedback
+                    state = "disabled" if not self._show_feedback else "enabled"
+                    print(f"Feedback display {state}")
+                    
                     
                 else:
                     print(f"Unknown command: {cmd}")
@@ -199,10 +208,21 @@ class ConditionTestNode(Node):
 
     def _feedback_callback(self, feedback_msg, local_goal_id):
         """Handle feedback from a specific condition."""
+        if not self._show_feedback:
+            return
+
         with self._goal_lock:
             if local_goal_id in self._active_goals:
                 condition_name = self._active_goals[local_goal_id]['condition_name']
-                print(f"📡 [{local_goal_id}] {condition_name}: {getattr(feedback_msg.feedback, 'current_status', 'No status')}")
+
+                if local_goal_id not in self._feedback_counters:
+                    self._feedback_counters[local_goal_id] = 0
+                
+                self._feedback_counters[local_goal_id] += 1
+
+                if self._feedback_counters[local_goal_id] % 10 == 0:
+                    count = self._feedback_counters[local_goal_id]
+                    print(f"[{local_goal_id}] {condition_name}: {getattr(feedback_msg.feedback, 'current_status', 'No status')}")
 
     def _result_callback(self, future, local_goal_id):
         """Handle the final result from a specific condition."""
@@ -241,12 +261,16 @@ class ConditionTestNode(Node):
                 # Remove from active goals
                 if local_goal_id in self._active_goals:
                     del self._active_goals[local_goal_id]
+                if local_goal_id in self._feedback_counters:
+                    del self._feedback_counters[local_goal_id]
                 
         except Exception as e:
             print(f"Error processing result for goal {local_goal_id}: {e}")
             with self._goal_lock:
                 if local_goal_id in self._active_goals:
                     del self._active_goals[local_goal_id]
+                if local_goal_id in self._feedback_counters:
+                    del self._feedback_counters[local_goal_id]
 
     def _list_conditions(self):
         """List all currently running conditions."""

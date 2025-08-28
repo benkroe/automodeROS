@@ -25,7 +25,7 @@ class RobotStateTestPublisher(Node):
         self.light_magnitude = 0.0
         self.light_angle = 0.0
         self.attraction_angle = 0.0
-        self.neighbor_count = 0
+        self.neighbour_count = 0
         
         self.get_logger().info("RobotState Test Publisher started")
         self.get_logger().info("Publishing to /robotState every 1 second")
@@ -52,13 +52,13 @@ class RobotStateTestPublisher(Node):
         msg.light_magnitude = self.light_magnitude
         msg.light_angle = self.light_angle
         msg.attraction_angle = self.attraction_angle
-        msg.neighbor_count = self.neighbor_count
+        msg.neighbour_count = self.neighbour_count
         
         self._pub.publish(msg)
         
         # Log current values (every 5 seconds to avoid spam)
         if int(time.time()) % 5 == 0:
-            self.get_logger().info(f'Publishing: proximity={self.proximity_magnitude:.1f}@{self.proximity_angle:.0f}°, neighbors={self.neighbor_count}')
+            self.get_logger().info(f'Publishing: proximity={self.proximity_magnitude:.1f}@{self.proximity_angle:.0f}°, neighbors={self.neighbour_count}')
     
     def print_help(self):
         """Print available commands."""
@@ -66,7 +66,7 @@ class RobotStateTestPublisher(Node):
         print("Commands:")
         print("  pm <value>  - Set proximity_magnitude (e.g., 'pm 0.8')")
         print("  pa <value>  - Set proximity_angle in degrees (e.g., 'pa -45')")
-        print("  nc <value>  - Set neighbor_count (e.g., 'nc 3')")
+        print("  nc <value>  - Set neighbour_count (e.g., 'nc 3')")
         print("  bf <0|1>    - Set ground_black_floor (e.g., 'bf 1')")
         print("  lm <value>  - Set light_magnitude (e.g., 'lm 0.9')")
         print("  la <value>  - Set light_angle in degrees (e.g., 'la 90')")
@@ -109,7 +109,7 @@ class RobotStateTestPublisher(Node):
         print(f"light_magnitude: {self.light_magnitude}")
         print(f"light_angle: {self.light_angle}°")
         print(f"attraction_angle: {self.attraction_angle}°")
-        print(f"neighbor_count: {self.neighbor_count}")
+        print(f"neighbour_count: {self.neighbour_count}")
         print()
     
     def process_command(self, cmd):
@@ -129,8 +129,8 @@ class RobotStateTestPublisher(Node):
                 self.proximity_angle = float(value_str)
                 print(f"Set proximity_angle = {self.proximity_angle}°")
             elif command == 'nc':
-                self.neighbor_count = int(value_str)
-                print(f"Set neighbor_count = {self.neighbor_count}")
+                self.neighbour_count = int(value_str)
+                print(f"Set neighbour_count = {self.neighbour_count}")
             elif command == 'bf':
                 self.ground_black_floor = bool(int(value_str))
                 print(f"Set ground_black_floor = {self.ground_black_floor}")
