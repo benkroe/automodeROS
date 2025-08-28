@@ -158,7 +158,7 @@ class BehaviorTestNode(Node):
 
     def cancel_done(self, future):
         """Handle cancellation response - this is a class method like in ROS 2 examples."""
-        print("🚨 CANCEL CALLBACK EXECUTED! 🚨")
+        print("CANCEL CALLBACK EXECUTED!")
         try:
             cancel_response = future.result()
             print(f"Cancel response received")
@@ -223,20 +223,20 @@ class BehaviorTestNode(Node):
         """Show the current status of the action client."""
         with self._goal_lock:
             if self._current_goal_handle:
-                print("📊 Status: Behavior is currently running")
+                print("Status: Behavior is currently running")
                 try:
                     goal_id = self._current_goal_handle.goal_id
                     print(f"   Goal ID: {goal_id}")
                 except:
                     pass
             else:
-                print("📊 Status: No behavior currently running")
+                print("Status: No behavior currently running")
 
 def main(args=None):
     rclpy.init(args=args)
     
     try:
-        node = ActionTestNode()
+        node = BehaviorTestNode()
         
         # Use MultiThreadedExecutor to handle callbacks properly
         from rclpy.executors import MultiThreadedExecutor
