@@ -26,9 +26,6 @@ class BehaviorNode(Node):
     Behavior action server + discovery node.
 
     - discovers modules under automode_controller.modules.behaviors
-      supports modules that expose:
-        * class-based API: class Behavior(...) with methods get_description, setup_listeners, set_params, execute_step
-        * legacy module-level API: functions get_description(), execute_step(), optional setup_listeners()/set_params()
     - publishes discovery on 'behaviors/list' (std_msgs/String) as JSON
     - provides a Trigger service 'behaviors/list_srv' returning the same JSON in message
     - provides an action server 'behavior_action' if automode action is available
@@ -118,21 +115,14 @@ class BehaviorNode(Node):
         # Publish available behaviors as JSON on 'behaviors/list'.
         overview = {k: v.get('descriptor', {}) for k, v in self._behaviors.items()}
         msg = String()
-        try:
-            msg.data = json.dumps(overview)
-        except Exception:
-            msg.data = '{}'
+        msg.data = json.dumps(overview)
         self._list_pub.publish(msg)
 
     def _handle_list_srv(self, request, response):
         # Trigger service handler returning JSON overview in response.message
         overview = {k: v.get('descriptor', {}) for k, v in self._behaviors.items()}
-        try:
-            response.success = True
-            response.message = json.dumps(overview)
-        except Exception:
-            response.success = False
-            response.message = 'failed to serialize behavior overview'
+        response.success = True
+        response.message = json.dumps(overview)
         return response
 
     def _parse_params(self, params: List[str], descriptor: Optional[Dict[str, Any]]) -> Dict[str, Any]:
@@ -198,7 +188,6 @@ class BehaviorNode(Node):
 
 
     async def _execute_action(self, goal_handle):
-        """Action server execute callback - runs behavior steps continuously."""
         goal = goal_handle.request
         req_name = getattr(goal, 'behavior_name', None)
         params_list = list(getattr(goal, 'params', [])) if hasattr(goal, 'params') else []
@@ -225,14 +214,17 @@ class BehaviorNode(Node):
 
         # Parse params and setup
         params_dict = self._parse_params(params_list, descriptor)
-        self._safe_call(inst, 'set_params', params_dict, req_name)
-        self._safe_call(inst, 'reset', None, req_name)
-        self._safe_call(inst, 'setup_communication', self, req_name)
-
+        try:
+            inst.set_params(params_dict)
+            inst.reset()
+            inst.setup_communication(self)
+        except Exception as e:
+            self.get_logger().error(f'Failed to setup behavior "{req_name}": {e}')
+            return self._abort_with_message(f'Setup failed: {str(e)}', goal_handle, result)
         return inst
 
     def _run_behavior_loop(self, inst, req_name, goal_handle, result):
-        """Run the continuous behavior execution loop."""
+        # Run the continuous behavior loop
         step_count = 0
         execution_rate = 10.0  # Hz
         sleep_duration = 1.0 / execution_rate
@@ -244,7 +236,7 @@ class BehaviorNode(Node):
                     self.get_logger().info(f'Behavior "{req_name}" step {step_count}, cancel_requested: {goal_handle.is_cancel_requested}')
                 
                 if goal_handle.is_cancel_requested:
-                    return self._handle_cancellation(req_name, step_count, goal_handle, result)
+                    return self._handle_cancellation(req_name, step_count, "User requested cancellation", goal_handle, result)
 
                 # Execute one step
                 step_result = self._execute_behavior_step(inst, req_name, step_count)
@@ -272,9 +264,7 @@ class BehaviorNode(Node):
         return self._abort_with_message('Behavior execution loop ended unexpectedly', goal_handle, result)
 
     def _execute_behavior_step(self, inst, req_name, step_count):
-        """Execute a single behavior step and return (success, message, completed)."""
-        if not (hasattr(inst, 'execute_step') and callable(getattr(inst, 'execute_step'))):
-            return None
+        #exec one behavior step
 
         try:
             ret = inst.execute_step()
@@ -289,54 +279,42 @@ class BehaviorNode(Node):
             self.get_logger().error(f'Behavior "{req_name}" step {step_count} failed:\n{traceback.format_exc()}')
             return False, f'Exception: {str(e)}', True  
 
-    def _safe_call(self, inst, method_name, arg, behavior_name):
-        """Safely call a method on behavior instance."""
-        if hasattr(inst, method_name) and callable(getattr(inst, method_name)):
-            try:
-                method = getattr(inst, method_name)
-                method(arg) if arg is not None else method()
-            except Exception:
-                self.get_logger().error(f'{method_name} failed for "{behavior_name}":\n{traceback.format_exc()}')
 
     def _publish_feedback(self, step_count, message, goal_handle):
-        # """Publish feedback if available."""
-        # if hasattr(Behavior, 'Feedback'):
-        #     feedback = Behavior.Feedback()
-        #     feedback.current_step = step_count
-        #     feedback.status = message
-        #     goal_handle.publish_feedback(feedback)
+        # In this actions feedback is not realy needed
         pass
 
-    def _handle_completion(self, req_name, step_count, message, goal_handle, result):
-        """Handle successful behavior completion."""
-        self.get_logger().info(f'Behavior "{req_name}" completed after {step_count} steps')
-        if result is not None:
-            goal_handle.succeed()
-            result.success = True
-            result.message = f'Completed: {message}'
-        return result
-
-    def _handle_failure(self, req_name, step_count, message, goal_handle, result):
-        """Handle behavior failure."""
-        self.get_logger().warning(f'Behavior "{req_name}" failed at step {step_count}: {message}')
-        return self._abort_with_message(f'Failed at step {step_count}: {message}', goal_handle, result)
-
-    def _handle_cancellation(self, req_name, step_count, goal_handle, result):
-        """Handle behavior cancellation."""
-        self.get_logger().info(f'Behavior "{req_name}" cancelled after {step_count} steps')
-        goal_handle.canceled()
-        if result is not None:
-            result.success = False
-            result.message = f'Cancelled after {step_count} steps'
-        return result
-
     def _abort_with_message(self, message, goal_handle, result):
-        """Helper to abort action with message."""
+        # used above to abort in exeptions. Makes the abortion above shorter (oneline)
         self.get_logger().warning(message)
         if result is not None:
             goal_handle.abort()
             result.success = False
             result.message = message
+        return result
+    
+    def _handle_completion(self, req_name, step_count, message, goal_handle, result):
+        """Handle successful behavior completion."""
+        self.get_logger().info(f'Behavior "{req_name}" completed after {step_count} steps')
+        goal_handle.succeed()
+        result.success = True
+        result.message = f'Completed: {message}'
+        return result
+
+    def _handle_cancellation(self, req_name, step_count, message, goal_handle, result):
+        """Handle behavior cancellation."""
+        self.get_logger().info(f'Behavior "{req_name}" cancelled after {step_count} steps')
+        goal_handle.canceled()
+        result.success = False
+        result.message = f'Cancelled after {step_count} steps'
+        return result
+
+    def _handle_failure(self, req_name, step_count, message, goal_handle, result):
+        """Handle behavior failure."""
+        self.get_logger().warning(f'Behavior "{req_name}" failed at step {step_count}: {message}')
+        goal_handle.abort()
+        result.success = False
+        result.message = f'Failed at step {step_count}: {message}'
         return result
 
 
