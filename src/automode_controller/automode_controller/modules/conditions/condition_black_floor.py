@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 from typing import Dict, Any, Tuple
-from .conditions_interface import BehaviorBase  # Note: should be ConditionBase
+from .conditions_interface import ConditionBase
 from automode_interfaces.msg import RobotState
 
-class Condition(BehaviorBase):
+class Condition(ConditionBase):
     def __init__(self) -> None:
         self._node = None
         self._sub = None
@@ -36,8 +36,7 @@ class Condition(BehaviorBase):
     def _robot_state_cb(self, msg) -> None:
         self._last_robot_state = msg
 
-    def execute_reading(self) -> Tuple[bool, str]:
-        """Check if black floor condition is met."""
+    def execute_step(self) -> Tuple[bool, str]:
         if self._last_robot_state is None:
             return False, "Waiting for robot state..."
         

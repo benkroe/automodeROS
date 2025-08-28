@@ -252,10 +252,10 @@ class ConditionTestNode(Node):
         """List all currently running conditions."""
         with self._goal_lock:
             if not self._active_goals:
-                print("📊 No conditions currently running")
+                print("No conditions currently running")
                 return
             
-            print(f"📊 Running conditions ({len(self._active_goals)}):")
+            print(f"Running conditions ({len(self._active_goals)}):")
             current_time = time.time()
             for goal_id, info in self._active_goals.items():
                 condition_name = info['condition_name']
@@ -272,9 +272,9 @@ class ConditionTestNode(Node):
         with self._goal_lock:
             count = len(self._active_goals)
             if count == 0:
-                print("📊 Status: No conditions currently running")
+                print("Status: No conditions currently running")
             else:
-                print(f"📊 Status: {count} condition(s) currently running")
+                print(f"Status: {count} condition(s) currently running")
                 for goal_id, info in self._active_goals.items():
                     condition_name = info['condition_name']
                     duration = time.time() - info['start_time']

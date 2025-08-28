@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Tuple
 
-class ConditionClass(ABC):
+class ConditionBase(ABC):
     @staticmethod
     @abstractmethod
     def get_description() -> Dict[str, Any]:
@@ -18,8 +18,8 @@ class ConditionClass(ABC):
         """Configure behavior instance"""
 
     @abstractmethod
-    def execute_reading(self) -> Tuple[bool, str]:
-        """Publish/act for one controller tick; return (condition_met, message)"""
+    def execute_step(self) -> Tuple[bool, str, bool]:
+        """Publish/act for one controller tick; return (success, message)"""
 
     def reset(self) -> None:
         """Optional: tear down publishers/subscriptions"""
