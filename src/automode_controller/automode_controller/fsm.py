@@ -84,10 +84,10 @@ def create_simple_fsm() -> FSM:
         target_state="stop",
     ))
 
-    fsm.add_edge("exploration", FSMEdge(
+    fsm.add_edge("stop", FSMEdge(
         condition_name="neighbour_count",
         condition_params=["1"],  
-        target_state="exploraition",
+        target_state="exploration",
     ))
     
     return fsm
