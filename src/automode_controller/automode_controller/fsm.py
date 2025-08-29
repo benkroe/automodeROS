@@ -34,8 +34,8 @@ class FSM:
         self.initial_state: str = initial_state
     
     def add_state(self, state: FSMState):
-        self.states[state.name] = state
-    
+        self.states[state.behavior_name] = state
+
     def add_edge(self, from_state: str, edge: FSMEdge):
         if from_state in self.states:
             self.states[from_state].outgoing_edges.append(edge)
@@ -63,11 +63,11 @@ class FSM:
 def create_simple_fsm() -> FSM:
     # Simple example FSM for debugging and coding
     # -> wants to stop on black floor but more beeing alone
-    fsm = FSM("EXPLORATION")
+    fsm = FSM("exploration")
     
     
     exploration_state = FSMState(
-        behavior_name="explore",
+        behavior_name="exploration",
         behavior_params=["30"]  
     )
     
@@ -78,16 +78,16 @@ def create_simple_fsm() -> FSM:
     fsm.add_state(exploration_state)
     fsm.add_state(stop_state)
     
-    fsm.add_edge("EXPLORATION", FSMEdge(
+    fsm.add_edge("exploration", FSMEdge(
         condition_name="black_floor",
         condition_params=[],
-        target_state="STOP",
+        target_state="stop",
     ))
-    
-    fsm.add_edge("EXPLORATION", FSMEdge(
+
+    fsm.add_edge("exploration", FSMEdge(
         condition_name="neighbour_count",
         condition_params=["1"],  
-        target_state="EXPLORATION",
+        target_state="exploraition",
     ))
     
     return fsm
