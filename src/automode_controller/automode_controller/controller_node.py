@@ -103,7 +103,12 @@ class ControllerNode(Node):
         goal_msg.condition_name = edge.condition_name
         goal_msg.params = edge.condition_params
 
-        send_goal_future = self._action_client_condition.send_goal_async(goal_msg, feedback_callback=self.feedback_callback_condition)
+        send_goal_future = self._action_client_condition.send_goal_async(
+            goal_msg, 
+            feedback_callback=lambda feedback, edge_ref=edge: 
+                self.feedback_callback_condition(feedback, edge_ref)
+        )
+
         send_goal_future.add_done_callback(lambda future, edge_ref=edge: self.goal_response_condition(future, edge_ref))
         self.get_logger().info(f"Started condition: {edge.condition_name} with params: {edge.condition_params}")
 
@@ -144,9 +149,33 @@ class ControllerNode(Node):
         # Actually we don't need to do anything with the feedback maybe error handling
         pass
     
-    def feedback_callback_condition(self, feedback):
-        # TODO: implement logic. If for one of the conditions is true we need to change state
-        pass
+    def feedback_callback_condition(self, feedback, edge):
+        try:
+            condition_result = feedback.feedback
+            if condition_result.condition_met:
+                self.get_logger().info(f"Condition {condition_result.condition_name} met: {condition_result.message}")
+
+            self._transition_to_state(edge.target_state)
+        except Exception as e:
+            self.get_logger().error(f"Error occurred during condition feedback processing: {e}")
+
+    def _transition_to_state(self, new_state: str):
+        # switch to the new state
+        try:
+            old_state = self._fsm.get_current_state()
+
+            if self._fsm.transition_to(new_state):
+                self.get_logger().info(f"Transitioning from {old_state.behavior_name} to {new_state}")
+                
+                # Stop old state
+                self.stop_state()
+                
+                # Start new state
+                self.start_state()
+            else:
+                self.get_logger().error(f"Failed to transition to state: {new_state}")
+        except Exception as e:
+            self.get_logger().error(f"Error occurred during state transition: {e}")
 
 
 def main(args=None):
