@@ -382,11 +382,10 @@ def _create_fsm_from_cleaned_states(cleaned_states: List[Dict[str, Any]],
             condition_type = condition['condition_type']
             target_offset = condition['target_state_offset']
             
-            # CHANGE: Use type mapping instead of array index
             condition_name = condition_type_map[condition_type]
             
-            # Calculate target state (handle offset logic)
-            target_state_num = state_num + target_offset + 1 if state_num < target_offset else target_offset
+            # FIX: Use target_offset directly as target state number
+            target_state_num = target_offset
             
             edge = FSMEdge(
                 condition_name=condition_name,
