@@ -94,130 +94,302 @@ def create_simple_fsm() -> FSM:
     return fsm
 
 
-
-
 def create_fsm_from_config(fsm_config: str, behavior_descriptions: Any, condition_descriptions: Any) -> FSM:
-    fsm = FSM("INITIAL")
-    # Get n states
-    _tokens = fsm_config.strip().split()
-    if _tokens[0] != "--fsm-config":
-        raise ValueError("FSM config must start with '--fsm-config'")
-    if _tokens[1] != "--nstates":
-        raise ValueError("FSM config must contain '--nstates'")
-    _states_count = int(_tokens[2])
-    logging.info(f"Parsing FSM config with {_states_count} states")
-
-    _remaining_tokens = _tokens[3:]
-
-    ########################
-    # Split tokens by states
-    state_configs = _split_config_into_config_states(_remaining_tokens, _states_count)
-
-    #######################
-    # Split state_configs in state and conditions
-    for state_config in state_configs:
-        _state, condition_tokens = _split_into_state_and_conditions(state_config)
-        conditions = _split_condition_tokens(condition_tokens)
+    try:
+        logging.info(f"Received behavior descriptions: {list(behavior_descriptions.keys())}")
+        logging.info(f"Received condition descriptions: {list(condition_descriptions.keys())}")
         
-def _split_config_into_config_states(_remaining_tokens, _states_count):
-    _state_configs = []
-    current_state_tokens = []
-    expected_state_number = 0
 
-    for token in _remaining_tokens:
-        # start of new state?
-        if token.startswith("--s") and len(token) > 3:
-            if token[3:].isdigit():
-                state_number = int(token[3:])
+        # Step 1: Check how many states we have
+        tokens = fsm_config.strip().split()
+        nstates = _extract_nstates(tokens)
+        logging.info(f"Creating FSM with {nstates} states")
+        
+        # Step 2: Separate the states
+        state_configs = _separate_states(tokens, nstates)
+        logging.info(f"Separated {len(state_configs)} state configurations")
+        
+        # Step 3: Clean parameter names
+        cleaned_states = _clean_parameter_names(state_configs)
+        logging.info("Cleaned parameter names")
+        
+        # Step 4: Validate against descriptions
+        _validate_against_descriptions(cleaned_states, behavior_descriptions, condition_descriptions)
+        logging.info("Validation passed")
+        
+        # Step 5: Create FSM with states and edges
+        fsm = _create_fsm_from_cleaned_states(cleaned_states, behavior_descriptions, condition_descriptions)
+        logging.info("FSM created successfully")
+        
+        return fsm
+        
+    except Exception as e:
+        logging.error(f"Failed to create FSM from config: {e}")
+        logging.info("Falling back to simple FSM")
+        return create_simple_fsm()
 
-                # check if state number is correct
-                if state_number == expected_state_number:
-                    _state_configs.append(current_state_tokens)
-                    current_state_tokens = [token]
-                    expected_state_number += 1
-                else:
-                    raise ValueError(f"Expected state number {expected_state_number}, got {state_number}")
-            # if we have new valid state append old tokens to states (only if state_number is not 0)
-                if current_state_tokens:
-                    _state_configs.append(current_state_tokens)
-                
-                # start new state
-                current_state_tokens = [token]
-                expected_state_number += 1
-
-        # add token to current state if no new state
+def _extract_nstates(tokens: List[str]) -> int:
+    """Step 1: Extract number of states from --nstates parameter."""
+    try:
+        nstates_index = tokens.index("--nstates")
+        if nstates_index + 1 >= len(tokens):
+            raise ValueError("--nstates parameter missing value")
+        return int(tokens[nstates_index + 1])
+    except ValueError as e:
+        if "--nstates" in str(e):
+            raise ValueError("--nstates parameter not found in config")
         else:
-            current_state_tokens.append(token)
+            raise ValueError("--nstates value must be a number")
 
-    # Add the last state
-    if current_state_tokens:
-        _state_configs.append(current_state_tokens)
+def _separate_states(tokens: List[str], nstates: int) -> List[Dict[str, Any]]:
+    """Step 2: Separate states and their conditions."""
+    state_configs = []
     
-    # Validate if --nstates fits to state count
-    if len(_state_configs) != _states_count:
-        raise ValueError(f"Expected {_states_count} states, got {len(_state_configs)}")
+    # Find state start positions
+    state_positions = []
+    for i, token in enumerate(tokens):
+        if token.startswith("--s") and len(token) > 3 and token[3:].isdigit():
+            state_num = int(token[3:])
+            state_positions.append((state_num, i))
+    
+    # Sort by state number and validate sequence
+    state_positions.sort()
+    for i, (state_num, pos) in enumerate(state_positions):
+        if state_num != i:
+            raise ValueError(f"States must be sequential starting from 0. Missing state {i}")
+    
+    if len(state_positions) != nstates:
+        raise ValueError(f"Expected {nstates} states, found {len(state_positions)}")
+    
+    # Extract each state's tokens
+    for i, (state_num, start_pos) in enumerate(state_positions):
+        end_pos = state_positions[i + 1][1] if i + 1 < len(state_positions) else len(tokens)
+        state_tokens = tokens[start_pos:end_pos]
         
-    return _state_configs
+        # Parse state configuration
+        state_config = _parse_state_tokens(state_tokens, state_num)
+        state_configs.append(state_config)
+    
+    return state_configs
 
-def _split_into_state_and_conditions(state_config):
-    state_params = []
+def _parse_state_tokens(tokens: List[str], state_num: int) -> Dict[str, Any]:
+    """Parse tokens for a single state into structured data."""
+    if len(tokens) < 2:
+        raise ValueError(f"State {state_num} missing type")
     
-    #### Split int state and conditons(one string)
-    # Find where conditions start (--n{number})
-    condition_start_index = None
-    for i, token in enumerate(state_config):
-        if token.startswith("--n") and len(token) > 3 and token[3:].isdigit():
-            condition_start_index = i
-            break
-    
-    if condition_start_index is None:
-        # No conditions found, everything is state parameters
-        state_params = state_config
-        conditions = []
-    else:
-        # Split at the condition start
-        state_params = state_config[:condition_start_index]
-        condition_tokens = state_config[condition_start_index:]
-    
-    #### Split the conditions into seperated conditions
-    conditions = _split_condition_tokens(condition_tokens)
-    
-    return state_params, conditions
-
-def _split_condition_tokens(condition_tokens):
-    # Split the condition tokens into individual conditions.
+    state_type = int(tokens[1])
+    state_params = {}
     conditions = []
-    current_condition = []
     
-    for token in condition_tokens:
-        # Check if this is a new condition marker (--n{number}x{number})
-        if token.startswith("--n") and "x" in token:
-            # Save previous condition if exists
-            if current_condition:
-                conditions.append(current_condition)
-            
-            # Start new condition
-            current_condition = [token]
+    i = 2
+    # Parse state parameters (until we hit --n{state_num})
+    while i < len(tokens) and not (tokens[i].startswith(f"--n{state_num}") and "x" not in tokens[i]):
+        if i + 1 >= len(tokens):
+            raise ValueError(f"State {state_num}: Parameter {tokens[i]} missing value")
+        
+        param_name = tokens[i]
+        param_value = tokens[i + 1]
+        state_params[param_name] = param_value
+        i += 2
+    
+    # Parse conditions
+    if i < len(tokens) and tokens[i] == f"--n{state_num}":
+        if i + 1 >= len(tokens):
+            raise ValueError(f"State {state_num}: --n{state_num} missing value")
+        
+        num_conditions = int(tokens[i + 1])
+        i += 2
+        
+        # Parse each condition
+        for cond_idx in range(num_conditions):
+            condition = _parse_condition_tokens(tokens, i, state_num, cond_idx)
+            conditions.append(condition)
+            # Skip to next condition (each condition has 6 tokens: --n{s}x{c} val --c{s}x{c} val --p{s}x{c} val)
+            i += 6
+    
+    return {
+        'state_num': state_num,
+        'state_type': state_type,
+        'params': state_params,
+        'conditions': conditions
+    }
+
+def _parse_condition_tokens(tokens: List[str], start_idx: int, state_num: int, cond_idx: int) -> Dict[str, Any]:
+    """Parse tokens for a single condition."""
+    expected_tokens = [
+        f"--n{state_num}x{cond_idx}",
+        f"--c{state_num}x{cond_idx}",
+        f"--p{state_num}x{cond_idx}"
+    ]
+    
+    condition = {}
+    
+    for i, expected_prefix in enumerate(expected_tokens):
+        token_idx = start_idx + i * 2
+        if token_idx >= len(tokens):
+            raise ValueError(f"Condition {state_num}x{cond_idx}: Missing token {expected_prefix}")
+        
+        if not tokens[token_idx].startswith(expected_prefix[:4]):  # Check --n, --c, --p prefix
+            raise ValueError(f"Condition {state_num}x{cond_idx}: Expected {expected_prefix}, got {tokens[token_idx]}")
+        
+        if token_idx + 1 >= len(tokens):
+            raise ValueError(f"Condition {state_num}x{cond_idx}: {tokens[token_idx]} missing value")
+        
+        value = tokens[token_idx + 1]
+        
+        if i == 0:  # --n token (transition type - ignore)
+            condition['transition_type'] = int(value)
+        elif i == 1:  # --c token (condition type)
+            condition['condition_type'] = int(value)
+        elif i == 2:  # --p token (target state with offset)
+            condition['target_state_offset'] = int(value)
+    
+    return condition
+
+def _clean_parameter_names(state_configs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Step 3: Clean parameter names by removing trailing digits."""
+    def clean_param_name(param_token: str) -> str:
+        if param_token.startswith("--"):
+            # Remove leading -- and trailing digits
+            clean_name = param_token[2:]
+            while clean_name and clean_name[-1].isdigit():
+                clean_name = clean_name[:-1]
+            return clean_name
         else:
-            # Add token to current condition
-            current_condition.append(token)
+            raise ValueError(f"Parameter token '{param_token}' does not start with '--'")
     
-    # Add the last condition
-    if current_condition:
-        conditions.append(current_condition)
+    cleaned_states = []
+    for state_config in state_configs:
+        cleaned_params = {}
+        for param_token, value in state_config['params'].items():
+            clean_name = clean_param_name(param_token)
+            cleaned_params[clean_name] = value
+        
+        cleaned_config = state_config.copy()
+        cleaned_config['params'] = cleaned_params
+        cleaned_states.append(cleaned_config)
     
-    return conditions
+    return cleaned_states
 
-def _get_clean_para_name(_param_token: str) -> str:
-    if _param_token.startswith("--"):
-        # remove leading -- and trailing digits
-        clean_name = _param_token[2:]
-        while clean_name and clean_name[-1].isdigit():
-            clean_name = clean_name[:-1]
-        return clean_name
-    else:
-        raise ValueError(f"Parameter token '{_param_token}' does not start with '--'")
+def _validate_against_descriptions(cleaned_states: List[Dict[str, Any]], 
+                                 behavior_descriptions: Dict[str, Any], 
+                                 condition_descriptions: Dict[str, Any]) -> None:
+    """Step 4: Validate states and conditions against available descriptions."""
+    available_behaviors = list(behavior_descriptions.keys())
+    available_conditions = list(condition_descriptions.keys())
+    
+    errors = []
+    
+    for state in cleaned_states:
+        state_num = state['state_num']
+        state_type = state['state_type']
+        
+        # Validate behavior exists
+        if state_type >= len(available_behaviors):
+            errors.append(f"State {state_num}: Behavior type {state_type} not found. Available: 0-{len(available_behaviors)-1} {available_behaviors}")
+        else:
+            behavior_name = available_behaviors[state_type]
+            logging.info(f"State {state_num}: Using behavior '{behavior_name}' (type {state_type})")
+        
+        # Validate conditions
+        for cond_idx, condition in enumerate(state['conditions']):
+            condition_type = condition['condition_type']
+            
+            if condition_type >= len(available_conditions):
+                errors.append(f"State {state_num}, Condition {cond_idx}: Condition type {condition_type} not found. Available: 0-{len(available_conditions)-1} {available_conditions}")
+            else:
+                condition_name = available_conditions[condition_type]
+                logging.info(f"State {state_num}, Condition {cond_idx}: Using condition '{condition_name}' (type {condition_type})")
+    
+    if errors:
+        error_msg = "FSM Configuration Validation Errors:\n" + "\n".join(f"  ERROR: {error}" for error in errors)
+        raise ValueError(error_msg)
 
-
-
+def _create_fsm_from_cleaned_states(cleaned_states: List[Dict[str, Any]], 
+                                   behavior_descriptions: Dict[str, Any], 
+                                   condition_descriptions: Dict[str, Any]) -> FSM:
+    """Step 5: Create FSM with states and edges."""
+    available_behaviors = list(behavior_descriptions.keys())
+    available_conditions = list(condition_descriptions.keys())
+    
+    # Create FSM with first state as initial
+    fsm = FSM(f"STATE_{cleaned_states[0]['state_num']}")
+    
+    # Create all states first
+    for state_config in cleaned_states:
+        state_num = state_config['state_num']
+        state_type = state_config['state_type']
+        params = state_config['params']
+        
+        behavior_name = available_behaviors[state_type]
+        behavior_params = [params.get(key, "") for key in params.keys()]
+        
+        # Add name field to FSMState
+        state = FSMState(
+            behavior_name=behavior_name,
+            behavior_params=behavior_params
+        )
+        # Add name manually since it's missing from dataclass
+        state.name = f"STATE_{state_num}"
+        
+        fsm.add_state(state)
+        logging.info(f"Created state STATE_{state_num} with behavior '{behavior_name}', params: {behavior_params}")
+    
+    # Create edges
+    for state_config in cleaned_states:
+        state_num = state_config['state_num']
+        
+        for condition in state_config['conditions']:
+            condition_type = condition['condition_type']
+            target_offset = condition['target_state_offset']
+            
+            condition_name = available_conditions[condition_type]
+            
+            # Calculate target state (handle offset logic)
+            target_state_num = state_num + target_offset + 1 if state_num < target_offset else target_offset
+            
+            edge = FSMEdge(
+                condition_name=condition_name,
+                condition_params=[],  # Add specific params if needed
+                target_state=f"STATE_{target_state_num}"
+            )
+            
+            fsm.add_edge(f"STATE_{state_num}", edge)
+            logging.info(f"Added edge: STATE_{state_num} --[{condition_name}]--> STATE_{target_state_num}")
+    
     return fsm
+
+
+
+# let us create the create_fsm_from_config from scratch again. we need to do the following:
+# 1.Check how much states we have. thats the value after --nstates
+# 2.Seperate the states. They always start with --s{state_number} and as value the type of the state.
+# Then in each state we need to seperate the conditions. The conditions beginn with --n{state_number} and the param which gives how many conditions (edges there are) In this ever individual condition(edge) starts with --n{state_number}x{condition number} and the param is the state they are directing to but -1 if the own state is lower than the goal state
+
+# 3. If we have the individual states with their individual condition, we need to clean them. The params are then like --rwm0 but the states later can only have rwm as param thats true for the most params and also for the conditon names. 
+
+# 4. in the last step check every state and condition against the behavior_descriptions and condition_descriptions if they are vailable. There we need good error logs
+
+# 5. At last we need to create the states and edges.
+
+# This is a example fsm i will explain the individual tokens:
+
+# --fsm-config --nstates 2 --s0 0 --rwm0 50 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0 --n0x1 0 --c0x1 0 --p0x1 0 --s1 1 --n1 1 --n1x0 0 --c1x0 3 --p1x0 1 --w1x0 0 
+
+# --fsm-config -> indicates that the config starts
+# --nstates 2 -> these two tokens indicate that we have two states
+# -- s0 0 -> indicates the first state with type 0
+# --rwm0 50 -> is the first param (in this case the only one) for the first state with the value 50
+# --n0 2 -> indicates that the first state has two conditions
+# --n0x0 0 --> first sate first transition transition type 0 (the transition type doent matter)
+# --c0x0 0 --> indicates the condition from goes from first state to second state and has typ 0
+# --p0x0 0 --> param for the first condition of the first state (goes from first to second state) and has value 0
+# --n0x1 0 --> indicates the second condition for the first state also from 
+# --c0x1 0 --> indicates condition goes from first state to second state and has type 0
+# --p0x1 0 --> indicates the param for the condition p with the value 0
+# --s1 1 --> indicates now starts the second state with typ 1
+# --n1 1 --> indicates the first state has 1 condition
+# --n1x0 0 --> start of first condition for the second state with condition type 0 (type doesnt matter)
+# --c1x0 3 --> the condition for state 1  the first one has type 3
+# -- p1x0 1 --> param (p) for the first condition of the second state with value 0
+# --w1x0 0 -->param for the first conditoin of the second state (param.is w, value is 0)

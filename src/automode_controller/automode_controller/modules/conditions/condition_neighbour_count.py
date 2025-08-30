@@ -65,3 +65,4 @@ class Condition(ConditionBase):
             except Exception:
                 pass
             self._sub = None
+
