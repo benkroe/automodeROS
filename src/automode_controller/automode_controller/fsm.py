@@ -69,7 +69,7 @@ def create_simple_fsm() -> FSM:
     
     
     exploration_state = FSMState(
-        name="EXPLORATION"
+        name="EXPLORATION",
         behavior_name="explore",
         behavior_params=["30"]  
     )
