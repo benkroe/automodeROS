@@ -15,6 +15,7 @@ class FSMEdge:
 @dataclass
 class FSMState:
    # State (Behavior)
+    name: str
     behavior_name: Optional[str] = None
     behavior_params: List[str] = None
     outgoing_edges: List[FSMEdge] = None
@@ -68,11 +69,13 @@ def create_simple_fsm() -> FSM:
     
     
     exploration_state = FSMState(
+        name="EXPLORATION"
         behavior_name="explore",
         behavior_params=["30"]  
     )
     
     stop_state = FSMState(
+        name="STOP",
         behavior_name="stop",  
     )
     
