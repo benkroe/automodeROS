@@ -96,36 +96,40 @@ def create_simple_fsm() -> FSM:
 
 def create_fsm_from_config(fsm_config: str, behavior_descriptions: Any, condition_descriptions: Any) -> FSM:
     try:
-        logging.info(f"Received behavior descriptions: {list(behavior_descriptions.keys())}")
-        logging.info(f"Received condition descriptions: {list(condition_descriptions.keys())}")
-        
+        print(f"FSM DEBUG: Received behavior descriptions: {list(behavior_descriptions.keys())}")
+        print(f"FSM DEBUG: Received condition descriptions: {list(condition_descriptions.keys())}")
+        print(f"FSM DEBUG: Config string: {fsm_config}")
 
         # Step 1: Check how many states we have
         tokens = fsm_config.strip().split()
+        print(f"FSM DEBUG: Tokens: {tokens}")
+        
         nstates = _extract_nstates(tokens)
-        logging.info(f"Creating FSM with {nstates} states")
+        print(f"FSM DEBUG: Creating FSM with {nstates} states")
         
         # Step 2: Separate the states
         state_configs = _separate_states(tokens, nstates)
-        logging.info(f"Separated {len(state_configs)} state configurations")
+        print(f"FSM DEBUG: Separated {len(state_configs)} state configurations")
         
         # Step 3: Clean parameter names
         cleaned_states = _clean_parameter_names(state_configs)
-        logging.info("Cleaned parameter names")
+        print("FSM DEBUG: Cleaned parameter names")
         
         # Step 4: Validate against descriptions
         _validate_against_descriptions(cleaned_states, behavior_descriptions, condition_descriptions)
-        logging.info("Validation passed")
+        print("FSM DEBUG: Validation passed")
         
         # Step 5: Create FSM with states and edges
         fsm = _create_fsm_from_cleaned_states(cleaned_states, behavior_descriptions, condition_descriptions)
-        logging.info("FSM created successfully")
+        print("FSM DEBUG: FSM created successfully")
         
         return fsm
         
     except Exception as e:
-        logging.error(f"Failed to create FSM from config: {e}")
-        logging.info("Falling back to simple FSM")
+        print(f"FSM ERROR: Failed to create FSM from config: {e}")
+        import traceback
+        print(f"FSM ERROR: Traceback: {traceback.format_exc()}")
+        print("FSM DEBUG: Falling back to simple FSM")
         return create_simple_fsm()
 
 def _extract_nstates(tokens: List[str]) -> int:
