@@ -51,12 +51,12 @@ class ControllerNode(Node):
         except Exception as e:
             self.get_logger().error(f"Error starting state: {e}")
 
-    def stop_state(self):
+    def stop_state(self, state):
         # stops the action of the current state and all necessary conditions
         try:
-            self.stop_behavior_action(self._fsm.get_current_state())
+            self.stop_behavior_action(state)
 
-            for edge in self._fsm.get_outgoing_edges(self._fsm.get_current_state().condition_name):
+            for edge in self._fsm.get_outgoing_edges(state.behavior_name):
                 self.stop_condition_action(edge)
         except Exception as e:
             self.get_logger().error(f"Error stopping state: {e}")
@@ -142,11 +142,16 @@ class ControllerNode(Node):
     
     def feedback_callback_condition(self, feedback, edge):
         try:
+            # Ignore feedback from conditions that have been stopped
+            if edge.condition_name not in self._active_condition_goals:
+                self.get_logger().debug(f"Ignoring feedback from cancelled condition: {edge.condition_name}")
+                return
+
             condition_result = feedback.feedback
             if condition_result.condition_met:
-                self.get_logger().info(f"Condition {condition_result.condition_name} met: {condition_result.message}")
+                self.get_logger().info(f"Condition {edge.condition_name} met: {condition_result.condition_met}")
+                self._transition_to_state(edge.target_state)
 
-            self._transition_to_state(edge.target_state)
         except Exception as e:
             self.get_logger().error(f"Error occurred during condition feedback processing: {e}")
 
@@ -159,7 +164,7 @@ class ControllerNode(Node):
                 self.get_logger().info(f"Transitioning from {old_state.behavior_name} to {new_state}")
                 
                 # Stop old state
-                self.stop_state()
+                self.stop_state(old_state)
                 
                 # Start new state
                 self.start_state()

@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'behavior_node = automode_controller.behavior_node:main',
             'condition_node = automode_controller.condition_node:main',
+            'controller_node = automode_controller.controller_node:main',
         ],
     },
 )

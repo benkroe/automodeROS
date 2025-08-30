@@ -343,6 +343,15 @@ class ConditionNode(Node):
         result.success = False
         result.message = f'Failed at step {step_count}: {message}'
         return result
+    
+    #new handle cancellation because of error check later if that is correct like that
+    def _handle_cancellation(self, req_name, step_count, message, goal_handle, result):
+        self.get_logger().info(f'Condition "{req_name}" cancelled after {step_count} steps: {message}')
+        goal_handle.canceled()
+        result.success = False
+        result.condition_met = False
+        result.message = f'Cancelled after {step_count} steps: {message}'
+        return result
 
 def main(args=None):
     rclpy.init(args=args)
