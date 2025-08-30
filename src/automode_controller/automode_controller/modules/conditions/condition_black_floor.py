@@ -3,6 +3,7 @@
 from typing import Dict, Any, Tuple
 from .conditions_interface import ConditionBase
 from automode_interfaces.msg import RobotState
+import random
 
 class Condition(ConditionBase):
     def __init__(self) -> None:
@@ -16,10 +17,11 @@ class Condition(ConditionBase):
     def get_description() -> Dict[str, Any]:
         return {
             "name": "black_floor",
-            "description": "Triggers when black floor is detected (or not detected)",
+            "type": 0,
+            "description": "Triggers when black floor is detected (or not detected) with probability (p)",
             "params": [
-                {"name": "detect_black", "type": "bool", "required": False, "default": True, 
-                 "description": "True = trigger when black detected, False = trigger when no black"}
+                {"name": "p", "type": "float64", "required": False, "default": 1
+                }
             ]
         }
 
@@ -31,7 +33,7 @@ class Condition(ConditionBase):
 
     def set_params(self, params: Dict[str, Any]) -> None:
         self._params.update(params)
-        self._detect_black = params.get('detect_black', True)
+        self._detect_black = params.get('p', True)
 
     def _robot_state_cb(self, msg) -> None:
         self._last_robot_state = msg
@@ -40,8 +42,10 @@ class Condition(ConditionBase):
         if self._last_robot_state is None:
             return False, "Waiting for robot state..."
         
-        ground_black_floor = self._last_robot_state.ground_black_floor
-        
+        p = self._params.get('p', 1)
+        if random.random() > p: 
+            ground_black_floor = self._last_robot_state.ground_black_floor
+
         if self._detect_black:
             if ground_black_floor:
                 return True, "Black floor detected!"

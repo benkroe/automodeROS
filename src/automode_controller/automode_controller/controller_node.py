@@ -31,7 +31,7 @@ class ControllerNode(Node):
         self.declare_parameter('fsm_config', 'simple_fsm')
 
         _fsm_config = self.get_parameter('fsm_config').get_parameter_value().string_value
-        self._fsm: FSM = self.create_fsm(_fsm_config)
+        self._fsm: FSM = self._create_fsm_from_config(_fsm_config)
 
 
         self._action_client_behavior = ActionClient(self, Behavior, 'behavior_action')
@@ -111,15 +111,6 @@ class ControllerNode(Node):
 
         send_goal_future.add_done_callback(lambda future, edge_ref=edge: self.goal_response_condition(future, edge_ref))
         self.get_logger().info(f"Started condition: {edge.condition_name} with params: {edge.condition_params}")
-
-
-    def create_fsm(self, _fsm_config):
-        # TODO: create the fsm from the parameters
-        if _fsm_config == 'simple_fsm':
-            return create_simple_fsm()
-        else:
-            # TODO: create FSM from config
-            pass
     
 
     def goal_response_behavior(self, future):
@@ -176,6 +167,61 @@ class ControllerNode(Node):
                 self.get_logger().error(f"Failed to transition to state: {new_state}")
         except Exception as e:
             self.get_logger().error(f"Error occurred during state transition: {e}")
+
+    def _create_fsm_from_config(self, _fsm_config):
+        # Create FSM from configuration by getting descriptions from behavior and condition nodes
+        try:
+            # Import required services
+            from std_srvs.srv import Trigger
+            import json
+            
+            # Create service clients
+            behavior_list_client = self.create_client(Trigger, 'behaviors/list_srv')
+            condition_list_client = self.create_client(Trigger, 'conditions/list_srv')
+            
+            # Get behavior descriptions
+            behavior_descriptions = None
+            if behavior_list_client.wait_for_service(timeout_sec=5.0):
+                request = Trigger.Request()
+                future = behavior_list_client.call_async(request)
+                rclpy.spin_until_future_complete(self, future, timeout_sec=5.0)
+                
+                if future.result() and future.result().success:
+                    behavior_descriptions = json.loads(future.result().message)
+                    self.get_logger().info(f"Retrieved {len(behavior_descriptions)} behavior descriptions")
+                else:
+                    self.get_logger().error("Failed to get behavior descriptions")
+            else:
+                self.get_logger().error("Behavior list service not available!")
+            
+            # Get condition descriptions
+            condition_descriptions = None
+            if condition_list_client.wait_for_service(timeout_sec=5.0):
+                request = Trigger.Request()
+                future = condition_list_client.call_async(request)
+                rclpy.spin_until_future_complete(self, future, timeout_sec=5.0)
+                
+                if future.result() and future.result().success:
+                    condition_descriptions = json.loads(future.result().message)
+                    self.get_logger().info(f"Retrieved {len(condition_descriptions)} condition descriptions")
+                else:
+                    self.get_logger().error("Failed to get condition descriptions")
+            else:
+                self.get_logger().error("Condition list service not available!")
+            
+            # Check if we got both descriptions
+            if behavior_descriptions is None or condition_descriptions is None:
+                self.get_logger().warn("Failed to get descriptions, falling back to simple FSM")
+                return create_simple_fsm()
+            
+            # Call the FSM factory with descriptions (method from fsm file)
+            from .fsm import create_fsm_from_config
+            return create_fsm_from_config(_fsm_config, behavior_descriptions, condition_descriptions) # method from fsm file
+
+        except Exception as e:
+            self.get_logger().error(f"Error creating FSM from config: {e}")
+            return create_simple_fsm()
+            
 
 
 def main(args=None):

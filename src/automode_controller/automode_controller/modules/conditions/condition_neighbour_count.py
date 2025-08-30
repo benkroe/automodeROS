@@ -16,10 +16,11 @@ class Condition(ConditionBase):
     def get_description() -> Dict[str, Any]:
         return {
             "name": "neighbour_count",
-            "description": "Triggers when neighbour count reaches or exceeds threshold",
+            "type": 3,
+            "description": "Triggers when neighbour count reaches or exceeds threshold (p)",
             "params": [
-                {"name": "threshold", "type": "int", "required": False, "default": 1, 
-                 "description": "Minimum number of neighbours to trigger condition"}
+                {"name": "p", "type": "float64", "required": False, "default": 1, # new threshold (fload converted then to int)
+                 "name": "w", "type": "float64", "required": False, "default": 1} # don't know what that is stick only to it because of orgiginal
             ]
         }
 
@@ -32,7 +33,7 @@ class Condition(ConditionBase):
     def set_params(self, params: Dict[str, Any]) -> None:
         self._params.update(params)
         # Handle both string and int parameters from command line
-        threshold_param = params.get('threshold', 1)
+        threshold_param = params.get('p', 1)
         try:
             self._threshold = int(threshold_param)
         except (ValueError, TypeError):
