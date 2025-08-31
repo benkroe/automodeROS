@@ -70,7 +70,7 @@ def create_simple_fsm() -> FSM:
     
     exploration_state = FSMState(
         name="EXPLORATION",
-        behavior_name="explore",
+        behavior_name="exploration",
         behavior_params=["30"]  
     )
     
@@ -88,7 +88,7 @@ def create_simple_fsm() -> FSM:
         target_state="STOP",
     ))
     
-    fsm.add_edge("EXPLORATION", FSMEdge(
+    fsm.add_edge("STOP", FSMEdge(
         condition_name="neighbour_count",
         condition_params=["1"],  
         target_state="EXPLORATION",
@@ -98,6 +98,10 @@ def create_simple_fsm() -> FSM:
 
 
 def create_fsm_from_config(fsm_config: str, behavior_descriptions: Any, condition_descriptions: Any) -> FSM:
+    if not fsm_config or fsm_config.strip() == "simple_fsm" or fsm_config.strip() == "":
+        print("FSM DEBUG: No config provided or simple_fsm requested, using simple FSM")
+        return create_simple_fsm()
+
     try:
         print(f"FSM DEBUG: Received behavior descriptions: {list(behavior_descriptions.keys())}")
         print(f"FSM DEBUG: Received condition descriptions: {list(condition_descriptions.keys())}")
@@ -207,18 +211,26 @@ def _parse_state_tokens(tokens: List[str], state_num: int) -> Dict[str, Any]:
         num_conditions = int(tokens[i + 1])
         i += 2
         
-        # CHANGE: Parse each condition dynamically instead of fixed 6 tokens
+        # FIX: Parse each condition by finding its tokens explicitly
         for cond_idx in range(num_conditions):
-            condition = _parse_condition_tokens(tokens, i, state_num, cond_idx)
+            # Find the start of this condition
+            condition_start = f"--n{state_num}x{cond_idx}"
+            
+            # Find where this condition starts
+            start_pos = None
+            for j in range(i, len(tokens)):
+                if tokens[j] == condition_start:
+                    start_pos = j
+                    break
+            
+            if start_pos is None:
+                raise ValueError(f"Could not find condition {cond_idx} for state {state_num}")
+            
+            # Parse this condition and get the new position
+            condition, new_pos = _parse_condition_tokens_fixed(tokens, start_pos, state_num, cond_idx)
             conditions.append(condition)
             
-            # CHANGE: Skip to next condition by finding next --n{state}x{cond+1} or end
-            while i < len(tokens):
-                if tokens[i].startswith(f"--n{state_num}x{cond_idx + 1}") or \
-                   tokens[i].startswith("--s") or \
-                   (cond_idx == num_conditions - 1):
-                    break
-                i += 1
+            print(f"FSM DEBUG: Parsed condition {cond_idx}: {condition}")
     
     return {
         'state_num': state_num,
@@ -227,36 +239,56 @@ def _parse_state_tokens(tokens: List[str], state_num: int) -> Dict[str, Any]:
         'conditions': conditions
     }
 
-def _parse_condition_tokens(tokens: List[str], start_idx: int, state_num: int, cond_idx: int) -> Dict[str, Any]:
-    """Parse tokens for a single condition."""
+def _parse_condition_tokens_fixed(tokens: List[str], start_idx: int, state_num: int, cond_idx: int) -> tuple:
+    """Parse tokens for a single condition and return (condition, next_position)."""
     condition = {}
     i = start_idx
     
-    # CHANGE: More flexible parsing to handle variable parameters like --w1x0
+    print(f"FSM DEBUG: Parsing condition {cond_idx} starting at {start_idx}: {tokens[start_idx:start_idx+8]}")
+    
+    # Parse all tokens for this condition
     while i < len(tokens):
         token = tokens[i]
         
-        # Stop if we hit the next condition or next state
-        if (token.startswith(f"--n{state_num}x") and token != f"--n{state_num}x{cond_idx}") or \
-           token.startswith("--s") or \
-           (token.startswith("--n") and "x" not in token):
+        # Stop if we hit the next condition, next state, or end
+        if i > start_idx and (
+            (token.startswith(f"--n{state_num}x") and token != f"--n{state_num}x{cond_idx}") or
+            token.startswith("--s") or
+            (token.startswith("--n") and "x" not in token)
+        ):
             break
         
         # Parse this condition's tokens
         if token == f"--n{state_num}x{cond_idx}":
-            condition['transition_type'] = int(tokens[i + 1])
+            if i + 1 < len(tokens):
+                # FIX: This is the TARGET STATE OFFSET, not transition type!
+                condition['target_state_offset'] = int(tokens[i + 1])  # ← FIXED!
+                i += 2
+            else:
+                break
         elif token == f"--c{state_num}x{cond_idx}":
-            condition['condition_type'] = int(tokens[i + 1])
+            if i + 1 < len(tokens):
+                condition['condition_type'] = int(tokens[i + 1])
+                i += 2
+            else:
+                break
         elif token == f"--p{state_num}x{cond_idx}":
-            condition['target_state_offset'] = int(tokens[i + 1])
+            if i + 1 < len(tokens):
+                # FIX: This is probability parameter, not target state!
+                condition['probability_param'] = int(tokens[i + 1])  # ← FIXED!
+                i += 2
+            else:
+                break
         elif token == f"--w{state_num}x{cond_idx}":
-            # CHANGE: Handle additional parameters like --w
-            condition['w_param'] = int(tokens[i + 1])
-        # Add more parameter types as needed
-        
-        i += 2
+            if i + 1 < len(tokens):
+                condition['w_param'] = int(tokens[i + 1])
+                i += 2
+            else:
+                break
+        else:
+            i += 1
     
-    return condition
+    return condition, i
 
 def _clean_parameter_names(state_configs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Step 3: Clean parameter names by removing trailing digits."""
@@ -339,7 +371,7 @@ def _create_fsm_from_cleaned_states(cleaned_states: List[Dict[str, Any]],
                                    condition_descriptions: Dict[str, Any]) -> FSM:
     """Step 5: Create FSM with states and edges."""
     
-    # CHANGE: Create type-to-name mappings (same as validation)
+    # Create type-to-name mappings
     behavior_type_map = {}
     condition_type_map = {}
     
@@ -360,13 +392,11 @@ def _create_fsm_from_cleaned_states(cleaned_states: List[Dict[str, Any]],
         state_type = state_config['state_type']
         params = state_config['params']
         
-        # CHANGE: Use type mapping instead of array index
         behavior_name = behavior_type_map[state_type]
         behavior_params = [params.get(key, "") for key in params.keys()]
         
-        # CHANGE: Fix FSMState constructor to include name parameter
         state = FSMState(
-            name=f"STATE_{state_num}",  # Now part of constructor
+            name=f"STATE_{state_num}",
             behavior_name=behavior_name,
             behavior_params=behavior_params
         )
@@ -374,22 +404,30 @@ def _create_fsm_from_cleaned_states(cleaned_states: List[Dict[str, Any]],
         fsm.add_state(state)
         print(f"FSM DEBUG: Created state STATE_{state_num} with behavior '{behavior_name}', params: {behavior_params}")
     
-    # Create edges
+    # Create edges with correct target calculation
     for state_config in cleaned_states:
         state_num = state_config['state_num']
         
         for condition in state_config['conditions']:
             condition_type = condition['condition_type']
-            target_offset = condition['target_state_offset']
+            target_offset = condition['target_state_offset']  # ← From --n{state}x{condition}
             
             condition_name = condition_type_map[condition_type]
             
-            # FIX: Use target_offset directly as target state number
-            target_state_num = target_offset
+            # FIX: Calculate target state using offset from OTHER states
+            other_states = [s['state_num'] for s in cleaned_states if s['state_num'] != state_num]
+            other_states.sort()
+            
+            if target_offset >= len(other_states):
+                raise ValueError(f"State {state_num}: target_offset {target_offset} too large. Available other states: {other_states}")
+            
+            target_state_num = other_states[target_offset]
+            
+            print(f"FSM DEBUG: State {state_num} offset {target_offset}: other_states={other_states}, target=STATE_{target_state_num}")
             
             edge = FSMEdge(
                 condition_name=condition_name,
-                condition_params=[],  # Add specific params if needed
+                condition_params=[],
                 target_state=f"STATE_{target_state_num}"
             )
             

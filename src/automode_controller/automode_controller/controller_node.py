@@ -46,7 +46,7 @@ class ControllerNode(Node):
         try:   
             self.start_behavior_action(self._fsm.get_current_state())
 
-            for edge in self._fsm.get_outgoing_edges(self._fsm.get_current_state().behavior_name):
+            for edge in self._fsm.get_outgoing_edges(self._fsm.get_current_state().name):
                 self.start_condition_action(edge)
         except Exception as e:
             self.get_logger().error(f"Error starting state: {e}")
@@ -56,7 +56,7 @@ class ControllerNode(Node):
         try:
             self.stop_behavior_action(state)
 
-            for edge in self._fsm.get_outgoing_edges(state.behavior_name):
+            for edge in self._fsm.get_outgoing_edges(state.name):
                 self.stop_condition_action(edge)
         except Exception as e:
             self.get_logger().error(f"Error stopping state: {e}")

@@ -349,7 +349,6 @@ class ConditionNode(Node):
         self.get_logger().info(f'Condition "{req_name}" cancelled after {step_count} steps: {message}')
         goal_handle.canceled()
         result.success = False
-        result.condition_met = False
         result.message = f'Cancelled after {step_count} steps: {message}'
         return result
 

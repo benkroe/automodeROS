@@ -11,7 +11,6 @@ class Condition(ConditionBase):
         self._sub = None
         self._params: Dict[str, Any] = {}
         self._last_robot_state = None
-        self._detect_black = False  # True = trigger when black detected, False = trigger when no black
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
@@ -39,23 +38,18 @@ class Condition(ConditionBase):
         self._last_robot_state = msg
 
     def execute_reading(self) -> Tuple[bool, str]:
+        ground_black_floor = False
         if self._last_robot_state is None:
             return False, "Waiting for robot state..."
-        
-        p = self._params.get('p', 1)
-        if random.random() > p: 
+
+        p = self._params.get('p', 1.0)
+        if random.random() <= p:
             ground_black_floor = self._last_robot_state.ground_black_floor
 
-        if self._detect_black:
-            if ground_black_floor:
-                return True, "Black floor detected!"
-            else:
-                return False, "No black floor detected yet"
+        if ground_black_floor:
+            return True, "Black floor detected!"
         else:
-            if not ground_black_floor:
-                return True, "No black floor (condition met)"
-            else:
-                return False, "Black floor detected, waiting for no black floor"
+            return False, "No black floor detected yet"
 
     def reset(self) -> None:
         self._last_robot_state = None
