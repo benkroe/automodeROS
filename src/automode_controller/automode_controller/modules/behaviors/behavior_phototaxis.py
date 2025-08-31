@@ -57,7 +57,7 @@ class Behavior(BehaviorBase):
         """
         # Check if we have robotState
         if self._last_robot_state is None:
-                return False, "No robot state data available", False
+            return True, "No robot state data available", False
 
         # Check if publisher is ready
         if self._pub is None or self._Float32MultiArray is None:

@@ -71,7 +71,7 @@ class Behavior(BehaviorBase):
             goal_reached always False for pure repulsion
         """
         if self._last_robot_state is None:
-            return False, "No robot state data available", False
+            return True, "No robot state data available", False
 
         if self._pub is None or self._Float32MultiArray is None:
             return False, "Communication not set up", False

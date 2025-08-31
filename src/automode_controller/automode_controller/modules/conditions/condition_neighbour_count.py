@@ -58,7 +58,7 @@ class Condition(ConditionBase):
             return False, "Waiting for robot state..."
         
         # Get neighbour count from robot state (with safe fallback)
-        neighbour_count = getattr(self._last_robot_state, 'neighbour_count', 0)
+        neighbour_count = self._last_robot_state.neighbour_count
 
         # First check: do we even perform the check this time? (probability p)
         if random.random() > self._probability:

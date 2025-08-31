@@ -51,7 +51,7 @@ class Condition(ConditionBase):
     def execute_reading(self) -> Tuple[bool, str]:
         if self._last_robot_state is None:
             return False, "Waiting for robot state..."
-        neighbour_count = getattr(self._last_robot_state, 'neighbour_count', 0)
+        neighbour_count = self._last_robot_state.neighbour_count
         if random.random() > self._probability:
             return False, f"Skipped check (probability: {self._probability:.2f})"
         if neighbour_count < self._threshold:
