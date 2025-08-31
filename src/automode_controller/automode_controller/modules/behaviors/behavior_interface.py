@@ -10,7 +10,7 @@ class BehaviorBase(ABC):
         """Return metadata: name, params, description"""
         """It needs:
           name: String
-          type: String
+          type: String --> is used later in the config
           description: String
           params: [param: {name: String, type: Any, required: Boolean, default: Any}]
           """

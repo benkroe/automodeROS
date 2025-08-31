@@ -436,37 +436,3 @@ def _create_fsm_from_cleaned_states(cleaned_states: List[Dict[str, Any]],
     
     return fsm
 
-
-
-# let us create the create_fsm_from_config from scratch again. we need to do the following:
-# 1.Check how much states we have. thats the value after --nstates
-# 2.Seperate the states. They always start with --s{state_number} and as value the type of the state.
-# Then in each state we need to seperate the conditions. The conditions beginn with --n{state_number} and the param which gives how many conditions (edges there are) In this ever individual condition(edge) starts with --n{state_number}x{condition number} and the param is the state they are directing to but -1 if the own state is lower than the goal state
-
-# 3. If we have the individual states with their individual condition, we need to clean them. The params are then like --rwm0 but the states later can only have rwm as param thats true for the most params and also for the conditon names. 
-
-# 4. in the last step check every state and condition against the behavior_descriptions and condition_descriptions if they are vailable. There we need good error logs
-
-# 5. At last we need to create the states and edges.
-
-# This is a example fsm i will explain the individual tokens:
-
-# --fsm-config --nstates 2 --s0 0 --rwm0 50 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0 --n0x1 0 --c0x1 0 --p0x1 0 --s1 1 --n1 1 --n1x0 0 --c1x0 3 --p1x0 1 --w1x0 0 
-
-# --fsm-config -> indicates that the config starts
-# --nstates 2 -> these two tokens indicate that we have two states
-# -- s0 0 -> indicates the first state with type 0
-# --rwm0 50 -> is the first param (in this case the only one) for the first state with the value 50
-# --n0 2 -> indicates that the first state has two conditions
-# --n0x0 0 --> first sate first transition transition type 0 (the transition type doent matter)
-# --c0x0 0 --> indicates the condition from goes from first state to second state and has typ 0
-# --p0x0 0 --> param for the first condition of the first state (goes from first to second state) and has value 0
-# --n0x1 0 --> indicates the second condition for the first state also from 
-# --c0x1 0 --> indicates condition goes from first state to second state and has type 0
-# --p0x1 0 --> indicates the param for the condition p with the value 0
-# --s1 1 --> indicates now starts the second state with typ 1
-# --n1 1 --> indicates the first state has 1 condition
-# --n1x0 0 --> start of first condition for the second state with condition type 0 (type doesnt matter)
-# --c1x0 3 --> the condition for state 1  the first one has type 3
-# -- p1x0 1 --> param (p) for the first condition of the second state with value 0
-# --w1x0 0 -->param for the first conditoin of the second state (param.is w, value is 0)
