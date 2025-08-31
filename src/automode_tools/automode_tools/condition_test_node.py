@@ -4,6 +4,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient
 from automode_interfaces.action import Condition
+from rclpy.executors import ExternalShutdownException
 import signal
 import sys
 import threading
@@ -321,8 +322,8 @@ def main(args=None):
         # Spin in the main thread
         try:
             executor.spin()
-        except KeyboardInterrupt:
-            print("\nShutting down...")
+        except (KeyboardInterrupt, ExternalShutdownException):
+            print("\nShutting down due to external request or keyboard interrupt...")
         finally:
             executor.shutdown()
             node.destroy_node()

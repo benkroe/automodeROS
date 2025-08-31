@@ -14,6 +14,7 @@ from rclpy.executors import MultiThreadedExecutor
 from rclpy.action import ActionServer, CancelResponse
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
+from rclpy.executors import ExternalShutdownException
 
 # try to import generated action; if not available, we still allow discovery/testing
 
@@ -324,6 +325,8 @@ def main(args=None):
     executor = MultiThreadedExecutor()
     try:
         rclpy.spin(node, executor=executor)
+    except (KeyboardInterrupt, ExternalShutdownException):
+        node.get_logger().info('Shutting down due to interrupt or external shutdown')
     finally:
         # clean up action server if created
         if getattr(node, '_action_server', None) is not None:

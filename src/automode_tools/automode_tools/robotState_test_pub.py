@@ -6,6 +6,7 @@ from automode_interfaces.msg import RobotState
 from builtin_interfaces.msg import Time
 import threading
 import time
+from rclpy.executors import ExternalShutdownException
 
 class RobotStateTestPublisher(Node):
     def __init__(self):
@@ -152,8 +153,8 @@ def main(args=None):
     
     try:
         rclpy.spin(node)
-    except KeyboardInterrupt:
-        pass
+    except (KeyboardInterrupt, ExternalShutdownException):
+        print("\nShutting down due to external request or keyboard interrupt...")
     finally:
         node.destroy_node()
         rclpy.shutdown()
