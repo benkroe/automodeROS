@@ -236,10 +236,8 @@ def main(args=None):
         controller_node = ControllerNode()
         controller_node.start_state()  # Start the FSM
         rclpy.spin(controller_node)
-    except KeyboardInterrupt:
-        pass
-    except ExternalShutdownException:
-        pass
+    except (KeyboardInterrupt, ExternalShutdownException):
+        controller_node.get_logger().info('Shutting down due to interrupt or external shutdown')
     finally:
         if rclpy.ok():
             rclpy.shutdown()
