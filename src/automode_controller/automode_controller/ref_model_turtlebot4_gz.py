@@ -12,7 +12,7 @@ class TurtleBot4ReferenceNode(Node):
     def __init__(self):
         super().__init__('turtlebot4_reference_node')
         # Publisher for cmd_vel (movement)
-        self._cmd_vel_pub = self.create_publisher(Twist, '/cmd_vel', 10)
+        self._cmd_vel_pub = self.create_publisher(TwistStamped, '/cmd_vel', 10)
         # Publisher for RobotState
         self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10)
         # Subscriber for wheels_speed (from automode)
