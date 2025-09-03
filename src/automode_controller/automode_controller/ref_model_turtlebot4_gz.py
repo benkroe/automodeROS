@@ -8,7 +8,7 @@ from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
 
 # Use of lidar
-from sensor_msg.msg import LaserScan
+from sensor_msgs.msg import LaserScan
 import math
 import numpy as np  
 PROXIMITY_MAX_RANGE = 0.25 # for creating the virtual proximity sensors, max range of them
