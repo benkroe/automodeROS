@@ -2,7 +2,7 @@
 
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import TwistStamped
 from std_msgs.msg import Float32MultiArray
 from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
@@ -30,17 +30,18 @@ class TurtleBot4ReferenceNode(Node):
         self.light_angle = 0.0
 
     def _wheels_speed_cb(self, msg: Float32MultiArray):
-        # Convert wheel speeds to Twist for /cmd_vel
+        # Convert wheel speeds to TwistStamped for /cmd_vel
         # Assuming msg.data = [left_wheel, right_wheel]
         if len(msg.data) != 2:
             self.get_logger().warning("wheels_speed message must have 2 elements")
             return
         left, right = msg.data
-        twist = Twist()
-        # Simple differential drive conversion (tune these factors for your robot)
-        twist.linear.x = (left + right) / 2.0
-        twist.angular.z = (right - left) / 0.3  # 0.3 is wheel_base (meters), adjust as needed
-        self._cmd_vel_pub.publish(twist)
+        twist_stamped = TwistStamped()
+        twist_stamped.header.stamp = self.get_clock().now().to_msg()
+        twist_stamped.header.frame_id = "base_link"
+        twist_stamped.twist.linear.x = (left + right) / 2.0
+        twist_stamped.twist.angular.z = (right - left) / 0.3  # 0.3 is wheel_base (meters), adjust as needed
+        self._cmd_vel_pub.publish(twist_stamped)
 
     def _publish_robot_state(self):
         # Fill RobotState message (expand with real sensor data)
@@ -52,7 +53,7 @@ class TurtleBot4ReferenceNode(Node):
         msg.proximity_angle = self.proximity_angle
         msg.light_magnitude = self.light_magnitude
         msg.light_angle = self.light_angle
-        
+
         self._robot_state_pub.publish(msg)
 
 def main(args=None):
