@@ -52,7 +52,7 @@ class TurtleBot4ReferenceNode(Node):
         msg.proximity_angle = self.proximity_angle
         msg.light_magnitude = self.light_magnitude
         msg.light_angle = self.light_angle
-        # TODO: Fill in with real sensor data from TurtleBot4 topics
+        
         self._robot_state_pub.publish(msg)
 
 def main(args=None):
