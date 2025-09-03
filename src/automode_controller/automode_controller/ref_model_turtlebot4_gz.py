@@ -7,6 +7,12 @@ from std_msgs.msg import Float32MultiArray
 from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
 
+# Use of lidar
+from sensor_msg.msg import LaserScan
+import math
+import numpy as np  
+PROXIMITY_MAX_RANGE = 0.25 # for creating the virtual proximity sensors, max range of them
+
 
 class TurtleBot4ReferenceNode(Node):
     def __init__(self):
@@ -17,6 +23,8 @@ class TurtleBot4ReferenceNode(Node):
         self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10)
         # Subscriber for wheels_speed (from automode)
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)
+        # Subscribe for lidar scan (turtlebot4)
+        self.create_subscription(LaserScan, '/scan', self._lidar_scan_cb, 10)
         # Timer to publish RobotState periodically
         self.create_timer(0.1, self._publish_robot_state)  # 10 Hz
 
@@ -28,6 +36,40 @@ class TurtleBot4ReferenceNode(Node):
         self.proximity_angle = 0.0
         self.light_magnitude = 0.0
         self.light_angle = 0.0
+
+
+    def _lidar_scan_cb(self, msg):
+        # Divide scan into 5 sectors: left, front-left, front, front-right, right
+        num_ranges = len(msg.ranges)
+        angles = np.linspace(msg.angle_min, msg.angle_max, num_ranges)
+        ranges = np.array(msg.ranges)
+
+        sector_angles = [-math.pi/2, -math.pi/4, 0, math.pi/4, math.pi/2]
+        sector_width = math.pi/8  # 22.5° width per sector
+
+        sector_ranges = []
+        for sa in sector_angles:
+            mask = np.abs(angles - sa) < sector_width
+            sector = ranges[mask]
+            # Only consider readings within the proximity sensor's max range
+            sector = sector[(sector > msg.range_min) & (sector < PROXIMITY_MAX_RANGE)]
+            if len(sector) > 0:
+                sector_ranges.append(np.min(sector))
+            else:
+                sector_ranges.append(PROXIMITY_MAX_RANGE)
+
+        # Compute proximity vector (closer = stronger)
+        vectors = []
+        for r, a in zip(sector_ranges, sector_angles):
+            strength = max(0, PROXIMITY_MAX_RANGE - r) / PROXIMITY_MAX_RANGE  # 0 (far) to 1 (close)
+            vectors.append(np.array([strength * math.cos(a), strength * math.sin(a)]))
+
+        prox_vec = np.sum(vectors, axis=0)
+        prox_mag = np.linalg.norm(prox_vec)
+        prox_ang = math.atan2(prox_vec[1], prox_vec[0])  # radians
+
+        self.proximity_magnitude = float(prox_mag)
+        self.proximity_angle = math.degrees(prox_ang) % 360  # degrees, 0=front
 
     def _wheels_speed_cb(self, msg: Float32MultiArray):
         # Convert wheel speeds to TwistStamped for /cmd_vel
