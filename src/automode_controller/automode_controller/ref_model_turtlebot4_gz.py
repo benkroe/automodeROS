@@ -71,6 +71,16 @@ class TurtleBot4ReferenceNode(Node):
         self.proximity_magnitude = float(prox_mag)
         self.proximity_angle = math.degrees(prox_ang) % 360  # degrees, 0=front
 
+        # Debug log for proximity sensors
+    
+        lidar_preview = np.array2string(ranges[:5], precision=2, separator=',') + " ... " + np.array2string(ranges[-5:], precision=2, separator=',')
+        self.get_logger().info(
+            f"Lidar (first/last 5): {lidar_preview}\n"
+            f"Proximity sensors (m): left={sector_ranges[0]:.2f}, front-left={sector_ranges[1]:.2f}, "
+            f"front={sector_ranges[2]:.2f}, front-right={sector_ranges[3]:.2f}, right={sector_ranges[4]:.2f} | "
+            f"Vector mag={self.proximity_magnitude:.2f}, angle={self.proximity_angle:.1f}°"
+        )
+
     def _wheels_speed_cb(self, msg: Float32MultiArray):
         # Convert wheel speeds to TwistStamped for /cmd_vel
         # Assuming msg.data = [left_wheel, right_wheel]
