@@ -81,6 +81,11 @@ class TurtleBot4ReferenceNode(Node):
             self.proximity_angle = (math.degrees(prox_ang) - 90) % 360
 
         # Debug log for proximity sensors
+        self.get_logger().info(
+        f"Proximity sensors (m): left={sector_ranges[0]:.2f}, front-left={sector_ranges[1]:.2f}, "
+        f"front={sector_ranges[2]:.2f}, front-right={sector_ranges[3]:.2f}, right={sector_ranges[4]:.2f} | "
+        f"Vector mag={self.proximity_magnitude:.2f}, angle={self.proximity_angle:.1f}°"
+)
     
         # lidar_preview = np.array2string(ranges[:5], precision=2, separator=',') + " ... " + np.array2string(ranges[-5:], precision=2, separator=',')
         # self.get_logger().info(
@@ -102,7 +107,7 @@ class TurtleBot4ReferenceNode(Node):
         twist_stamped.header.frame_id = "base_link"
         twist_stamped.twist.linear.x = (left + right) / 2.0
         twist_stamped.twist.angular.z = (right - left) / 0.3  # 0.3 is wheel_base (meters), adjust as needed
-        self._cmd_vel_pub.publish(twist_stamped)
+        # self._cmd_vel_pub.publish(twist_stamped)
 
     def _publish_robot_state(self):
         # Fill RobotState message (expand with real sensor data)
