@@ -69,7 +69,7 @@ class TurtleBot4ReferenceNode(Node):
         prox_ang = math.atan2(prox_vec[1], prox_vec[0])  # radians
 
         self.proximity_magnitude = float(prox_mag)
-        self.proximity_angle = math.degrees(prox_ang) % 360  # degrees, 0=front
+        self.proximity_angle = (math.degrees(prox_ang) - 90) % 360  # degrees, 0=front
 
         # Debug log for proximity sensors
     
