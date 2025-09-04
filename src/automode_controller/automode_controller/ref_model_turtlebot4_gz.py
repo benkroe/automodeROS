@@ -78,7 +78,7 @@ class TurtleBot4ReferenceNode(Node):
         if prox_mag == 0.0:
             self.proximity_angle = 0.0
         else:
-            self.proximity_angle = (math.degrees(prox_ang) - 90) % 360
+            self.proximity_angle = (math.degrees(prox_ang)) % 360
 
         # Debug log for proximity sensors
         self.get_logger().info(
