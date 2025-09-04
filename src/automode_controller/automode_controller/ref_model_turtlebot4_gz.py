@@ -49,7 +49,7 @@ class TurtleBot4ReferenceNode(Node):
             f"Lidar angle_min={math.degrees(msg.angle_min):.1f}°, angle_max={math.degrees(msg.angle_max):.1f}°, num_ranges={num_ranges}"
         )
 
-        sector_angles = [math.pi/2, math.pi/4, 0, -math.pi/4, -math.pi/2]
+        sector_angles = [0, math.pi/4, math.pi/2, -math.pi/4, -math.pi/2]
         sector_width = math.pi/8  # 22.5° width per sector
 
         sector_ranges = []
