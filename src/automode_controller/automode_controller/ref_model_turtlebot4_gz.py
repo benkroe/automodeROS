@@ -11,7 +11,7 @@ from rclpy.executors import ExternalShutdownException
 from sensor_msgs.msg import LaserScan
 import math
 import numpy as np  
-PROXIMITY_MAX_RANGE = 0.25 # for creating the virtual proximity sensors, max range of them
+PROXIMITY_MAX_RANGE = 0.5 # for creating the virtual proximity sensors, max range of them
 
 
 class TurtleBot4ReferenceNode(Node):
@@ -44,7 +44,7 @@ class TurtleBot4ReferenceNode(Node):
         angles = np.linspace(msg.angle_min, msg.angle_max, num_ranges)
         ranges = np.array(msg.ranges)
 
-        sector_angles = [-math.pi/2, -math.pi/4, 0, math.pi/4, math.pi/2]
+        sector_angles = [math.pi/2, math.pi/4, 0, -math.pi/4, -math.pi/2]
         sector_width = math.pi/8  # 22.5° width per sector
 
         sector_ranges = []
