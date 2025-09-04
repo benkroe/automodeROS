@@ -44,6 +44,11 @@ class TurtleBot4ReferenceNode(Node):
         angles = np.linspace(msg.angle_min, msg.angle_max, num_ranges)
         ranges = np.array(msg.ranges)
 
+            # Debug: print lidar angle info
+        self.get_logger().info(
+            f"Lidar angle_min={math.degrees(msg.angle_min):.1f}°, angle_max={math.degrees(msg.angle_max):.1f}°, num_ranges={num_ranges}"
+        )
+
         sector_angles = [math.pi/2, math.pi/4, 0, -math.pi/4, -math.pi/2]
         sector_width = math.pi/8  # 22.5° width per sector
 
@@ -66,20 +71,24 @@ class TurtleBot4ReferenceNode(Node):
 
         prox_vec = np.sum(vectors, axis=0)
         prox_mag = np.linalg.norm(prox_vec)
+
         prox_ang = math.atan2(prox_vec[1], prox_vec[0])  # radians
 
         self.proximity_magnitude = float(prox_mag)
-        self.proximity_angle = (math.degrees(prox_ang) - 90) % 360  # degrees, 0=front
+        if prox_mag == 0.0:
+            self.proximity_angle = 0.0
+        else:
+            self.proximity_angle = (math.degrees(prox_ang) - 90) % 360
 
         # Debug log for proximity sensors
     
-        lidar_preview = np.array2string(ranges[:5], precision=2, separator=',') + " ... " + np.array2string(ranges[-5:], precision=2, separator=',')
-        self.get_logger().info(
-            f"Lidar (first/last 5): {lidar_preview}\n"
-            f"Proximity sensors (m): left={sector_ranges[0]:.2f}, front-left={sector_ranges[1]:.2f}, "
-            f"front={sector_ranges[2]:.2f}, front-right={sector_ranges[3]:.2f}, right={sector_ranges[4]:.2f} | "
-            f"Vector mag={self.proximity_magnitude:.2f}, angle={self.proximity_angle:.1f}°"
-        )
+        # lidar_preview = np.array2string(ranges[:5], precision=2, separator=',') + " ... " + np.array2string(ranges[-5:], precision=2, separator=',')
+        # self.get_logger().info(
+        #     f"Lidar (first/last 5): {lidar_preview}\n"
+        #     f"Proximity sensors (m): left={sector_ranges[0]:.2f}, front-left={sector_ranges[1]:.2f}, "
+        #     f"front={sector_ranges[2]:.2f}, front-right={sector_ranges[3]:.2f}, right={sector_ranges[4]:.2f} | "
+        #     f"Vector mag={self.proximity_magnitude:.2f}, angle={self.proximity_angle:.1f}°"
+        # )
 
     def _wheels_speed_cb(self, msg: Float32MultiArray):
         # Convert wheel speeds to TwistStamped for /cmd_vel
