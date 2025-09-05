@@ -6,6 +6,8 @@ from geometry_msgs.msg import TwistStamped
 from std_msgs.msg import Float32MultiArray
 from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
+from rclpy.qos import qos_profile_sensor_data
+
 
 # Use of lidar
 from sensor_msgs.msg import LaserScan
@@ -24,7 +26,7 @@ class TurtleBot4ReferenceNode(Node):
         # Subscriber for wheels_speed (from automode)
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)
         # Subscribe for lidar scan (turtlebot4)
-        self.create_subscription(LaserScan, '/scan', self._lidar_scan_cb, 10)
+        self.create_subscription(LaserScan, '/scan', self._lidar_scan_cb, qos_profile_sensor_data)
         # Timer to publish RobotState periodically
         self.create_timer(0.1, self._publish_robot_state)  # 10 Hz
 
