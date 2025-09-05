@@ -38,25 +38,24 @@ class TurtleBot4ReferenceNode(Node):
         self.light_angle = 0.0
 
 
+    # ...existing code...
     def _lidar_scan_cb(self, msg):
-        # Divide scan into 5 sectors: left, front-left, front, front-right, right
+        # TurtleBot4's lidar typically covers -135° to +135° (in radians: -2.356 to +2.356)
         num_ranges = len(msg.ranges)
         angles = np.linspace(msg.angle_min, msg.angle_max, num_ranges)
         ranges = np.array(msg.ranges)
 
-            # Debug: print lidar angle info
-        self.get_logger().info(
-            f"Lidar angle_min={math.degrees(msg.angle_min):.1f}°, angle_max={math.degrees(msg.angle_max):.1f}°, num_ranges={num_ranges}"
-        )
+        # Sector definitions: left, front-left, front, front-right, right
+        # Each sector is 45° wide (in radians: pi/4)
+        sector_centers = [0, -math.pi/4, -math.pi/2, -3*math.pi/4, math.pi]
 
-        sector_angles = [0, math.pi/4, math.pi/2, -math.pi/4, -math.pi/2]
-        sector_width = math.pi/8  # 22.5° width per sector
+        sector_width = math.pi/8 # 45° per sector
 
         sector_ranges = []
-        for sa in sector_angles:
-            mask = np.abs(angles - sa) < sector_width
+        for center in sector_centers:
+            mask = np.abs(angles - center) < (sector_width / 2)
             sector = ranges[mask]
-            # Only consider readings within the proximity sensor's max range
+            # Only consider valid readings within the proximity sensor's max range
             sector = sector[(sector > msg.range_min) & (sector < PROXIMITY_MAX_RANGE)]
             if len(sector) > 0:
                 sector_ranges.append(np.min(sector))
@@ -65,35 +64,27 @@ class TurtleBot4ReferenceNode(Node):
 
         # Compute proximity vector (closer = stronger)
         vectors = []
-        for r, a in zip(sector_ranges, sector_angles):
+        for r, a in zip(sector_ranges, sector_centers):
             strength = max(0, PROXIMITY_MAX_RANGE - r) / PROXIMITY_MAX_RANGE  # 0 (far) to 1 (close)
             vectors.append(np.array([strength * math.cos(a), strength * math.sin(a)]))
 
         prox_vec = np.sum(vectors, axis=0)
         prox_mag = np.linalg.norm(prox_vec)
-
         prox_ang = math.atan2(prox_vec[1], prox_vec[0])  # radians
 
         self.proximity_magnitude = float(prox_mag)
         if prox_mag == 0.0:
             self.proximity_angle = 0.0
         else:
-            self.proximity_angle = (math.degrees(prox_ang)) % 360
+            self.proximity_angle = (math.degrees(prox_ang) -270) % 360
 
         # Debug log for proximity sensors
         self.get_logger().info(
-        f"Proximity sensors (m): left={sector_ranges[0]:.2f}, front-left={sector_ranges[1]:.2f}, "
-        f"front={sector_ranges[2]:.2f}, front-right={sector_ranges[3]:.2f}, right={sector_ranges[4]:.2f} | "
-        f"Vector mag={self.proximity_magnitude:.2f}, angle={self.proximity_angle:.1f}°"
-)
-    
-        # lidar_preview = np.array2string(ranges[:5], precision=2, separator=',') + " ... " + np.array2string(ranges[-5:], precision=2, separator=',')
-        # self.get_logger().info(
-        #     f"Lidar (first/last 5): {lidar_preview}\n"
-        #     f"Proximity sensors (m): left={sector_ranges[0]:.2f}, front-left={sector_ranges[1]:.2f}, "
-        #     f"front={sector_ranges[2]:.2f}, front-right={sector_ranges[3]:.2f}, right={sector_ranges[4]:.2f} | "
-        #     f"Vector mag={self.proximity_magnitude:.2f}, angle={self.proximity_angle:.1f}°"
-        # )
+            f"Proximity sensors (m): left={sector_ranges[0]:.2f}, front-left={sector_ranges[1]:.2f}, "
+            f"front={sector_ranges[2]:.2f}, front-right={sector_ranges[3]:.2f}, right={sector_ranges[4]:.2f} | "
+            f"Vector mag={self.proximity_magnitude:.2f}, angle={self.proximity_angle:.1f}°"
+        )
+        # ...existing code...
 
     def _wheels_speed_cb(self, msg: Float32MultiArray):
         # Convert wheel speeds to TwistStamped for /cmd_vel
@@ -107,7 +98,7 @@ class TurtleBot4ReferenceNode(Node):
         twist_stamped.header.frame_id = "base_link"
         twist_stamped.twist.linear.x = (left + right) / 2.0
         twist_stamped.twist.angular.z = (right - left) / 0.3  # 0.3 is wheel_base (meters), adjust as needed
-        # self._cmd_vel_pub.publish(twist_stamped)
+        self._cmd_vel_pub.publish(twist_stamped)
 
     def _publish_robot_state(self):
         # Fill RobotState message (expand with real sensor data)
