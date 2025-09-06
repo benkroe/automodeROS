@@ -16,7 +16,7 @@ from std_msgs.msg import String
 from std_srvs.srv import Trigger
 from rclpy.executors import ExternalShutdownException
 
-
+from automode_interfaces.action import Condition
 
 class ConditionNode(Node):
     """
