@@ -17,7 +17,6 @@ from std_srvs.srv import Trigger
 from rclpy.executors import ExternalShutdownException
 
 
-from automode_interfaces.action import Condition
 
 class ConditionNode(Node):
     """
@@ -30,6 +29,10 @@ class ConditionNode(Node):
 
     def __init__(self, name: str = 'condition_node'):
         super().__init__(name)
+        # parameter for modules pkg
+        self.declare_parameter('module_package', 'basic_modules')
+
+
         self.get_logger().info('Starting ConditionNode')
         
         self._conditions: Dict[str, Dict[str, Any]] = {}
@@ -60,6 +63,8 @@ class ConditionNode(Node):
         )
         
         self.get_logger().info(f'Discovered conditions: {", ".join(sorted(self._conditions.keys()))}')
+    
+
 
     def _accept_multiple_goals(self, goal_request):
         return rclpy.action.GoalResponse.ACCEPT
@@ -77,19 +82,21 @@ class ConditionNode(Node):
 
 
     def _discover_conditions(self) -> None:
+        base_package = self.get_parameter('module_package').value
+        package_name = f"{base_package}.conditions"
         try:
-            import automode_controller.modules.conditions as cond_pkg
+            cond_pkg = importlib.import_module(package_name)
         except Exception:
-            self.get_logger().warning('No conditions package found')
+            self.get_logger().warning(f'No conditions package found: {package_name}')
             return
 
         for finder, mod_name, ispkg in pkgutil.iter_modules(cond_pkg.__path__):
             try:
-                mod = importlib.import_module(f'automode_controller.modules.conditions.{mod_name}')
+                mod = importlib.import_module(f'{package_name}.{mod_name}')
             except Exception:
                 self.get_logger().error(f'Failed to import condition module {mod_name}:\n{traceback.format_exc()}')
                 continue
-            
+
             # Only classes support Condition
             if not hasattr(mod, 'Condition'):
                 self.get_logger().warning(f'Condition module {mod_name} missing Condition class')

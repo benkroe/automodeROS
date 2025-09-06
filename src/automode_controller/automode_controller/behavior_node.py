@@ -16,9 +16,6 @@ from std_msgs.msg import String
 from std_srvs.srv import Trigger
 from rclpy.executors import ExternalShutdownException
 
-# try to import generated action; if not available, we still allow discovery/testing
-
-from automode_interfaces.action import Behavior  # type: ignore
 
 
 
@@ -34,6 +31,10 @@ class BehaviorNode(Node):
 
     def __init__(self, name: str = 'behavior_node'):
         super().__init__(name)
+        
+        # parameter for modules pkg
+        self.declare_parameter('module_package', 'basic_modules')
+
         self.get_logger().info('Starting BehaviorNode')
         # mapping: behavior_name -> {'instance': obj, 'descriptor': dict, 'module_name': str}
         self._behaviors: Dict[str, Dict[str, Any]] = {}
@@ -64,15 +65,17 @@ class BehaviorNode(Node):
 
 
     def _discover_behaviors(self) -> None:
+        base_package = self.get_parameter('module_package').value
+        package_name = f"{base_package}.behaviors"
         try:
-            import automode_controller.modules.behaviors as bh_pkg
+            bh_pkg = importlib.import_module(package_name)
         except Exception:
-            self.get_logger().warning('No automode_controller.modules.behaviors package found; nothing to discover')
+            self.get_logger().warning(f'No behaviors package found: {package_name}')
             return
 
         for finder, mod_name, ispkg in pkgutil.iter_modules(bh_pkg.__path__):
             try:
-                mod = importlib.import_module(f'automode_controller.modules.behaviors.{mod_name}')
+                mod = importlib.import_module(f'{package_name}.{mod_name}')
             except Exception:
                 self.get_logger().error(f'Failed to import behavior module "{mod_name}":\n{traceback.format_exc()}')
                 continue
