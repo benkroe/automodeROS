@@ -6,14 +6,14 @@ from geometry_msgs.msg import TwistStamped
 from std_msgs.msg import Float32MultiArray
 from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
-from rclpy.qos import qos_profile_sensor_data
+#from rclpy.qos import qos_profile_sensor_data
 
 
 # Use of lidar
 from sensor_msgs.msg import LaserScan
 import math
 import numpy as np  
-PROXIMITY_MAX_RANGE = 0.5 # for creating the virtual proximity sensors, max range of them
+PROXIMITY_MAX_RANGE = 1.0 # for creating the virtual proximity sensors, max range of them
 
 
 class TurtleBot4ReferenceNode(Node):
@@ -26,7 +26,7 @@ class TurtleBot4ReferenceNode(Node):
         # Subscriber for wheels_speed (from automode)
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)
         # Subscribe for lidar scan (turtlebot4)
-        self.create_subscription(LaserScan, '/scan', self._lidar_scan_cb, qos_profile_sensor_data)
+        self.create_subscription(LaserScan, '/scan', self._lidar_scan_cb, 10)
         # Timer to publish RobotState periodically
         self.create_timer(0.1, self._publish_robot_state)  # 10 Hz
 
@@ -49,9 +49,13 @@ class TurtleBot4ReferenceNode(Node):
 
         # Sector definitions: left, front-left, front, front-right, right
         # Each sector is 45° wide (in radians: pi/4)
-        sector_centers = [0, -math.pi/4, -math.pi/2, -3*math.pi/4, math.pi]
+        # Dynamically calculate sector centers for 5 sectors
+        front_arc = math.radians(180)  # 180° front arc
+        center_offset = 0  # 0 radians is forward
 
-        sector_width = math.pi/8 # 45° per sector
+        sector_count = 5
+        sector_centers = np.linspace(-front_arc/2, front_arc/2, sector_count) + center_offset
+        sector_width = front_arc / sector_count
 
         sector_ranges = []
         for center in sector_centers:

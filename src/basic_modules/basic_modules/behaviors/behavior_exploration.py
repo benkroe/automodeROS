@@ -17,9 +17,9 @@ class Behavior(BehaviorBase):
         self._Float32MultiArray = None
         self._turning_time = time.time()
 
-        self._obstacle_threshold = 0.5  # Proximity magnitude threshold for obstacle detection
+        self._obstacle_threshold = 0.3  # Proximity magnitude threshold for obstacle detection
         self._forward_speed = 1.0       # Forward movement speed
-        self._turn_speed = 1.0          # Turning speed (will calibrate later)
+        self._turn_speed = 0.3          # Turning speed (will calibrate later)
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
@@ -53,8 +53,13 @@ class Behavior(BehaviorBase):
         self._sub = self._node.create_subscription(RobotState, 'robotState', self._robot_state_cb, 10)
 
     def execute_step(self) -> Tuple[bool, str, bool]:
-        # If currently turning just do nothing
+        # If currently turning, keep publishing turn speeds
         if self._turning_time > time.time():
+            msg = self._Float32MultiArray()
+            # Use last turn direction (store it as an attribute)
+            if hasattr(self, "_last_turn_direction"):
+                msg.data = self._last_turn_direction
+                self._pub.publish(msg)
             return True, "turning", False
 
         proximity_magnitude = 0.0
@@ -70,10 +75,13 @@ class Behavior(BehaviorBase):
         if proximity_magnitude > self._obstacle_threshold:
             # Obstacle detected, initiate turn
             if proximity_angle < 180:
-                msg.data = [self._turn_speed, -self._turn_speed]  # Turn left
+                turn_direction = [self._turn_speed, -self._turn_speed]  # Turn left
             else:
-                msg.data = [-self._turn_speed, self._turn_speed]  # Turn right
+                turn_direction = [-self._turn_speed, self._turn_speed]  # Turn right
 
+            self._last_turn_direction = turn_direction  # Store direction for duration of turn
+
+            msg.data = turn_direction
             rwm = int(self._params.get("rwm", 100))
             self._turning_time = time.time() + (random.uniform(0, rwm))/10
             self._pub.publish(msg)
