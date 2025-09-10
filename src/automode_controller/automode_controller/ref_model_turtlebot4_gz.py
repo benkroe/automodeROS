@@ -20,13 +20,13 @@ class TurtleBot4ReferenceNode(Node):
     def __init__(self):
         super().__init__('turtlebot4_reference_node')
         # Publisher for cmd_vel (movement)
-        self._cmd_vel_pub = self.create_publisher(TwistStamped, '/cmd_vel', 10)
+        self._cmd_vel_pub = self.create_publisher(TwistStamped, 'cmd_vel', 10)
         # Publisher for RobotState
         self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10)
         # Subscriber for wheels_speed (from automode)
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)
         # Subscribe for lidar scan (turtlebot4)
-        self.create_subscription(LaserScan, '/scan', self._lidar_scan_cb, 10)
+        self.create_subscription(LaserScan, 'scan', self._lidar_scan_cb, 10)
         # Timer to publish RobotState periodically
         self.create_timer(0.1, self._publish_robot_state)  # 10 Hz
 
