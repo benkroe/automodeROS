@@ -40,7 +40,7 @@ class TurtleBot4ReferenceNode(Node):
         self.light_angle = 0.0
 
 
-    # ...existing code...
+
     def _lidar_scan_cb(self, msg):
         # TurtleBot4's lidar typically covers -135° to +135° (in radians: -2.356 to +2.356)
         num_ranges = len(msg.ranges)
@@ -90,7 +90,6 @@ class TurtleBot4ReferenceNode(Node):
             f"front={sector_ranges[2]:.2f}, front-right={sector_ranges[3]:.2f}, right={sector_ranges[4]:.2f} | "
             f"Vector mag={self.proximity_magnitude:.2f}, angle={self.proximity_angle:.1f}°"
         )
-        # ...existing code...
 
     def _wheels_speed_cb(self, msg: Float32MultiArray):
         # Convert wheel speeds to TwistStamped for /cmd_vel
