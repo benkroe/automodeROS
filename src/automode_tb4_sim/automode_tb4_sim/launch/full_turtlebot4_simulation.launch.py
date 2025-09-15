@@ -66,18 +66,10 @@ def generate_launch_description():
             executable='ir_sensors_node',
             parameters=[{'use_sim_time': True}]
         ),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([
-                os.path.join(get_package_share_directory('automode_tb4_sim'), 'launch', 'fsm_controller_launch.py')
-            ])
-        )
+
     ])
 
-    # Optional: Simulation check node
-    check_simulation_node = Node(
-        package='automode_tb4_sim',
-        executable='check_simulation_node'
-    )
+
 
     return LaunchDescription([
         genome_id_arg,
@@ -85,6 +77,5 @@ def generate_launch_description():
         turtlebot4_simulator,
         tf_broadcaster,
         robot_sensors_and_controller,
-        check_simulation_node,
         *object_bridges,
     ])
