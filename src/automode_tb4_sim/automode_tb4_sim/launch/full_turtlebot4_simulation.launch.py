@@ -34,7 +34,7 @@ def generate_launch_description():
             name=f'object{i}_pose_bridge',
             package='ros_gz_bridge',
             executable='parameter_bridge',
-            arguments=[f'/model/object{i}/pose@geometry_msgs/msg/Pose[ignition.msgs.Pose']
+            arguments=[f'/model/object{i}/pose@geometry_msgs/msg/Pose[ignition.msgs.Pose]']
         ) for i in range(1, 8)
     ]
 
