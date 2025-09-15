@@ -20,6 +20,16 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-
 sudo apt-get update
 sudo apt-get install gz-harmonic
 
+
+6. Alternative install Gazbeo (2)
+sudo apt-get update && sudo apt-get install wget
+sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+sudo apt-get update && sudo apt-get install ros-gz
+----> ros-gz doesnt exist in jazzy probably only in humble
+
+
+
 7. rosdep
 sudo rosdep init
 rosdep update
