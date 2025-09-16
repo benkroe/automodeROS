@@ -3,9 +3,17 @@
 <package format="3">
   <name>automode_tb4_sim</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Simulation and sensor nodes for TurtleBot4 in Gazebo</description>
   <maintainer email="ben@todo.todo">ben</maintainer>
   <license>TODO: License declaration</license>
+
+  <depend>rclpy</depend>
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
+  <depend>tf2_ros</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
