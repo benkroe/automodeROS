@@ -120,12 +120,12 @@ def generate_launch_description():
             parameters=[{'use_sim_time': True}]
         ),
 
-        # lanunch the fsm controller node
-        IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('automode_tb4_sim'), 'launch'),
-            '/fsm_controller_launch.py'])
-            )
+        # # lanunch the fsm controller node
+        # IncludeLaunchDescription(
+        # PythonLaunchDescriptionSource([os.path.join(
+        #     get_package_share_directory('automode_tb4_sim'), 'launch'),
+        #     '/fsm_controller_launch.py'])
+        #     )
         
         ])
 
@@ -136,4 +136,5 @@ def generate_launch_description():
         check_simulation_node,
         ros_ign_object_bridge1, ros_ign_object_bridge2, ros_ign_object_bridge3, ros_ign_object_bridge4,
         ros_ign_object_bridge5, ros_ign_object_bridge6, ros_ign_object_bridge7,
+        robot_sensors_node,
     ])
