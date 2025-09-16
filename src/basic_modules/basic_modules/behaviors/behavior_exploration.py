@@ -17,7 +17,7 @@ class Behavior(BehaviorBase):
         self._Float32MultiArray = None
         self._turning_time = time.time()
 
-        self._obstacle_threshold = 0.3  # Proximity magnitude threshold for obstacle detection
+        self._obstacle_threshold = 10  # Proximity magnitude threshold for obstacle detection
         self._forward_speed = 1.0       # Forward movement speed
         self._turn_speed = 0.3          # Turning speed (will calibrate later)
 
@@ -74,7 +74,7 @@ class Behavior(BehaviorBase):
         # Check if obstacle ahead and we need to turn
         if proximity_magnitude > self._obstacle_threshold:
             # Obstacle detected, initiate turn
-            if proximity_angle < 180:
+            if proximity_angle > 180:
                 turn_direction = [self._turn_speed, -self._turn_speed]  # Turn left
             else:
                 turn_direction = [-self._turn_speed, self._turn_speed]  # Turn right

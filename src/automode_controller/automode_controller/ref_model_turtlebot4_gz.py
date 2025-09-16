@@ -56,6 +56,14 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_wheels_speed = [0.0, 0.0]  
         self.latest_cmd_vel = (0.0, 0.0) 
 
+        # prox smoothening
+        self.proximity_mag_history = []
+        self.proximity_angle_history = []
+        self.proximity_smoothing_window = 5  # Number of samples for moving average
+        self.proximity_angle_last = 0.0
+        self.proximity_mag_last = 0.0
+        self.proximity_hysteresis = 2.0  # Minimum change to update
+
 
     def _ir_cb(self, msg):
         self.latest_ir = msg.data
@@ -70,12 +78,33 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_light_back = msg.data
     
     def compute_proximity(self):
-        # Example: Use max IR value as magnitude, index as angle
         if self.latest_ir:
-            mag = max(self.latest_ir)
-            idx = self.latest_ir.index(mag)
-            angle = idx * (360 / len(self.latest_ir))
-            return mag, angle
+            angles = np.linspace(0, 360, len(self.latest_ir), endpoint=False)
+            weights = np.array(self.latest_ir)
+            total = np.sum(weights)
+            if total > 0:
+                avg_angle = np.sum(angles * weights) / total
+                mag = total / len(self.latest_ir)
+            else:
+                avg_angle = 0.0
+                mag = 0.0
+
+            # Smoothing (moving average)
+            self.proximity_mag_history.append(mag)
+            self.proximity_angle_history.append(avg_angle)
+            if len(self.proximity_mag_history) > self.proximity_smoothing_window:
+                self.proximity_mag_history.pop(0)
+                self.proximity_angle_history.pop(0)
+            mag_smoothed = np.mean(self.proximity_mag_history)
+            angle_smoothed = np.mean(self.proximity_angle_history)
+
+            # Hysteresis: only update if change is significant
+            if abs(mag_smoothed - self.proximity_mag_last) > self.proximity_hysteresis:
+                self.proximity_mag_last = mag_smoothed
+            if abs(angle_smoothed - self.proximity_angle_last) > self.proximity_hysteresis:
+                self.proximity_angle_last = angle_smoothed
+
+            return self.proximity_mag_last, self.proximity_angle_last
         return 0.0, 0.0
     
     def compute_light(self):
