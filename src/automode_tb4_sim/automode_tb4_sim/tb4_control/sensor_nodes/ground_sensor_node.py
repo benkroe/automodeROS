@@ -11,8 +11,8 @@ from rclpy.qos import qos_profile_sensor_data
 class GroundSensor(Node):
 
     # Black patch position and size (must match SDF)
-    BLACK_X = -8
-    BLACK_Y = -8
+    BLACK_X = -9
+    BLACK_Y = -9
     BLACK_SIZE = 2  # meters (patch is 2x2)
 
     def __init__(self):
