@@ -3,7 +3,7 @@
 	<world name='arena'>
 
 		<physics type="ode">
-			<max_step_size>0.003</max_step_size>
+			<max_step_size>0.009</max_step_size>
 			<real_time_factor>5.0</real_time_factor>
 		</physics>
 
