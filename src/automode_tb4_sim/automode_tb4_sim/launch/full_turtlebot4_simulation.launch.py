@@ -6,6 +6,8 @@ from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, Grou
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node, PushROSNamespace
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+
 
 def generate_launch_description():
     genome_id_arg = DeclareLaunchArgument('genome_id', default_value='test', description='Genome identifier')
@@ -26,6 +28,13 @@ def generate_launch_description():
             'z': '0.2',
             'namespace': turtlebot4_id,
         }.items()
+    )
+    
+    static_tf_arena = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['0', '0', '0', '0', '0', '0', 'world', 'arena'],
+        name='static_tf_arena'
     )
 
     # Object pose bridges
@@ -72,6 +81,7 @@ def generate_launch_description():
 
 
     return LaunchDescription([
+        static_tf_arena,
         genome_id_arg,
         turtlebot4_id_arg,
         turtlebot4_simulator,
