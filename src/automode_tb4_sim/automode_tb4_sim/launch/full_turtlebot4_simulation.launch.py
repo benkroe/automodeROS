@@ -52,30 +52,30 @@ def generate_launch_description():
     robot_sensors_and_controller = GroupAction([
         PushROSNamespace(turtlebot4_id),
         Node(
-            package='turtlebot4_controller',
+            package='automode_tb4_sim',
             executable='light_sensors_node',
             parameters=[{'use_sim_time': True}]
         ),
         Node(
-            package='turtlebot4_controller',
+            package='automode_tb4_sim',
             executable='cliff_sensors_node',
             parameters=[{'use_sim_time': True}]
         ),
         Node(
-            package='turtlebot4_controller',
+            package='automode_tb4_sim',
             executable='ir_sensors_node',
             parameters=[{'use_sim_time': True}]
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
-                os.path.join(get_package_share_directory('turtlebot4_controller'), 'launch', 'fsm_controller_launch.py')
+                os.path.join(get_package_share_directory('automode_tb4_sim'), 'launch', 'fsm_controller_launch.py')
             ])
         )
     ])
 
     # Optional: Simulation check node
     check_simulation_node = Node(
-        package='turtlebot4_controller',
+        package='automode_tb4_sim',
         executable='check_simulation_node'
     )
 

@@ -92,7 +92,7 @@ def generate_launch_description():
 
 
     check_simulation_node = Node(
-        package='turtlebot4_controller',
+        package='automode_tb4_sim',
         executable='check_simulation_node'
     )
 
@@ -101,21 +101,21 @@ def generate_launch_description():
         
         # launch light sensor node (this node emulate light sensors, see code for more details)
         Node(
-            package='turtlebot4_controller',
+            package='automode_tb4_sim',
             executable='light_sensors_node',
             parameters=[{'use_sim_time': True}]
         ),
 
         # launch cliff sensor node (this node emulate cliff sensors, see code for more details)
         Node(
-            package='turtlebot4_controller',
+            package='automode_tb4_sim',
             executable='cliff_sensors_node',
             parameters=[{'use_sim_time': True}]
         ),
 
         # # launch ir sensor node (this node emulate ir sensors, see code for more details)
         Node(
-            package='turtlebot4_controller',
+            package='automode_tb4_sim',
             executable='ir_sensors_node',
             parameters=[{'use_sim_time': True}]
         ),
@@ -123,7 +123,7 @@ def generate_launch_description():
         # lanunch the fsm controller node
         IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('turtlebot4_controller'), 'launch'),
+            get_package_share_directory('automode_tb4_sim'), 'launch'),
             '/fsm_controller_launch.py'])
             )
         
