@@ -27,6 +27,11 @@ class TurtleBot4ReferenceNode(Node):
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)
         # Subscribe for lidar scan (turtlebot4)
         self.create_subscription(LaserScan, 'scan', self._lidar_scan_cb, 10)
+        # Subscribe to raw IR and light sensor topics
+        self.create_subscription(Float32MultiArray, 'ir_intensities', self._ir_cb, 10)
+        self.create_subscription(Float32, 'light_sensor_front_left', self._light_fl_cb, 10)
+        self.create_subscription(Float32, 'light_sensor_front_right', self._light_fr_cb, 10)
+        self.create_subscription(Float32, 'light_sensor_back', self._light_back_cb, 10)
         # Timer to publish RobotState periodically
         self.create_timer(0.1, self._publish_robot_state)  # 10 Hz
 
@@ -39,57 +44,46 @@ class TurtleBot4ReferenceNode(Node):
         self.light_magnitude = 0.0
         self.light_angle = 0.0
 
+        
+        # Store latest sensor values
+        self.latest_ir = None
+        self.latest_light_fl = None
+        self.latest_light_fr = None
+        self.latest_light_back = None
 
 
-    def _lidar_scan_cb(self, msg):
-        # TurtleBot4's lidar typically covers -135° to +135° (in radians: -2.356 to +2.356)
-        num_ranges = len(msg.ranges)
-        angles = np.linspace(msg.angle_min, msg.angle_max, num_ranges)
-        ranges = np.array(msg.ranges)
+    def _ir_cb(self, msg):
+        self.latest_ir = msg.data
 
-        # Sector definitions: left, front-left, front, front-right, right
-        # Each sector is 45° wide (in radians: pi/4)
-        # Dynamically calculate sector centers for 5 sectors
-        front_arc = math.radians(180)  # 180° front arc
-        center_offset = 0  # 0 radians is forward
+    def _light_fl_cb(self, msg):
+        self.latest_light_fl = msg.data
 
-        sector_count = 5
-        sector_centers = np.linspace(-front_arc/2, front_arc/2, sector_count) + center_offset
-        sector_width = front_arc / sector_count
+    def _light_fr_cb(self, msg):
+        self.latest_light_fr = msg.data
 
-        sector_ranges = []
-        for center in sector_centers:
-            mask = np.abs(angles - center) < (sector_width / 2)
-            sector = ranges[mask]
-            # Only consider valid readings within the proximity sensor's max range
-            sector = sector[(sector > msg.range_min) & (sector < PROXIMITY_MAX_RANGE)]
-            if len(sector) > 0:
-                sector_ranges.append(np.min(sector))
-            else:
-                sector_ranges.append(PROXIMITY_MAX_RANGE)
-
-        # Compute proximity vector (closer = stronger)
-        vectors = []
-        for r, a in zip(sector_ranges, sector_centers):
-            strength = max(0, PROXIMITY_MAX_RANGE - r) / PROXIMITY_MAX_RANGE  # 0 (far) to 1 (close)
-            vectors.append(np.array([strength * math.cos(a), strength * math.sin(a)]))
-
-        prox_vec = np.sum(vectors, axis=0)
-        prox_mag = np.linalg.norm(prox_vec)
-        prox_ang = math.atan2(prox_vec[1], prox_vec[0])  # radians
-
-        self.proximity_magnitude = float(prox_mag)
-        if prox_mag == 0.0:
-            self.proximity_angle = 0.0
-        else:
-            self.proximity_angle = (math.degrees(prox_ang) -270) % 360
-
-        # Debug log for proximity sensors
-        self.get_logger().info(
-            f"Proximity sensors (m): left={sector_ranges[0]:.2f}, front-left={sector_ranges[1]:.2f}, "
-            f"front={sector_ranges[2]:.2f}, front-right={sector_ranges[3]:.2f}, right={sector_ranges[4]:.2f} | "
-            f"Vector mag={self.proximity_magnitude:.2f}, angle={self.proximity_angle:.1f}°"
-        )
+    def _light_back_cb(self, msg):
+        self.latest_light_back = msg.data
+    
+    def compute_proximity(self):
+        # Example: Use max IR value as magnitude, index as angle
+        if self.latest_ir:
+            mag = max(self.latest_ir)
+            idx = self.latest_ir.index(mag)
+            angle = idx * (360 / len(self.latest_ir))
+            return mag, angle
+        return 0.0, 0.0
+    
+    def compute_light(self):
+        # Example: Vector sum based on sensor positions
+        if None not in (self.latest_light_fl, self.latest_light_fr, self.latest_light_back):
+            angles = [60, -60, 180]  # degrees
+            values = [self.latest_light_fl, self.latest_light_fr, self.latest_light_back]
+            x = sum(v * math.cos(math.radians(a)) for v, a in zip(values, angles))
+            y = sum(v * math.sin(math.radians(a)) for v, a in zip(values, angles))
+            mag = math.sqrt(x**2 + y**2)
+            angle = (math.degrees(math.atan2(y, x))) % 360
+            return mag, angle
+        return 0.0, 0.0
 
     def _wheels_speed_cb(self, msg: Float32MultiArray):
         # Convert wheel speeds to TwistStamped for /cmd_vel
@@ -111,10 +105,8 @@ class TurtleBot4ReferenceNode(Node):
         msg.robot_id = self.robot_id
         msg.neighbour_count = self.neighbour_count
         msg.ground_black_floor = self.ground_black_floor
-        msg.proximity_magnitude = self.proximity_magnitude
-        msg.proximity_angle = self.proximity_angle
-        msg.light_magnitude = self.light_magnitude
-        msg.light_angle = self.light_angle
+        msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
+        msg.light_magnitude, msg.light_angle = self.compute_light()
 
         self._robot_state_pub.publish(msg)
 

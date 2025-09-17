@@ -1,269 +1,699 @@
-[INFO] [launch]: All log files can be found below /home/ben/.ros/log/2025-09-15-19-18-27-722624-srv-32478
+[INFO] [launch]: All log files can be found below /home/ben/.ros/log/2025-09-15-19-34-19-778191-srv-36473
 [INFO] [launch]: Default logging verbosity is set to INFO
-[INFO] [gazebo-1]: process started with pid [32482]
-[INFO] [parameter_bridge-2]: process started with pid [32483]
-[INFO] [robot_state_publisher-3]: process started with pid [32484]
-[INFO] [joint_state_publisher-4]: process started with pid [32486]
-[INFO] [create-5]: process started with pid [32487]
-[INFO] [create-6]: process started with pid [32488]
-[INFO] [parameter_bridge-7]: process started with pid [32489]
-[INFO] [parameter_bridge-8]: process started with pid [32490]
-[INFO] [parameter_bridge-9]: process started with pid [32491]
-[INFO] [parameter_bridge-10]: process started with pid [32492]
-[INFO] [parameter_bridge-11]: process started with pid [32493]
-[INFO] [parameter_bridge-12]: process started with pid [32494]
-[INFO] [parameter_bridge-13]: process started with pid [32499]
-[INFO] [parameter_bridge-14]: process started with pid [32500]
-[INFO] [parameter_bridge-15]: process started with pid [32501]
-[INFO] [parameter_bridge-16]: process started with pid [32502]
-[INFO] [parameter_bridge-17]: process started with pid [32504]
-[INFO] [parameter_bridge-18]: process started with pid [32506]
-[INFO] [parameter_bridge-19]: process started with pid [32507]
-[INFO] [parameter_bridge-20]: process started with pid [32508]
-[INFO] [parameter_bridge-21]: process started with pid [32513]
-[INFO] [turtlebot4_node-22]: process started with pid [32514]
-[INFO] [turtlebot4_gz_hmi_node-23]: process started with pid [32515]
-[INFO] [spawner-24]: process started with pid [32520]
-[INFO] [static_transform_publisher-25]: process started with pid [32525]
-[INFO] [static_transform_publisher-26]: process started with pid [32526]
-[INFO] [hazards_vector_publisher-27]: process started with pid [32531]
-[INFO] [ir_intensity_vector_publisher-28]: process started with pid [32548]
-[INFO] [motion_control-29]: process started with pid [32553]
-[INFO] [mock_publisher-30]: process started with pid [32561]
-[INFO] [robot_state-31]: process started with pid [32566]
-[INFO] [pose_republisher_node-32]: process started with pid [32574]
-[INFO] [sensors_node-33]: process started with pid [32584]
-[INFO] [static_transform_publisher-34]: process started with pid [32597]
-[INFO] [static_transform_publisher-35]: process started with pid [32603]
-[INFO] [parameter_bridge-36]: process started with pid [32606]
-[INFO] [parameter_bridge-37]: process started with pid [32607]
-[INFO] [static_transform_publisher-38]: process started with pid [32618]
-[INFO] [static_transform_publisher-39]: process started with pid [32621]
-[INFO] [static_transform_publisher-40]: process started with pid [32636]
-[INFO] [static_transform_publisher-41]: process started with pid [32638]
-[INFO] [static_transform_publisher-42]: process started with pid [32648]
-[INFO] [static_transform_publisher-43]: process started with pid [32660]
-[INFO] [static_transform_publisher-44]: process started with pid [32664]
-[INFO] [light_sensors_node-45]: process started with pid [32666]
-[INFO] [cliff_sensors_node-46]: process started with pid [32673]
-[INFO] [ir_sensors_node-47]: process started with pid [32680]
-[INFO] [parameter_bridge-48]: process started with pid [32693]
-[INFO] [parameter_bridge-49]: process started with pid [32709]
-[INFO] [parameter_bridge-50]: process started with pid [32714]
-[INFO] [parameter_bridge-51]: process started with pid [32729]
-[INFO] [parameter_bridge-52]: process started with pid [32732]
-[INFO] [parameter_bridge-53]: process started with pid [32746]
-[INFO] [parameter_bridge-54]: process started with pid [32753]
-[parameter_bridge-2] [INFO] [1757963908.728140536] [clock_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
-[create-5] [INFO] [1757963908.657747001] [tb1.ros_gz_sim]: Requesting list of world names.
-[static_transform_publisher-25] [WARN] [1757963908.587773349] []: Old-style arguments are deprecated; see --help for new-style arguments
-[static_transform_publisher-26] [WARN] [1757963908.635111964] []: Old-style arguments are deprecated; see --help for new-style arguments
-[static_transform_publisher-34] [WARN] [1757963908.732176187] []: Old-style arguments are deprecated; see --help for new-style arguments
-[static_transform_publisher-35] [WARN] [1757963908.755737387] []: Old-style arguments are deprecated; see --help for new-style arguments
-[gazebo-1] [1;33m[Wrn] [gz.cc:102] [0m[1;33mFuel world download failed because [0m[1;33mFetch failed. Other errors[0m[1;33m[0m
-[gazebo-1] Unable to find or download file 
-[ERROR] [gazebo-1]: process has died [pid 32482, exit code 255, cmd 'ruby /opt/ros/jazzy/opt/gz_tools_vendor/bin/gz sim arena.sdf -r -v 4 --gui-config /home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/gui/standard/gui.config --force-version 8'].
-[hazards_vector_publisher-27] [INFO] [1757963909.968781649] [tb1.hazards_vector_publisher]: Advertised topic: hazard_detection
-[static_transform_publisher-26] [INFO] [1757963909.973057349] [tb1.tf_namespaced_base_link_publisher]: Spinning until stopped - publishing transform
+[INFO] [gazebo-1]: process started with pid [36477]
+[INFO] [parameter_bridge-2]: process started with pid [36478]
+[INFO] [robot_state_publisher-3]: process started with pid [36480]
+[INFO] [joint_state_publisher-4]: process started with pid [36481]
+[INFO] [create-5]: process started with pid [36482]
+[INFO] [create-6]: process started with pid [36483]
+[INFO] [parameter_bridge-7]: process started with pid [36484]
+[INFO] [parameter_bridge-8]: process started with pid [36485]
+[INFO] [parameter_bridge-9]: process started with pid [36488]
+[INFO] [parameter_bridge-10]: process started with pid [36491]
+[INFO] [parameter_bridge-11]: process started with pid [36494]
+[INFO] [parameter_bridge-12]: process started with pid [36495]
+[INFO] [parameter_bridge-13]: process started with pid [36496]
+[INFO] [parameter_bridge-14]: process started with pid [36499]
+[INFO] [parameter_bridge-15]: process started with pid [36500]
+[INFO] [parameter_bridge-16]: process started with pid [36501]
+[INFO] [parameter_bridge-17]: process started with pid [36502]
+[INFO] [parameter_bridge-18]: process started with pid [36503]
+[INFO] [parameter_bridge-19]: process started with pid [36519]
+[INFO] [parameter_bridge-20]: process started with pid [36521]
+[INFO] [parameter_bridge-21]: process started with pid [36532]
+[INFO] [turtlebot4_node-22]: process started with pid [36536]
+[INFO] [turtlebot4_gz_hmi_node-23]: process started with pid [36537]
+[INFO] [spawner-24]: process started with pid [36549]
+[INFO] [static_transform_publisher-25]: process started with pid [36552]
+[INFO] [static_transform_publisher-26]: process started with pid [36553]
+[INFO] [hazards_vector_publisher-27]: process started with pid [36554]
+[INFO] [ir_intensity_vector_publisher-28]: process started with pid [36564]
+[INFO] [motion_control-29]: process started with pid [36589]
+[INFO] [mock_publisher-30]: process started with pid [36594]
+[INFO] [robot_state-31]: process started with pid [36614]
+[INFO] [pose_republisher_node-32]: process started with pid [36615]
+[INFO] [sensors_node-33]: process started with pid [36619]
+[INFO] [static_transform_publisher-34]: process started with pid [36621]
+[INFO] [static_transform_publisher-35]: process started with pid [36622]
+[INFO] [parameter_bridge-36]: process started with pid [36644]
+[INFO] [parameter_bridge-37]: process started with pid [36649]
+[INFO] [static_transform_publisher-38]: process started with pid [36655]
+[INFO] [static_transform_publisher-39]: process started with pid [36663]
+[INFO] [static_transform_publisher-40]: process started with pid [36671]
+[INFO] [static_transform_publisher-41]: process started with pid [36678]
+[INFO] [static_transform_publisher-42]: process started with pid [36719]
+[INFO] [static_transform_publisher-43]: process started with pid [36722]
+[INFO] [static_transform_publisher-44]: process started with pid [36724]
+[INFO] [light_sensors_node-45]: process started with pid [36725]
+[INFO] [cliff_sensors_node-46]: process started with pid [36726]
+[INFO] [ir_sensors_node-47]: process started with pid [36731]
+[INFO] [parameter_bridge-48]: process started with pid [36740]
+[INFO] [parameter_bridge-49]: process started with pid [36742]
+[INFO] [parameter_bridge-50]: process started with pid [36793]
+[INFO] [parameter_bridge-51]: process started with pid [36823]
+[INFO] [parameter_bridge-52]: process started with pid [36850]
+[INFO] [parameter_bridge-53]: process started with pid [36851]
+[INFO] [parameter_bridge-54]: process started with pid [36863]
+[robot_state_publisher-3] [WARN] [1757964860.329418687] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[robot_state_publisher-3] [INFO] [1757964860.329558437] [tb1.robot_state_publisher]: Robot initialized
+[create-5] [INFO] [1757964860.344730102] [tb1.ros_gz_sim]: Requesting list of world names.
+[create-6] [INFO] [1757964860.413295254] [tb1.ros_gz_sim]: Requesting list of world names.
+[parameter_bridge-8] [INFO] [1757964860.430560923] [tb1.pose_bridge]: Creating GZ->ROS Bridge: [/model/tb1/turtlebot4/pose (ignition.msgs.Pose_V) -> /model/tb1/turtlebot4/pose (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[static_transform_publisher-25] [WARN] [1757964860.447851599] []: Old-style arguments are deprecated; see --help for new-style arguments
+[static_transform_publisher-26] [WARN] [1757964860.387991662] []: Old-style arguments are deprecated; see --help for new-style arguments
+[static_transform_publisher-34] [WARN] [1757964860.500373585] []: Old-style arguments are deprecated; see --help for new-style arguments
+[static_transform_publisher-35] [WARN] [1757964860.623040637] []: Old-style arguments are deprecated; see --help for new-style arguments
+[parameter_bridge-2] [INFO] [1757964860.835009844] [clock_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[gazebo-1] [1;36m[Dbg] [gz.cc:166] [0m[1;36mSubscribing to [[0m[1;36m/gazebo/starting_world[0m[1;36m].[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [gz.cc:168] [0m[1;36mWaiting for a world to be set from the GUI...[0m[1;36m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mReceived world [[0m[1;32mmaze.sdf[0m[1;32m] from the GUI.[0m[1;32m[0m
+[gazebo-1] [1;36m[Dbg] [gz.cc:172] [0m[1;36mUnsubscribing from [[0m[1;36m/gazebo/starting_world[0m[1;36m].[0m[1;36m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mGazebo Sim Server v[0m[1;32m8.9.0[0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mLoading SDF world file[[0m[1;32m/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf[0m[1;32m].[0m
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="border"]/link[@name="wall1"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L86]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="border"]/link[@name="wall2"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L109]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="border"]/link[@name="wall3"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L132]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[parameter_bridge-12] [INFO] [1757964860.948417237] [tb1.ir_intensity_front_left_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/ir_intensity_front_left/sensor/ir_intensity_front_left/scan (ignition.msgs.LaserScan) -> /world/maze/model/tb1/turtlebot4/link/ir_intensity_front_left/sensor/ir_intensity_front_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="border"]/link[@name="wall4"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L155]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="border"]/link[@name="wall4"]/collision[@name="wall4_collision"]/material:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L162]: XML Element[material], child of element[collision], not defined in SDF. Copying[material] as children of [collision].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall1"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L188]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall2"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L212]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall3"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L236]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall4"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L260]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall5"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L284]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall6"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L308]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall7"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L332]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall8"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L356]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall9"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L380]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall10"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L404]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall11"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L428]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall12"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L451]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall13"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L475]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall14"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L499]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall15"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L523]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall16"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L547]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall17"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L571]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall18"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L595]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall19"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L619]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall20"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L643]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall21"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L667]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall22"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L691]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall23"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L715]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall24"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L739]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall25"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L763]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall26"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L787]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall27"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L811]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[static_transform_publisher-26] [INFO] [1757964861.083844577] [tb1.tf_namespaced_base_link_publisher]: Spinning until stopped - publishing transform
 [static_transform_publisher-26] translation: ('0.000000', '0.000000', '0.000000')
 [static_transform_publisher-26] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
 [static_transform_publisher-26] from 'tb1/base_link' to 'base_link'
-[hazards_vector_publisher-27] [INFO] [1757963909.975334205] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/bumper/event
-[parameter_bridge-9] [INFO] [1757963909.991944316] [tb1.bumper_contact_bridge]: Creating GZ->ROS Bridge: [tb1/bumper_contact (ignition.msgs.Contacts) -> tb1/bumper_contact (ros_gz_interfaces/msg/Contacts)] (Lazy 0)
-[hazards_vector_publisher-27] [INFO] [1757963909.996473562] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_front_left/event
-[hazards_vector_publisher-27] [INFO] [1757963909.999274437] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_front_right/event
-[static_transform_publisher-34] [INFO] [1757963910.004101329] [tb1.rplidar_stf]: Spinning until stopped - publishing transform
-[static_transform_publisher-34] translation: ('0.000000', '0.000000', '0.000000')
-[static_transform_publisher-34] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-34] from 'rplidar_link' to 'tb1/turtlebot4/rplidar_link/rplidar'
-[hazards_vector_publisher-27] [INFO] [1757963910.012961075] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_side_left/event
-[hazards_vector_publisher-27] [INFO] [1757963910.014707458] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_side_right/event
-[hazards_vector_publisher-27] [INFO] [1757963910.015695911] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/wheel_drop/left_wheel/event
-[hazards_vector_publisher-27] [INFO] [1757963910.016684410] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/wheel_drop/right_wheel/event
-[hazards_vector_publisher-27] [INFO] [1757963910.017893187] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/backup_limit
-[parameter_bridge-11] [INFO] [1757963910.043375005] [tb1.ir_intensity_front_center_right_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/ir_intensity_front_center_right/sensor/ir_intensity_front_center_right/scan (ignition.msgs.LaserScan) -> /world/arena/model/tb1/turtlebot4/link/ir_intensity_front_center_right/sensor/ir_intensity_front_center_right/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
-[robot_state_publisher-3] [WARN] [1757963910.049973694] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
-[robot_state_publisher-3] [INFO] [1757963910.050211125] [tb1.robot_state_publisher]: Robot initialized
-[create-6] [INFO] [1757963910.318925526] [tb1.ros_gz_sim]: Requesting list of world names.
-[static_transform_publisher-38] [INFO] [1757963910.352426422] [tb1.static_tf_lightSensorFrontL]: Spinning until stopped - publishing transform
-[static_transform_publisher-38] translation: ('0.090000', '0.080000', '0.350000')
-[static_transform_publisher-38] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-38] from 'tb1/turtlebot4' to 'tb1/light_sensor_front_left'
-[turtlebot4_node-22] [INFO] [1757963910.408846775] [tb1.turtlebot4_node]: Init Turtlebot4 Node Main
-[parameter_bridge-8] [INFO] [1757963910.559295169] [tb1.pose_bridge]: Creating GZ->ROS Bridge: [/model/tb1/turtlebot4/pose (ignition.msgs.Pose_V) -> /model/tb1/turtlebot4/pose (tf2_msgs/msg/TFMessage)] (Lazy 0)
-[parameter_bridge-12] [INFO] [1757963910.638768186] [tb1.ir_intensity_front_left_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/ir_intensity_front_left/sensor/ir_intensity_front_left/scan (ignition.msgs.LaserScan) -> /world/arena/model/tb1/turtlebot4/link/ir_intensity_front_left/sensor/ir_intensity_front_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
-[spawner-24] [INFO] [1757963911.151254175] [tb1.spawner_joint_state_broadcaster]: waiting for service /tb1/controller_manager/list_controllers to become available...
-[static_transform_publisher-39] [INFO] [1757963911.157720200] [tb1.static_tf_lightSensorFrontR]: Spinning until stopped - publishing transform
-[static_transform_publisher-39] translation: ('0.090000', '-0.080000', '0.350000')
-[static_transform_publisher-39] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-39] from 'tb1/turtlebot4' to 'tb1/light_sensor_front_right'
-[parameter_bridge-17] [INFO] [1757963911.266676652] [tb1.hmi_display_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/display/raw (std_msgs/msg/String) -> tb1/hmi/display/raw (gz.msgs.StringMsg)] (Lazy 0)
-[parameter_bridge-17] [INFO] [1757963911.268953688] [tb1.hmi_display_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/display/selected (std_msgs/msg/Int32) -> tb1/hmi/display/selected (gz.msgs.Int32)] (Lazy 0)
-[parameter_bridge-15] [INFO] [1757963911.278781620] [tb1.ir_intensity_right_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/ir_intensity_right/sensor/ir_intensity_right/scan (ignition.msgs.LaserScan) -> /world/arena/model/tb1/turtlebot4/link/ir_intensity_right/sensor/ir_intensity_right/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
-[parameter_bridge-53] [INFO] [1757963911.345199764] [object6_pose_bridge]: Creating GZ->ROS Bridge: [/model/object6/pose (ignition.msgs.Pose]) -> /model/object6/pose (geometry_msgs/msg/Pose)] (Lazy 0)
-[parameter_bridge-53] [WARN] [1757963911.345927133] [object6_pose_bridge]: Failed to create a bridge for topic [/model/object6/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object6/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
-[joint_state_publisher-4] [INFO] [1757963911.383069707] [tb1.joint_state_publisher]: Waiting for robot_description to be published on the robot_description topic...
-[static_transform_publisher-25] [INFO] [1757963911.585058478] [tb1.tf_namespaced_odom_publisher]: Spinning until stopped - publishing transform
-[static_transform_publisher-25] translation: ('0.000000', '0.000000', '0.000000')
-[static_transform_publisher-25] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-25] from 'odom' to 'tb1/odom'
-[parameter_bridge-49] [INFO] [1757963911.692298655] [object2_pose_bridge]: Creating GZ->ROS Bridge: [/model/object2/pose (ignition.msgs.Pose]) -> /model/object2/pose (geometry_msgs/msg/Pose)] (Lazy 0)
-[parameter_bridge-49] [WARN] [1757963911.692549267] [object2_pose_bridge]: Failed to create a bridge for topic [/model/object2/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object2/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
-[parameter_bridge-21] [INFO] [1757963911.719171522] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/image (gz.msgs.Image) -> /world/arena/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/image (sensor_msgs/msg/Image)] (Lazy 0)
-[parameter_bridge-36] [INFO] [1757963911.722525033] [tb1.robot_pose_tf_bridge]: Creating GZ->ROS Bridge: [/model/tb1/turtlebot4/pose (gz.msgs.Pose_V) -> /model/tb1/turtlebot4/pose (tf2_msgs/msg/TFMessage)] (Lazy 0)
-[parameter_bridge-51] [INFO] [1757963911.765442148] [object4_pose_bridge]: Creating GZ->ROS Bridge: [/model/object4/pose (ignition.msgs.Pose]) -> /model/object4/pose (geometry_msgs/msg/Pose)] (Lazy 0)
-[parameter_bridge-51] [WARN] [1757963911.765677593] [object4_pose_bridge]: Failed to create a bridge for topic [/model/object4/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object4/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
-[turtlebot4_node-22] [INFO] [1757963911.774947968] [tb1.turtlebot4_node]: Buttons Init
-[parameter_bridge-21] [INFO] [1757963911.823939391] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/depth_image (gz.msgs.Image) -> /world/arena/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/depth_image (sensor_msgs/msg/Image)] (Lazy 0)
-[parameter_bridge-21] [INFO] [1757963911.837506818] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/points (gz.msgs.PointCloudPacked) -> /world/arena/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/points (sensor_msgs/msg/PointCloud2)] (Lazy 0)
-[parameter_bridge-21] [INFO] [1757963911.949030640] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/camera_info (gz.msgs.CameraInfo) -> /world/arena/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/camera_info (sensor_msgs/msg/CameraInfo)] (Lazy 0)
-[turtlebot4_node-22] [INFO] [1757963911.966797708] [tb1.turtlebot4_node]: Init Display
-[turtlebot4_node-22] [INFO] [1757963912.053573447] [tb1.turtlebot4_node]: Leds Init
-[parameter_bridge-14] [INFO] [1757963912.058505875] [tb1.ir_intensity_left_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/ir_intensity_left/sensor/ir_intensity_left/scan (ignition.msgs.LaserScan) -> /world/arena/model/tb1/turtlebot4/link/ir_intensity_left/sensor/ir_intensity_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
-[parameter_bridge-7] [INFO] [1757963912.157161744] [tb1.cmd_vel_bridge]: Creating GZ->ROS Bridge: [tb1/cmd_vel (ignition.msgs.Twist) -> tb1/cmd_vel (geometry_msgs/msg/TwistStamped)] (Lazy 0)
-[parameter_bridge-16] [INFO] [1757963912.278476981] [tb1.ir_intensity_side_left_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/ir_intensity_side_left/sensor/ir_intensity_side_left/scan (ignition.msgs.LaserScan) -> /world/arena/model/tb1/turtlebot4/link/ir_intensity_side_left/sensor/ir_intensity_side_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
-[parameter_bridge-18] [INFO] [1757963912.353946260] [tb1.hmi_buttons_msg_bridge]: Creating GZ->ROS Bridge: [tb1/hmi/buttons (gz.msgs.Int32) -> tb1/hmi/buttons (std_msgs/msg/Int32)] (Lazy 0)
-[mock_publisher-30] [INFO] [1757963912.430117631] [tb1.mock_publisher]: Advertised mocked topic: slip_status
-[parameter_bridge-7] [INFO] [1757963912.439643357] [tb1.cmd_vel_bridge]: Creating ROS->GZ Bridge: [/model/tb1/turtlebot4/cmd_vel (geometry_msgs/msg/TwistStamped) -> /model/tb1/turtlebot4/cmd_vel (ignition.msgs.Twist)] (Lazy 0)
-[static_transform_publisher-43] [INFO] [1757963912.562572990] [tb1.static_tf_cliffSensorFrontL]: Spinning until stopped - publishing transform
-[static_transform_publisher-43] translation: ('0.160000', '0.045000', '0.000000')
-[static_transform_publisher-43] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-43] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_front_left'
-[static_transform_publisher-35] [INFO] [1757963912.736568409] [tb1.camera_stf]: Spinning until stopped - publishing transform
-[static_transform_publisher-35] translation: ('0.000000', '0.000000', '0.000000')
-[static_transform_publisher-35] rotation: ('0.499952', '-0.500000', '0.500000', '0.500048')
-[static_transform_publisher-35] from 'oakd_rgb_camera_optical_frame' to 'tb1/turtlebot4/oakd_rgb_camera_frame/rgbd_camera'
-[create-5] [INFO] [1757963913.661238614] [tb1.ros_gz_sim]: Requesting list of world names.
-[ir_intensity_vector_publisher-28] [INFO] [1757963913.900187507] [tb1.ir_intensity_vector_publisher]: Advertised topic: ir_intensity
-[ir_intensity_vector_publisher-28] [INFO] [1757963914.153187355] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_center_left
-[ir_intensity_vector_publisher-28] [INFO] [1757963914.249666352] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_center_right
-[ir_intensity_vector_publisher-28] [INFO] [1757963914.285715073] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_left
-[parameter_bridge-50] [INFO] [1757963914.286650217] [object3_pose_bridge]: Creating GZ->ROS Bridge: [/model/object3/pose (ignition.msgs.Pose]) -> /model/object3/pose (geometry_msgs/msg/Pose)] (Lazy 0)
-[parameter_bridge-50] [WARN] [1757963914.289395616] [object3_pose_bridge]: Failed to create a bridge for topic [/model/object3/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object3/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
-[ir_intensity_vector_publisher-28] [INFO] [1757963914.294232800] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_right
-[ir_intensity_vector_publisher-28] [INFO] [1757963914.294845517] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_left
-[ir_intensity_vector_publisher-28] [INFO] [1757963914.295312074] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_right
-[ir_intensity_vector_publisher-28] [INFO] [1757963914.295808332] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_side_left
-[parameter_bridge-54] [INFO] [1757963914.487897805] [object7_pose_bridge]: Creating GZ->ROS Bridge: [/model/object7/pose (ignition.msgs.Pose]) -> /model/object7/pose (geometry_msgs/msg/Pose)] (Lazy 0)
-[parameter_bridge-54] [WARN] [1757963914.488084410] [object7_pose_bridge]: Failed to create a bridge for topic [/model/object7/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object7/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
-[robot_state-31] [INFO] [1757963914.584251587] [tb1.robot_state]: Advertised topic: battery_state
-[parameter_bridge-52] [INFO] [1757963914.866655741] [object5_pose_bridge]: Creating GZ->ROS Bridge: [/model/object5/pose (ignition.msgs.Pose]) -> /model/object5/pose (geometry_msgs/msg/Pose)] (Lazy 0)
-[parameter_bridge-52] [WARN] [1757963914.877482599] [object5_pose_bridge]: Failed to create a bridge for topic [/model/object5/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object5/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
-[motion_control-29] [INFO] [1757963914.891110331] [tb1.motion_control]: Enabling REFLEX_BUMP
-[motion_control-29] [INFO] [1757963914.891427342] [tb1.motion_control]: Enabling REFLEX_CLIFF
-[static_transform_publisher-44] [INFO] [1757963914.955896294] [tb1.static_tf_cliffSensorFrontR]: Spinning until stopped - publishing transform
-[static_transform_publisher-44] translation: ('0.160000', '-0.045000', '0.000000')
-[static_transform_publisher-44] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-44] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_front_right'
-[parameter_bridge-19] [INFO] [1757963914.964935467] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/power (std_msgs/msg/Int32) -> tb1/hmi/led/power (gz.msgs.Int32)] (Lazy 0)
-[robot_state-31] [INFO] [1757963914.977082731] [tb1.robot_state]: Subscription to topic: dock_status
-[robot_state-31] [INFO] [1757963914.978027445] [tb1.robot_state]: Advertised topic: stop_status
-[robot_state-31] [INFO] [1757963914.986304221] [tb1.robot_state]: Subscription to topic: odom
-[parameter_bridge-48] [INFO] [1757963915.003585232] [object1_pose_bridge]: Creating GZ->ROS Bridge: [/model/object1/pose (ignition.msgs.Pose]) -> /model/object1/pose (geometry_msgs/msg/Pose)] (Lazy 0)
-[parameter_bridge-48] [WARN] [1757963915.004754287] [object1_pose_bridge]: Failed to create a bridge for topic [/model/object1/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object1/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
-[motion_control-29] [INFO] [1757963915.035970247] [tb1.motion_control]: Enabling REFLEX_STUCK
-[parameter_bridge-20] [INFO] [1757963915.089137162] [tb1.lidar_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/rplidar_link/sensor/rplidar/scan (gz.msgs.LaserScan) -> /world/arena/model/tb1/turtlebot4/link/rplidar_link/sensor/rplidar/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
-[motion_control-29] [INFO] [1757963915.144626840] [tb1.motion_control]: Enabling REFLEX_WHEEL_DROP
-[parameter_bridge-19] [INFO] [1757963915.216136888] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/motors (std_msgs/msg/Int32) -> tb1/hmi/led/motors (gz.msgs.Int32)] (Lazy 0)
-[create-6] [INFO] [1757963915.322027590] [tb1.ros_gz_sim]: Requesting list of world names.
-[parameter_bridge-13] [INFO] [1757963915.328675977] [tb1.ir_intensity_front_right_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/ir_intensity_front_right/sensor/ir_intensity_front_right/scan (ignition.msgs.LaserScan) -> /world/arena/model/tb1/turtlebot4/link/ir_intensity_front_right/sensor/ir_intensity_front_right/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
-[static_transform_publisher-41] [INFO] [1757963915.658193186] [tb1.static_tf_cliffSensorSideL]: Spinning until stopped - publishing transform
-[static_transform_publisher-41] translation: ('0.060000', '0.145000', '0.000000')
-[static_transform_publisher-41] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-41] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_side_left'
-[parameter_bridge-19] [INFO] [1757963915.712237242] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/comms (std_msgs/msg/Int32) -> tb1/hmi/led/comms (gz.msgs.Int32)] (Lazy 0)
-[static_transform_publisher-42] [INFO] [1757963915.749807644] [tb1.static_tf_cliffSensorSideR]: Spinning until stopped - publishing transform
-[static_transform_publisher-42] translation: ('0.060000', '-0.145000', '0.000000')
-[static_transform_publisher-42] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-42] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_side_right'
-[parameter_bridge-37] [INFO] [1757963915.908907557] [tb1.robot_pose_poseArray_bridge]: Creating GZ->ROS Bridge: [/model/tb1/turtlebot4/pose (gz.msgs.Pose_V) -> /model/tb1/turtlebot4/pose (geometry_msgs/msg/PoseArray)] (Lazy 0)
-[parameter_bridge-19] [INFO] [1757963915.969963549] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/wifi (std_msgs/msg/Int32) -> tb1/hmi/led/wifi (gz.msgs.Int32)] (Lazy 0)
-[static_transform_publisher-40] [INFO] [1757963916.005921856] [tb1.static_tf_lightSensorBack]: Spinning until stopped - publishing transform
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall28"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L835]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall29"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L859]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall30"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L883]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall31"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L907]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall32"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L931]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall33"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L955]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall34"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L979]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall35"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L1003]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="maze"]/model[@name="obstacles"]/link[@name="wall36"]/static:/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/worlds/maze.sdf:L1027]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[parameter_bridge-16] [INFO] [1757964861.191993127] [tb1.ir_intensity_side_left_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/ir_intensity_side_left/sensor/ir_intensity_side_left/scan (ignition.msgs.LaserScan) -> /world/maze/model/tb1/turtlebot4/link/ir_intensity_side_left/sensor/ir_intensity_side_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[gazebo-1] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:413:17: QML ToolButton: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[parameter_bridge-9] [INFO] [1757964861.336227607] [tb1.bumper_contact_bridge]: Creating GZ->ROS Bridge: [tb1/bumper_contact (ignition.msgs.Contacts) -> tb1/bumper_contact (ros_gz_interfaces/msg/Contacts)] (Lazy 0)
+[gazebo-1] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-1] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-1] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:413:17: QML ToolButton: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-1] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-1] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-1] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:413:17: QML ToolButton: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-1] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-1] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[parameter_bridge-10] [INFO] [1757964861.523439811] [tb1.ir_intensity_front_center_left_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/ir_intensity_front_center_left/sensor/ir_intensity_front_center_left/scan (ignition.msgs.LaserScan) -> /world/maze/model/tb1/turtlebot4/link/ir_intensity_front_center_left/sensor/ir_intensity_front_center_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-18] [37;1m2025-09-15 19:34:21.633 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[parameter_bridge-14] [37;1m2025-09-15 19:34:21.644 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[static_transform_publisher-35] [37;1m2025-09-15 19:34:21.651 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[hazards_vector_publisher-27] [37;1m2025-09-15 19:34:21.659 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[static_transform_publisher-40] [INFO] [1757964861.704456806] [tb1.static_tf_lightSensorBack]: Spinning until stopped - publishing transform
 [static_transform_publisher-40] translation: ('-0.110000', '0.000000', '0.350000')
 [static_transform_publisher-40] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
 [static_transform_publisher-40] from 'tb1/turtlebot4' to 'tb1/light_sensor_back'
-[parameter_bridge-19] [INFO] [1757963916.015159325] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/battery (std_msgs/msg/Int32) -> tb1/hmi/led/battery (gz.msgs.Int32)] (Lazy 0)
-[parameter_bridge-19] [INFO] [1757963916.260163614] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/user1 (std_msgs/msg/Int32) -> tb1/hmi/led/user1 (gz.msgs.Int32)] (Lazy 0)
-[parameter_bridge-10] [INFO] [1757963916.784041691] [tb1.ir_intensity_front_center_left_bridge]: Creating GZ->ROS Bridge: [/world/arena/model/tb1/turtlebot4/link/ir_intensity_front_center_left/sensor/ir_intensity_front_center_left/scan (ignition.msgs.LaserScan) -> /world/arena/model/tb1/turtlebot4/link/ir_intensity_front_center_left/sensor/ir_intensity_front_center_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
-[parameter_bridge-19] [INFO] [1757963916.816066767] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/user2 (std_msgs/msg/Int32) -> tb1/hmi/led/user2 (gz.msgs.Int32)] (Lazy 0)
-[create-5] [INFO] [1757963918.664329619] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-6] [INFO] [1757963920.325882527] [tb1.ros_gz_sim]: Requesting list of world names.
-[turtlebot4_node-22] [INFO] [1757963920.879292834] [tb1.turtlebot4_node]: Turtlebot4 standard running.
-[parameter_bridge-17] [INFO] [1757963920.943649841] [tb1.hmi_display_msg_bridge]: Passing message from ROS std_msgs/msg/String to Gazebo gz.msgs.StringMsg (showing msg only once per type)
-[parameter_bridge-17] [INFO] [1757963920.948175522] [tb1.hmi_display_msg_bridge]: Passing message from ROS std_msgs/msg/Int32 to Gazebo gz.msgs.Int32 (showing msg only once per type)
-[parameter_bridge-19] [INFO] [1757963922.918299386] [tb1.hmi_led_msg_bridge]: Passing message from ROS std_msgs/msg/Int32 to Gazebo gz.msgs.Int32 (showing msg only once per type)
-[create-5] [INFO] [1757963923.665955367] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-6] [INFO] [1757963925.328597163] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-5] [INFO] [1757963928.666949666] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-6] [INFO] [1757963930.329675555] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-5] [INFO] [1757963933.667795005] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-6] [INFO] [1757963935.332343066] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-5] [INFO] [1757963938.668964488] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-6] [INFO] [1757963940.334276210] [tb1.ros_gz_sim]: Requesting list of world names.
-[spawner-24] [FATAL] [1757963941.376763335] [tb1.spawner_joint_state_broadcaster]: Could not contact service /tb1/controller_manager/list_controllers
-[ERROR] [spawner-24]: process has died [pid 32520, exit code 1, cmd '/opt/ros/jazzy/lib/controller_manager/spawner joint_state_broadcaster -c controller_manager --controller-manager-timeout 30 --ros-args -r __ns:=/tb1'].
-[INFO] [spawner-55]: process started with pid [33512]
-[spawner-55] [INFO] [1757963942.014313445] [tb1.spawner_diffdrive_controller]: waiting for service /tb1/controller_manager/list_controllers to become available...
-[create-5] [INFO] [1757963943.669498324] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-6] [INFO] [1757963945.335300120] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-5] [INFO] [1757963948.670249954] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-6] [INFO] [1757963950.339497755] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-5] [INFO] [1757963953.671073820] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-6] [INFO] [1757963955.339860572] [tb1.ros_gz_sim]: Requesting list of world names.
-[create-5] [INFO] [1757963958.671687429] [tb1.ros_gz_sim]: Requesting list of world names.
+[static_transform_publisher-25] [37;1m2025-09-15 19:34:21.717 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[create-6] [INFO] [1757964861.734476985] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[motion_control-29] [INFO] [1757964861.835362244] [tb1.motion_control]: Enabling REFLEX_BUMP
+[motion_control-29] [INFO] [1757964861.835593357] [tb1.motion_control]: Enabling REFLEX_CLIFF
+[motion_control-29] [INFO] [1757964861.836173755] [tb1.motion_control]: Enabling REFLEX_STUCK
+[motion_control-29] [INFO] [1757964861.836370156] [tb1.motion_control]: Enabling REFLEX_WHEEL_DROP
+[parameter_bridge-15] [INFO] [1757964861.966438173] [tb1.ir_intensity_right_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/ir_intensity_right/sensor/ir_intensity_right/scan (ignition.msgs.LaserScan) -> /world/maze/model/tb1/turtlebot4/link/ir_intensity_right/sensor/ir_intensity_right/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-54] [INFO] [1757964862.032424572] [object7_pose_bridge]: Creating GZ->ROS Bridge: [/model/object7/pose (ignition.msgs.Pose]) -> /model/object7/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-54] [WARN] [1757964862.032633566] [object7_pose_bridge]: Failed to create a bridge for topic [/model/object7/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object7/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[parameter_bridge-20] [37;1m2025-09-15 19:34:22.091 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[parameter_bridge-11] [37;1m2025-09-15 19:34:22.114 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[create-5] [INFO] [1757964862.115479201] [tb1.ros_gz_sim]: Waiting messages on topic [robot_description].
+[parameter_bridge-53] [INFO] [1757964862.126677766] [object6_pose_bridge]: Creating GZ->ROS Bridge: [/model/object6/pose (ignition.msgs.Pose]) -> /model/object6/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-53] [WARN] [1757964862.126800093] [object6_pose_bridge]: Failed to create a bridge for topic [/model/object6/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object6/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[parameter_bridge-17] [37;1m2025-09-15 19:34:22.125 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[static_transform_publisher-42] [INFO] [1757964862.179743407] [tb1.static_tf_cliffSensorSideR]: Spinning until stopped - publishing transform
+[static_transform_publisher-42] translation: ('0.060000', '-0.145000', '0.000000')
+[static_transform_publisher-42] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-42] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_side_right'
+[parameter_bridge-7] [INFO] [1757964862.191994346] [tb1.cmd_vel_bridge]: Creating GZ->ROS Bridge: [tb1/cmd_vel (ignition.msgs.Twist) -> tb1/cmd_vel (geometry_msgs/msg/TwistStamped)] (Lazy 0)
+[static_transform_publisher-34] [37;1m2025-09-15 19:34:22.201 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[parameter_bridge-7] [INFO] [1757964862.201853046] [tb1.cmd_vel_bridge]: Creating ROS->GZ Bridge: [/model/tb1/turtlebot4/cmd_vel (geometry_msgs/msg/TwistStamped) -> /model/tb1/turtlebot4/cmd_vel (ignition.msgs.Twist)] (Lazy 0)
+[gazebo-1] [1;32m[Msg] [0m[1;32mGazebo Sim GUI    v[0m[1;32m8.9.0[0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mDetected Wayland. Setting Qt to use the xcb plugin: [0m[1;32m'QT_QPA_PLATFORM=xcb'.[0m[1;32m[0m
+[gazebo-1] [1;36m[Dbg] [Gui.cc:275] [0m[1;36mWaiting for subscribers to [[0m[1;36m/gazebo/starting_world[0m[1;36m]...[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [Application.cc:96] [0m[1;36mInitializing application.[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [Application.cc:170] [0m[1;36mQt using OpenGL graphics interface[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:657] [0m[1;36mCreate main window[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [PathManager.cc:68] [0m[1;36mRequesting resource paths through [[0m[1;36m/gazebo/resource_paths/get[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Gui.cc:355] [0m[1;36mGUI requesting list of world names. The server may be busy [0m[1;36mdownloading resources. Please be patient.[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [PathManager.cc:57] [0m[1;36mReceived resource paths.[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [GuiRunner.cc:149] [0m[1;36mRequesting initial state from [[0m[1;36m/world/maze/state[0m[1;36m]...[0m[1;36m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoading config [[0m[1;32m/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/gui/standard/gui.config[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mMinimalScene[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [MinimalScene.cc:802] [0m[1;36mCreating gz-rendering interface for OpenGL[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [MinimalScene.cc:802] [0m[1;36mCreating gz-rendering interface for OpenGL[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [MinimalScene.cc:986] [0m[1;36mCreating render thread interface for OpenGL[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [MinimalScene.cc:802] [0m[1;36mCreating gz-rendering interface for OpenGL[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [MinimalScene.cc:986] [0m[1;36mCreating render thread interface for OpenGL[0m[1;36m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32m3D View[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mMinimalScene[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_gui_vendor/lib/gz-gui-8/plugins/libMinimalScene.so[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mGzSceneManager[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mScene Manager[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mGzSceneManager[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_sim_vendor/lib/gz-sim-8/plugins/gui/libGzSceneManager.so[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mInteractiveViewControl[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mCamera view controller topic advertised on [[0m[1;32m/gui/camera/view_control[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mCamera reference visual topic advertised on [[0m[1;32m/gui/camera/view_control/reference_visual[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mCamera view control sensitivity advertised on [[0m[1;32m/gui/camera/view_control/sensitivity[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mInteractive view control[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mInteractiveViewControl[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_gui_vendor/lib/gz-gui-8/plugins/libInteractiveViewControl.so[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mWorldControl[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mUsing world control service [[0m[1;32m/world/maze/control[0m[1;32m][0m[1;32m[0m
+[turtlebot4_node-22] [INFO] [1757964862.248807979] [tb1.turtlebot4_node]: Init Turtlebot4 Node Main
+[parameter_bridge-19] [37;1m2025-09-15 19:34:22.257 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[turtlebot4_gz_hmi_node-23] [37;1m2025-09-15 19:34:22.268 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[robot_state-31] [37;1m2025-09-15 19:34:22.332 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[hazards_vector_publisher-27] [INFO] [1757964862.338889280] [tb1.hazards_vector_publisher]: Advertised topic: hazard_detection
+[parameter_bridge-11] [INFO] [1757964862.377587455] [tb1.ir_intensity_front_center_right_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/ir_intensity_front_center_right/sensor/ir_intensity_front_center_right/scan (ignition.msgs.LaserScan) -> /world/maze/model/tb1/turtlebot4/link/ir_intensity_front_center_right/sensor/ir_intensity_front_center_right/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[mock_publisher-30] [37;1m2025-09-15 19:34:22.384 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[joint_state_publisher-4] [37;1m2025-09-15 19:34:22.386 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[spawner-24] [37;1m2025-09-15 19:34:22.426 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[ir_intensity_vector_publisher-28] [37;1m2025-09-15 19:34:22.428 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7054: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[gazebo-1] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file::/Turtlebot4Hmi/Turtlebot4Hmi.qml:102:7: Unable to assign [undefined] to QString[0m[1;33m[0m
+[parameter_bridge-13] [INFO] [1757964862.640513358] [tb1.ir_intensity_front_right_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/ir_intensity_front_right/sensor/ir_intensity_front_right/scan (ignition.msgs.LaserScan) -> /world/maze/model/tb1/turtlebot4/link/ir_intensity_front_right/sensor/ir_intensity_front_right/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-21] [INFO] [1757964862.675892995] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/image (gz.msgs.Image) -> /world/maze/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/image (sensor_msgs/msg/Image)] (Lazy 0)
+[create-6] [INFO] [1757964862.755326699] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[static_transform_publisher-25] [INFO] [1757964862.764509306] [tb1.tf_namespaced_odom_publisher]: Spinning until stopped - publishing transform
+[static_transform_publisher-25] translation: ('0.000000', '0.000000', '0.000000')
+[static_transform_publisher-25] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-25] from 'odom' to 'tb1/odom'
+[parameter_bridge-20] [INFO] [1757964862.856026663] [tb1.lidar_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/rplidar_link/sensor/rplidar/scan (gz.msgs.LaserScan) -> /world/maze/model/tb1/turtlebot4/link/rplidar_link/sensor/rplidar/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mListening to stats on[1;32m[Msg] [0m[1;32mServing entity system service on [[0m[1;32m/[0m[1;32mentity/system/add[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[Dbg] [Physics.cc:883] [0m[1;36mLoaded [[0m[1;36mgz::physics::dartsim::Plugin[0m[1;36m] from library [[0m[1;36m/opt/ros/jazzy/opt/gz_physics_vendor/lib/gz-physics-7/engine-plugins/libgz-physics-dartsim-plugin.so[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::Physics[0m[1;36m] for entity [[0m[1;36m1[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mCreate service on [[0m[1;32m/world/maze/create[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mRemove service on [[0m[1;32m/world/maze/remove[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mPose service on [[0m[1;32m/world/maze/set_pose[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mPose service on [[0m[1;32m/world/maze/set_pose_vector[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mLight configuration service on [[0m[1;32m/world/maze/light_config[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mPhysics service on [[0m[1;32m/world/maze/set_physics[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mSphericalCoordinates service on [[0m[1;32m/world/maze/set_spherical_coordinates[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mEnable collision service on [[0m[1;32m/world/maze/enable_collision[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mDisable collision service on [[0m[1;32m/world/maze/disable_collision[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mMaterial service on [[0m[1;32m/world/maze/visual_config[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mMaterial service on [[0m[1;32m/world/maze/wheel_slip[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::UserCommands[0m[1;36m] for entity [[0m[1;36m1[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::SceneBroadcaster[0m[1;36m] for entity [[0m[1;36m1[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::Contact[0m[1;36m] for entity [[0m[1;36m1[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mLoaded level [[0m[1;32mdefault[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mServing world controls on [[0m[1;32m/world/maze[0m[1;32m/control], [[0m[1;32m/world/maze[0m[1;32m/control/state] and [[0m[1;32m/world/maze[0m[1;32m/playback/control][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mServing GUI information on [[0m[1;32m/world/maze[0m[1;32m/[0m[1;32mgui/info[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mWorld [[0m[1;32mmaze[0m[1;32m] initialized with [[0m[1;32m1ms[0m[1;32m] physics profile.[0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mServing world SDF generation service on [[0m[1;32m/world/maze[0m[1;32m/[0m[1;32mgenerate_world_sdf[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mServing world names on [[0m[1;32m/gazebo/worlds[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mResource path add service on [[0m[1;32m/gazebo/resource_paths/add[0m[1;32m].[0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mResource path get service on [[0m[1;32m/gazebo/resource_paths/get[0m[1;32m].[0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mResource path resolve service on [[0m[1;32m/gazebo/resource_paths/resolve[0m[1;32m].[0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mResource paths published on [[0m[1;32m/gazebo/resource_paths[0m[1;32m].[0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mServer control service on [[0m[1;32m/server_control[0m[1;32m].[0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mFound no publishers on /stats, adding root stats topic[0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mFound no publishers on /clock, adding root clock topic[0m[1;32m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:533] [0m[1;36mCreating PostUpdate worker threads: [0m[1;36m3[0m[1;36m[0m
+[gazebo-1] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file::/WorldStats/WorldStats.qml:53:3: QML RowLayout: Binding loop detected for property "x"[0m[1;33m[0m
+[parameter_bridge-50] [INFO] [1757964862.980155636] [object3_pose_bridge]: Creating GZ->ROS Bridge: [/model/object3/pose (ignition.msgs.Pose]) -> /model/object3/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-50] [WARN] [1757964862.980575429] [object3_pose_bridge]: Failed to create a bridge for topic [/model/object3/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object3/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[static_transform_publisher-35] [INFO] [1757964862.993714615] [tb1.camera_stf]: Spinning until stopped - publishing transform
+[static_transform_publisher-35] translation: ('0.000000', '0.000000', '0.000000')
+[static_transform_publisher-35] rotation: ('0.499952', '-0.500000', '0.500000', '0.500048')
+[static_transform_publisher-35] from 'oakd_rgb_camera_optical_frame' to 'tb1/turtlebot4/oakd_rgb_camera_frame/rgbd_camera'
+[parameter_bridge-14] [INFO] [1757964862.999051865] [tb1.ir_intensity_left_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/ir_intensity_left/sensor/ir_intensity_left/scan (ignition.msgs.LaserScan) -> /world/maze/model/tb1/turtlebot4/link/ir_intensity_left/sensor/ir_intensity_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[hazards_vector_publisher-27] [INFO] [1757964863.025783523] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/bumper/event
+[parameter_bridge-21] [INFO] [1757964863.031904163] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/depth_image (gz.msgs.Image) -> /world/maze/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/depth_image (sensor_msgs/msg/Image)] (Lazy 0)
+[hazards_vector_publisher-27] [INFO] [1757964863.044003885] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_front_left/event
+[hazards_vector_publisher-27] [INFO] [1757964863.053534288] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_front_right/event
+[hazards_vector_publisher-27] [INFO] [1757964863.054151069] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_side_left/event
+[hazards_vector_publisher-27] [INFO] [1757964863.054483157] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_side_right/event
+[hazards_vector_publisher-27] [INFO] [1757964863.054814614] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/wheel_drop/left_wheel/event
+[parameter_bridge-18] [INFO] [1757964863.046074777] [tb1.hmi_buttons_msg_bridge]: Creating GZ->ROS Bridge: [tb1/hmi/buttons (gz.msgs.Int32) -> tb1/hmi/buttons (std_msgs/msg/Int32)] (Lazy 0)
+[turtlebot4_node-22] [INFO] [1757964863.053872335] [tb1.turtlebot4_node]: Buttons Init
+[turtlebot4_node-22] [INFO] [1757964863.056059596] [tb1.turtlebot4_node]: Init Display
+[hazards_vector_publisher-27] [INFO] [1757964863.063004882] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/wheel_drop/right_wheel/event
+[hazards_vector_publisher-27] [INFO] [1757964863.063845147] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/backup_limit
+[static_transform_publisher-44] [INFO] [1757964863.068252530] [tb1.static_tf_cliffSensorFrontR]: Spinning until stopped - publishing transform
+[static_transform_publisher-44] translation: ('0.160000', '-0.045000', '0.000000')
+[static_transform_publisher-44] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-44] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_front_right'
+[create-5] [INFO] [1757964863.069736976] [tb1.ros_gz_sim]: Entity creation successful.
+[turtlebot4_node-22] [INFO] [1757964863.070930048] [tb1.turtlebot4_node]: Leds Init
+[static_transform_publisher-39] [INFO] [1757964863.120985542] [tb1.static_tf_lightSensorFrontR]: Spinning until stopped - publishing transform
+[static_transform_publisher-39] translation: ('0.090000', '-0.080000', '0.350000')
+[static_transform_publisher-39] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-39] from 'tb1/turtlebot4' to 'tb1/light_sensor_front_right'
+[parameter_bridge-48] [INFO] [1757964863.192535834] [object1_pose_bridge]: Creating GZ->ROS Bridge: [/model/object1/pose (ignition.msgs.Pose]) -> /model/object1/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-48] [WARN] [1757964863.192752727] [object1_pose_bridge]: Failed to create a bridge for topic [/model/object1/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object1/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[INFO] [create-5]: process has finished cleanly [pid 36482]
+[joint_state_publisher-4] [INFO] [1757964863.433199258] [tb1.joint_state_publisher]: Waiting for robot_description to be published on the robot_description topic...
+[parameter_bridge-21] [INFO] [1757964863.578685490] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/points (gz.msgs.PointCloudPacked) -> /world/maze/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/points (sensor_msgs/msg/PointCloud2)] (Lazy 0)
+[gazebo-1] libEGL warning: egl: failed to create dri2 screen
+[motion_control-29] [INFO] [1757964863.625536648] [tb1.motion_control]: Robot max speed is now 0.460000 m/s
+[gazebo-1] MESA: error: ZINK: failed to choose pdev
+[gazebo-1] libEGL warning: egl: failed to create dri2 screen
+[gazebo-1] libEGL warning: NEEDS EXTENSION: falling back to kms_swrast
+[create-6] [INFO] [1757964863.759530009] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[ir_intensity_vector_publisher-28] [INFO] [1757964863.804671839] [tb1.ir_intensity_vector_publisher]: Advertised topic: ir_intensity
+[ir_intensity_vector_publisher-28] [INFO] [1757964863.823674009] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_center_left
+[mock_publisher-30] [INFO] [1757964863.825859646] [tb1.mock_publisher]: Advertised mocked topic: slip_status
+[turtlebot4_node-22] [INFO] [1757964863.847985760] [tb1.turtlebot4_node]: Turtlebot4 standard running.
+[static_transform_publisher-38] [INFO] [1757964863.855391780] [tb1.static_tf_lightSensorFrontL]: Spinning until stopped - publishing transform
+[static_transform_publisher-38] translation: ('0.090000', '0.080000', '0.350000')
+[static_transform_publisher-38] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-38] from 'tb1/turtlebot4' to 'tb1/light_sensor_front_left'
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:544] [0m[1;36mCreating postupdate worker thread ([0m[1;36m0[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:544] [0m[1;36mCreating postupdate worker thread ([0m[1;36m1[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationFeatures.cc:90] [0m[1;36mSimulation timestep set to: [0m[1;36m0.003[0m[1;36m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mServing scene information on [[0m[1;32m/world/maze[0m[1;32m/[0m[1;32mscene/info[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mServing graph information on [[0m[1;32m/world/maze[0m[1;32m/[0m[1;32mscene/graph[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mServing full state on [[0m[1;32m/world/maze[0m[1;32m/[0m[1;32mstate[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mServing full state (async) on [[0m[1;32m/world/maze[0m[1;32m/[0m[1;32mstate_async[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mPublishing scene information on [[0m[1;32m/world/maze/scene/info[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mPublishing entity deletions on [[0m[1;32m/world/maze/scene/deletion[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mPublishing state changes on [[0m[1;32m/world/maze/state[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mPublishing pose messages on [[0m[1;32m/world/maze[0m[1;32m/[0m[1;32mpose/info[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mPublishing dynamic pose messages on [[0m[1;32m/world/maze[0m[1;32m/[0m[1;32mdynamic_pose/info[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[Dbg] [EntityComponentManager.cc:1656] [0m[1;36mUpdated state thread iterators: [0m[1;36m8[0m[1;36m threads processing around [0m[1;36m17[0m[1;36m entities each.[0m[1;36m[0m
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="turtlebot4"]/joint[@name="wheel_drop_left_joint"]/physics/ode/provide_feedback:<urdf-string>:L0]: XML Element[provide_feedback], child of element[ode], not defined in SDF. Copying[provide_feedback] as children of [ode].
+[spawner-24] [INFO] [1757964863.892309488] [tb1.spawner_joint_state_broadcaster]: waiting for service /tb1/controller_manager/list_controllers to become available...
+[ir_intensity_vector_publisher-28] [INFO] [1757964863.910701513] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_center_right
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="turtlebot4"]/joint[@name="wheel_drop_right_joint"]/physics/ode/provide_feedback:<urdf-string>:L0]: XML Element[provide_feedback], child of element[ode], not defined in SDF. Copying[provide_feedback] as children of [ode].
+[ir_intensity_vector_publisher-28] [INFO] [1757964863.929325960] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_left
+[parameter_bridge-21] [INFO] [1757964863.961764242] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/maze/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/camera_info (gz.msgs.CameraInfo) -> /world/maze/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/camera_info (sensor_msgs/msg/CameraInfo)] (Lazy 0)
+[static_transform_publisher-34] [INFO] [1757964863.977308575] [tb1.rplidar_stf]: Spinning until stopped - publishing transform
+[static_transform_publisher-34] translation: ('0.000000', '0.000000', '0.000000')
+[static_transform_publisher-34] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-34] from 'rplidar_link' to 'tb1/turtlebot4/rplidar_link/rplidar'
+[static_transform_publisher-41] [INFO] [1757964863.991438790] [tb1.static_tf_cliffSensorSideL]: Spinning until stopped - publishing transform
+[static_transform_publisher-41] translation: ('0.060000', '0.145000', '0.000000')
+[static_transform_publisher-41] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-41] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_side_left'
+[ir_intensity_vector_publisher-28] [INFO] [1757964864.002186009] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_right
+[gazebo-1] [1;33m[Wrn] [SdfEntityCreator.cc:933] [0m[1;33mGazebo does not support Ogre material scripts. See [0m[1;33mhttps://gazebosim.org/api/sim/8/migrationsdf.html#:~:text=Materials [0m[1;33mfor details.[0m[1;33m[0m
+[gazebo-1] [1;33m[Wrn] [SdfEntityCreator.cc:949] [0m[1;33mUsing an internal gazebo.material to parse [0m[1;33mGazebo/DarkGrey[0m[1;33m[0m
+[gazebo-1] [1;33m[Wrn] [SdfEntityCreator.cc:933] [0m[1;33mGazebo does not support Ogre material scripts. See [0m[1;33mhttps://gazebosim.org/api/sim/8/migrationsdf.html#:~:text=Materials [0m[1;33mfor details.[0m[1;33m[0m
+[gazebo-1] [1;33m[Wrn] [SdfEntityCreator.cc:949] [0m[1;33mUsing an internal gazebo.material to parse [0m[1;33mGazebo/DarkGrey[0m[1;33m[0m
+[gazebo-1] [1;33m[Wrn] [SdfEntityCreator.cc:933] [0m[1;33mGazebo does not support Ogre material scripts. See [0m[1;33mhttps://gazebosim.org/api/sim/8/migrationsdf.html#:~:text=Materials [0m[1;33mfor details.[0m[1;33m[0m
+[gazebo-1] [1;33m[Wrn] [SdfEntityCreator.cc:949] [0m[1;33mUsing an internal gazebo.material to parse [0m[1;33mGazebo/DarkGrey[0m[1;33m[0m
+[gazebo-1] [1;33m[Wrn] [SdfEntityCreator.cc:933] [0m[1;33mGazebo does not support Ogre material scripts. See [0m[1;33mhttps://gazebosim.org/api/sim/8/migrationsdf.html#:~:text=Materials [0m[1;33mfor details.[0m[1;33m[0m
+[gazebo-1] [1;33m[Wrn] [SdfEntityCreator.cc:949] [0m[1;33mUsing an internal gazebo.material to parse [0m[1;33mGazebo/DarkGrey[0m[1;33m[0m
+[parameter_bridge-52] [INFO] [1757964864.057713764] [object5_pose_bridge]: Creating GZ->ROS Bridge: [/model/object5/pose (ignition.msgs.Pose]) -> /model/object5/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-52] [WARN] [1757964864.057867372] [object5_pose_bridge]: Failed to create a bridge for topic [/model/object5/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object5/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[ir_intensity_vector_publisher-28] [INFO] [1757964864.066924356] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_left
+[ir_intensity_vector_publisher-28] [INFO] [1757964864.100988098] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_right
+[ir_intensity_vector_publisher-28] [INFO] [1757964864.131384286] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_side_left
+[static_transform_publisher-43] [INFO] [1757964864.218591669] [tb1.static_tf_cliffSensorFrontL]: Spinning until stopped - publishing transform
+[static_transform_publisher-43] translation: ('0.160000', '0.045000', '0.000000')
+[static_transform_publisher-43] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-43] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_front_left'
+[parameter_bridge-36] [INFO] [1757964864.304250149] [tb1.robot_pose_tf_bridge]: Creating GZ->ROS Bridge: [/model/tb1/turtlebot4/pose (gz.msgs.Pose_V) -> /model/tb1/turtlebot4/pose (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[robot_state-31] [INFO] [1757964864.371705284] [tb1.robot_state]: Advertised topic: battery_state
+[robot_state-31] [INFO] [1757964864.563277521] [tb1.robot_state]: Subscription to topic: dock_status
+[robot_state-31] [INFO] [1757964864.634226064] [tb1.robot_state]: Advertised topic: stop_status
+[gazebo-1] [INFO] [1757964864.702531034] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [bumper_joint] (Entity=211)] is skipped
+[gazebo-1] [INFO] [1757964864.702627541] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [front_caster_joint] (Entity=212)] is skipped
+[gazebo-1] [INFO] [1757964864.702632462] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [front_left_bottom_weight_block_joint] (Entity=213)] is skipped
+[gazebo-1] [INFO] [1757964864.702635396] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [front_left_top_weight_block_joint] (Entity=214)] is skipped
+[gazebo-1] [INFO] [1757964864.702638375] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [front_right_bottom_weight_block_joint] (Entity=215)] is skipped
+[gazebo-1] [INFO] [1757964864.702640903] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [front_right_top_weight_block_joint] (Entity=216)] is skipped
+[gazebo-1] [INFO] [1757964864.702643701] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [imu_joint] (Entity=217)] is skipped
+[gazebo-1] [INFO] [1757964864.702646139] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [ir_intensity_front_center_left_joint] (Entity=218)] is skipped
+[gazebo-1] [INFO] [1757964864.702648396] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [ir_intensity_front_center_right_joint] (Entity=219)] is skipped
+[gazebo-1] [INFO] [1757964864.706951102] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [ir_intensity_front_left_joint] (Entity=220)] is skipped
+[gazebo-1] [INFO] [1757964864.706954487] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [ir_intensity_front_right_joint] (Entity=221)] is skipped
+[gazebo-1] [INFO] [1757964864.706957376] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [ir_intensity_left_joint] (Entity=222)] is skipped
+[gazebo-1] [INFO] [1757964864.706959994] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [ir_intensity_right_joint] (Entity=223)] is skipped
+[gazebo-1] [INFO] [1757964864.706962387] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [ir_intensity_side_left_joint] (Entity=224)] is skipped
+[gazebo-1] [INFO] [1757964864.706964960] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [ir_omni_joint] (Entity=225)] is skipped
+[gazebo-1] [INFO] [1757964864.706967487] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [mouse_joint] (Entity=226)] is skipped
+[gazebo-1] [INFO] [1757964864.706971821] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [front_left_tower_standoff_joint] (Entity=227)] is skipped
+[gazebo-1] [INFO] [1757964864.706978862] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [front_right_tower_standoff_joint] (Entity=228)] is skipped
+[gazebo-1] [INFO] [1757964864.706985678] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [oakd_camera_bracket_joint] (Entity=229)] is skipped
+[gazebo-1] [INFO] [1757964864.706988567] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [oakd_joint] (Entity=230)] is skipped
+[gazebo-1] [INFO] [1757964864.706990734] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [oakd_imu_joint] (Entity=231)] is skipped
+[gazebo-1] [INFO] [1757964864.706992991] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [oakd_left_camera_joint] (Entity=232)] is skipped
+[gazebo-1] [INFO] [1757964864.706995519] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [oakd_left_camera_optical_joint] (Entity=233)] is skipped
+[gazebo-1] [INFO] [1757964864.706998182] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [oakd_rgb_camera_joint] (Entity=234)] is skipped
+[gazebo-1] [INFO] [1757964864.707000665] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [oakd_rgb_camera_optical_joint] (Entity=235)] is skipped
+[gazebo-1] [INFO] [1757964864.707003238] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [oakd_right_camera_joint] (Entity=236)] is skipped
+[gazebo-1] [INFO] [1757964864.707005946] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [oakd_right_camera_optical_joint] (Entity=237)] is skipped
+[gazebo-1] [INFO] [1757964864.707008429] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [rear_left_tower_standoff_joint] (Entity=238)] is skipped
+[gazebo-1] [INFO] [1757964864.707011182] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [rear_right_tower_standoff_joint] (Entity=239)] is skipped
+[gazebo-1] [INFO] [1757964864.707013574] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [rplidar_joint] (Entity=240)] is skipped
+[gazebo-1] [INFO] [1757964864.707015831] [tb1.gz_ros_control]: [gz_ros2_control] Fixed joint [tower_sensor_plate_joint] (Entity=241)] is skipped
+[robot_state-31] [INFO] [1757964864.727505381] [tb1.robot_state]: Subscription to topic: odom
+[parameter_bridge-37] [INFO] [1757964864.737087379] [tb1.robot_pose_poseArray_bridge]: Creating GZ->ROS Bridge: [/model/tb1/turtlebot4/pose (gz.msgs.Pose_V) -> /model/tb1/turtlebot4/pose (geometry_msgs/msg/PoseArray)] (Lazy 0)
+[gazebo-1] [INFO] [1757964864.754927353] [tb1.gz_ros_control]: Loading controller_manager
+[create-6] [INFO] [1757964864.759848284] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[parameter_bridge-17] [INFO] [1757964864.817434834] [tb1.hmi_display_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/display/raw (std_msgs/msg/String) -> tb1/hmi/display/raw (gz.msgs.StringMsg)] (Lazy 0)
+[parameter_bridge-49] [INFO] [1757964864.886009511] [object2_pose_bridge]: Creating GZ->ROS Bridge: [/model/object2/pose (ignition.msgs.Pose]) -> /model/object2/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-49] [WARN] [1757964864.886167001] [object2_pose_bridge]: Failed to create a bridge for topic [/model/object2/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object2/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[parameter_bridge-19] [INFO] [1757964864.995636593] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/power (std_msgs/msg/Int32) -> tb1/hmi/led/power (gz.msgs.Int32)] (Lazy 0)
+[parameter_bridge-19] [INFO] [1757964865.027287648] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/motors (std_msgs/msg/Int32) -> tb1/hmi/led/motors (gz.msgs.Int32)] (Lazy 0)
+[parameter_bridge-17] [INFO] [1757964865.064058022] [tb1.hmi_display_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/display/selected (std_msgs/msg/Int32) -> tb1/hmi/display/selected (gz.msgs.Int32)] (Lazy 0)
+[gazebo-1] [INFO] [1757964865.307733895] [tb1.controller_manager]: Using ROS clock for triggering controller manager cycles.
+[parameter_bridge-19] [INFO] [1757964865.333454663] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/comms (std_msgs/msg/Int32) -> tb1/hmi/led/comms (gz.msgs.Int32)] (Lazy 0)
+[parameter_bridge-19] [INFO] [1757964865.398653565] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/wifi (std_msgs/msg/Int32) -> tb1/hmi/led/wifi (gz.msgs.Int32)] (Lazy 0)
+[parameter_bridge-19] [INFO] [1757964865.447846631] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/battery (std_msgs/msg/Int32) -> tb1/hmi/led/battery (gz.msgs.Int32)] (Lazy 0)
+[gazebo-1] [1;33m[GUI] [Wrn] [Ogre2RenderTarget.cc:668] [0m[1;33mAnti-aliasing level of '[0m[1;33m[0m[1;33m' [0m[1;33mis not supported; valid FSAA levels are: [0m[1;33m[ 0 4 ][0m[1;33m. Setting to 1[0m[1;33m[0m
+[gazebo-1] [INFO] [1757964865.501911246] [tb1.controller_manager]: Subscribing to '/tb1/robot_description' topic for robot description.
+[gazebo-1] [WARN] [1757964865.577262704] [tb1.gz_ros_control]: Waiting RM to load and initialize hardware...
+[parameter_bridge-19] [INFO] [1757964865.650332605] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/user1 (std_msgs/msg/Int32) -> tb1/hmi/led/user1 (gz.msgs.Int32)] (Lazy 0)
+[parameter_bridge-51] [INFO] [1757964865.696552853] [object4_pose_bridge]: Creating GZ->ROS Bridge: [/model/object4/pose (ignition.msgs.Pose]) -> /model/object4/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-51] [WARN] [1757964865.697990309] [object4_pose_bridge]: Failed to create a bridge for topic [/model/object4/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object4/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[create-6] [INFO] [1757964865.760080524] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[parameter_bridge-19] [INFO] [1757964865.793396988] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/user2 (std_msgs/msg/Int32) -> tb1/hmi/led/user2 (gz.msgs.Int32)] (Lazy 0)
+[gazebo-1]  [[0m[1;32m/world/maze/stats[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [WorldControl.cc:237] [0m[1;36mUsing an event to share WorldControl msgs with the server[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mWorld control[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mWorldControl[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_gui_vendor/lib/gz-gui-8/plugins/libWorldControl.so[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mWorldStats[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mListening to stats on [[0m[1;32m/world/maze/stats[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mWorld stats[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mWorldStats[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_gui_vendor/lib/gz-gui-8/plugins/libWorldStats.so[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mTransformControl[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mTransform control[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mTransformControl[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_sim_vendor/lib/gz-sim-8/plugins/gui/libTransformControl.so[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mShapes[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mShapes[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mShapes[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_sim_vendor/lib/gz-sim-8/plugins/gui/libShapes.so[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mTurtlebot4Hmi[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mTurtlebot4 HMI[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mTurtlebot4Hmi[0m[1;32m] from path [[0m[1;32m/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_gui_plugins/share/turtlebot4_gz_gui_plugins/lib/libTurtlebot4Hmi.so[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mTeleop[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mA new topic has been entered: '[0m[1;32m/cmd_vel[0m[1;32m ' [0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mTeleop[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mTeleop[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_gui_vendor/lib/gz-gui-8/plugins/libTeleop.so[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:671] [0m[1;36mApplying config[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [MinimalScene.cc:802] [0m[1;36mCreating gz-rendering interface for OpenGL[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [MinimalScene.cc:986] [0m[1;36mCreating render thread interface for OpenGL[0m[1;36m[0m
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoading plugin [[0m[1;32mgz-rendering-ogre2[0m[1;32m][0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [MinimalScene.cc:749] [0m[1;36mCreate scene [[0m[1;36mscene[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/plugin[@name="__default__"]:<data-string>:L1]: XML Element[plugin], child of element[sdf], not defined in SDF. Copying[plugin] as children of [sdf].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="border"]/link[@name="wall1"]/static:<data-string>:L32]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="border"]/link[@name="wall2"]/static:<data-string>:L62]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="border"]/link[@name="wall3"]/static:<data-string>:L92]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="border"]/link[@name="wall4"]/collision[@name="wall4_collision"]/material:<data-string>:L102]: XML Element[material], child of element[collision], not defined in SDF. Copying[material] as children of [collision].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="border"]/link[@name="wall4"]/static:<data-string>:L127]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [WARN] [1757964866.465824008] [tb1.controller_manager]: Waiting for data on 'robot_description' topic to finish initialization
+[create-6] [INFO] [1757964866.760755534] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall1"]/static:<data-string>:L32]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall2"]/static:<data-string>:L62]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall3"]/static:<data-string>:L92]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall4"]/static:<data-string>:L122]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall5"]/static:<data-string>:L152]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall6"]/static:<data-string>:L182]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall7"]/static:<data-string>:L212]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall8"]/static:<data-string>:L242]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall9"]/static:<data-string>:L272]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall10"]/static:<data-string>:L302]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall11"]/static:<data-string>:L332]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall12"]/static:<data-string>:L362]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall13"]/static:<data-string>:L392]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall14"]/static:<data-string>:L422]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall15"]/static:<data-string>:L452]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall16"]/static:<data-string>:L482]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall17"]/static:<data-string>:L512]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall18"]/static:<data-string>:L542]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall19"]/static:<data-string>:L572]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall20"]/static:<data-string>:L602]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall21"]/static:<data-string>:L632]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall22"]/static:<data-string>:L662]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall23"]/static:<data-string>:L692]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall24"]/static:<data-string>:L722]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall25"]/static:<data-string>:L752]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall26"]/static:<data-string>:L782]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall27"]/static:<data-string>:L812]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [WARN] [1757964867.466762495] [tb1.controller_manager]: Waiting for data on 'robot_description' topic to finish initialization
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall28"]/static:<data-string>:L842]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall29"]/static:<data-string>:L872]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall30"]/static:<data-string>:L902]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall31"]/static:<data-string>:L932]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall32"]/static:<data-string>:L962]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall33"]/static:<data-string>:L992]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall34"]/static:<data-string>:L1022]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall35"]/static:<data-string>:L1052]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [INFO] [1757964867.579352148] [tb1.controller_manager]: Received robot description from topic.
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall36"]/static:<data-string>:L1082]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [INFO] [1757964867.724155786] [tb1.gz_ros_control]: The position_proportional_gain has been set to: 0.1
+[gazebo-1] [INFO] [1757964867.733112336] [tb1.gz_ros_control]: Loading joint: left_wheel_joint
+[gazebo-1] [INFO] [1757964867.733564224] [tb1.gz_ros_control]: 	State:
+[gazebo-1] [INFO] [1757964867.733572033] [tb1.gz_ros_control]: 		 velocity
+[gazebo-1] [INFO] [1757964867.733845892] [tb1.gz_ros_control]: 		 position
+[gazebo-1] [INFO] [1757964867.733869861] [tb1.gz_ros_control]: 	Command:
+[gazebo-1] [INFO] [1757964867.733873833] [tb1.gz_ros_control]: 		 velocity
+[gazebo-1] [INFO] [1757964867.733978149] [tb1.gz_ros_control]: Loading sensor: imu
+[gazebo-1] [INFO] [1757964867.733988125] [tb1.gz_ros_control]: 	State:
+[gazebo-1] [INFO] [1757964867.734086483] [tb1.controller_manager]: Initialize hardware 'left_wheel_controller' 
+[gazebo-1] [WARN] [1757964867.734116862] [tb1.controller_manager]: Executor is not available during hardware component initialization for 'left_wheel_controller'. Skipping node creation!
+[gazebo-1] [INFO] [1757964867.734166334] [tb1.controller_manager]: Successful initialization of hardware 'left_wheel_controller'
+[gazebo-1] [INFO] [1757964867.734272411] [tb1.gz_ros_control]: The position_proportional_gain has been set to: 0.1
+[gazebo-1] [INFO] [1757964867.740072066] [tb1.gz_ros_control]: Loading joint: right_wheel_joint
+[gazebo-1] [INFO] [1757964867.740086962] [tb1.gz_ros_control]: 	State:
+[gazebo-1] [INFO] [1757964867.740090348] [tb1.gz_ros_control]: 		 velocity
+[gazebo-1] [INFO] [1757964867.740094094] [tb1.gz_ros_control]: 		 position
+[gazebo-1] [INFO] [1757964867.740097525] [tb1.gz_ros_control]: 	Command:
+[gazebo-1] [INFO] [1757964867.740100188] [tb1.gz_ros_control]: 		 velocity
+[gazebo-1] [INFO] [1757964867.740115039] [tb1.gz_ros_control]: Loading sensor: imu
+[gazebo-1] [INFO] [1757964867.740118605] [tb1.gz_ros_control]: 	State:
+[gazebo-1] [INFO] [1757964867.742653166] [tb1.controller_manager]: Initialize hardware 'right_wheel_controller' 
+[gazebo-1] [WARN] [1757964867.742738344] [tb1.controller_manager]: Executor is not available during hardware component initialization for 'right_wheel_controller'. Skipping node creation!
+[gazebo-1] [INFO] [1757964867.742752743] [tb1.controller_manager]: Successful initialization of hardware 'right_wheel_controller'
+[gazebo-1] [INFO] [1757964867.743619143] [resource_manager]: 'configure' hardware 'right_wheel_controller' 
+[gazebo-1] [INFO] [1757964867.743625147] [tb1.gz_ros_control]: System Successfully configured!
+[gazebo-1] [INFO] [1757964867.743632595] [resource_manager]: Successful 'configure' of hardware 'right_wheel_controller'
+[gazebo-1] [INFO] [1757964867.743637605] [resource_manager]: 'activate' hardware 'right_wheel_controller' 
+[gazebo-1] [INFO] [1757964867.744271945] [resource_manager]: Successful 'activate' of hardware 'right_wheel_controller'
+[gazebo-1] [INFO] [1757964867.748010413] [resource_manager]: 'configure' hardware 'left_wheel_controller' 
+[gazebo-1] [INFO] [1757964867.748018222] [tb1.gz_ros_control]: System Successfully configured!
+[gazebo-1] [INFO] [1757964867.748025309] [resource_manager]: Successful 'configure' of hardware 'left_wheel_controller'
+[gazebo-1] [INFO] [1757964867.748027972] [resource_manager]: 'activate' hardware 'left_wheel_controller' 
+[gazebo-1] [INFO] [1757964867.748030274] [resource_manager]: Successful 'activate' of hardware 'left_wheel_controller'
+[gazebo-1] [INFO] [1757964867.748052934] [tb1.controller_manager]: Resource Manager has been successfully initialized. Starting Controller Manager services...
+[create-6] [INFO] [1757964867.760909278] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall1"]/static:<data-string>:L32]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall2"]/static:<data-string>:L62]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[parameter_bridge-17] [INFO] [1757964868.188072340] [tb1.hmi_display_msg_bridge]: Passing message from ROS std_msgs/msg/Int32 to Gazebo gz.msgs.Int32 (showing msg only once per type)
+[parameter_bridge-17] [INFO] [1757964868.188202024] [tb1.hmi_display_msg_bridge]: Passing message from ROS std_msgs/msg/String to Gazebo gz.msgs.StringMsg (showing msg only once per type)
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall3"]/static:<data-string>:L92]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall4"]/static:<data-string>:L122]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall5"]/static:<data-string>:L152]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall6"]/static:<data-string>:L182]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall7"]/static:<data-string>:L212]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall8"]/static:<data-string>:L242]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall9"]/static:<data-string>:L272]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall10"]/static:<data-string>:L302]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall11"]/static:<data-string>:L332]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall12"]/static:<data-string>:L362]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall13"]/static:<data-string>:L392]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall14"]/static:<data-string>:L422]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall15"]/static:<data-string>:L452]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall16"]/static:<data-string>:L482]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall17"]/static:<data-string>:L512]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall18"]/static:<data-string>:L542]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall19"]/static:<data-string>:L572]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall20"]/static:<data-string>:L602]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall21"]/static:<data-string>:L632]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall22"]/static:<data-string>:L662]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall23"]/static:<data-string>:L692]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall24"]/static:<data-string>:L722]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall25"]/static:<data-string>:L752]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall26"]/static:<data-string>:L782]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[create-6] [INFO] [1757964868.772464035] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall27"]/static:<data-string>:L812]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall28"]/static:<data-string>:L842]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall29"]/static:<data-string>:L872]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall30"]/static:<data-string>:L902]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall31"]/static:<data-string>:L932]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall32"]/static:<data-string>:L962]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall33"]/static:<data-string>:L992]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall34"]/static:<data-string>:L1022]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall35"]/static:<data-string>:L1052]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="obstacles"]/link[@name="wall36"]/static:<data-string>:L1082]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33m[Wrn] [Component.hh:127] [0m[1;33mTrying to serialize component with data type [[0m[1;33mSt10shared_ptrIN3sdf3v147ElementEE[0m[1;33m], which doesn't have [0m[1;33m`operator<<`. Component will not be serialized.[0m[1;33m[0m
+[gazebo-1] [ERROR] [1757964869.138321399] [tb1.gz_ros_control]: Desired controller update period (0.001 s) is faster than the gazebo simulation period (0.003 s).
+[gazebo-1] [WARN] [1757964869.159447140] [tb1.controller_manager]: No clock received, using time argument instead! Check your node's clock configuration (use_sim_time parameter) and if a valid clock source is available
+[gazebo-1] [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz_ros2_control::GazeboSimROS2ControlPlugin[0m[1;36m] for entity [[0m[1;36m132[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::PosePublisher[0m[1;36m] for entity [[0m[1;36m132[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::Contact[0m[1;36m] for entity [[0m[1;36m132[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [UserCommands.cc:1318] [0m[1;36mCreated entity [[0m[1;36m132[0m[1;36m] named [[0m[1;36mtb1/turtlebot4[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;32m[Msg] [0m[1;32mContact system publishing on [0m[1;32mtb1/bumper_contact[0m[1;32m[0m
+[gazebo-1] [1;36m[Dbg] [SDFFeatures.cc:332] [0m[1;36mMesh construction from an SDF has not been implemented yet for [0m[1;36mdartsim. Use AttachMeshShapeFeature to use mesh shapes.[0m
+[gazebo-1] [1;36m[Dbg] [SDFFeatures.cc:864] [0m[1;36mThe geometry element of collision [[0m[1;36mbase_link_fixed_joint_lump__shell_collision_collision_1[0m[1;36m] [0m[1;36mcouldn't be created[0m
+[gazebo-1] [1;36m[Dbg] [SDFFeatures.cc:332] [0m[1;36mMesh construction from an SDF has not been implemented yet for [0m[1;36mdartsim. Use AttachMeshShapeFeature to use mesh shapes.[0m
+[gazebo-1] [1;36m[Dbg] [SDFFeatures.cc:864] [0m[1;36mThe geometry element of collision [[0m[1;36mbumper_collision[0m[1;36m] [0m[1;36mcouldn't be created[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:560] [0m[1;36mExiting postupdate worker thread ([0m[1;36m1[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:560] [0m[1;36mExiting postupdate worker thread ([0m[1;36m0[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:533] [0m[1;36mCreating PostUpdate worker threads: [0m[1;36m6[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:544] [0m[1;36mCreating postupdate worker thread ([0m[1;36m0[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:544] [0m[1;36mCreating postupdate worker thread ([0m[1;36m1[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:544] [0m[1;36mCreating postupdate worker thread ([0m[1;36m2[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:544] [0m[1;36mCreating postupdate worker thread ([0m[1;36m3[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:544] [0m[1;36mCreating postupdate worker thread ([0m[1;36m4[0m[1;36m)[0m[1;36m[0m
+[ERROR] [pose_republisher_node-32]: process has died [pid 36615, exit code -11, cmd '/home/ben/ros2_ws/create3_ws/install/irobot_create_gz_toolbox/lib/irobot_create_gz_toolbox/pose_republisher_node --ros-args -r __node:=pose_republisher_node -r __ns:=/tb1 --params-file /home/ben/ros2_ws/create3_ws/install/irobot_create_gz_bringup/share/irobot_create_gz_bringup/config/pose_republisher_params.yaml --params-file /tmp/launch_params_0p0p5w9i --params-file /tmp/launch_params_bbex0ccq --params-file /tmp/launch_params_p6prmolm'].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="border"]/link[@name="wall1"]/static:<data-string>:L32]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="border"]/link[@name="wall2"]/static:<data-string>:L62]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[cliff_sensors_node-46] [INFO] [1757964869.559914609] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="border"]/link[@name="wall3"]/static:<data-string>:L92]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="border"]/link[@name="wall4"]/collision[@name="wall4_collision"]/material:<data-string>:L102]: XML Element[material], child of element[collision], not defined in SDF. Copying[material] as children of [collision].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="border"]/link[@name="wall4"]/static:<data-string>:L127]: XML Element[static], child of element[link], not defined in SDF. Copying[static] as children of [link].
+[light_sensors_node-45] [INFO] [1757964869.575993977] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964869.584949443] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964869.596705882] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/plugin[@name="__default__"]:<data-string>:L1]: XML Element[plugin], child of element[sdf], not defined in SDF. Copying[plugin] as children of [sdf].
+[gazebo-1] [1;36m[GUI] [Dbg] [MinimalScene.cc:1037] [0m[1;36mCreating texture node render interface for OpenGL[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [TransformControl.cc:453] [0m[1;36mTransformControl plugin is using camera [[0m[1;36mscene::Camera(65527)[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [InteractiveViewControl.cc:176] [0m[1;36mInteractiveViewControl plugin is moving camera [[0m[1;36mscene::Camera(65527)[0m[1;36m][0m[1;36m[0m
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="turtlebot4"]/joint[@name="wheel_drop_left_joint"]/physics/ode/provide_feedback:<data-string>:L1948]: XML Element[provide_feedback], child of element[ode], not defined in SDF. Copying[provide_feedback] as children of [ode].
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="turtlebot4"]/joint[@name="wheel_drop_right_joint"]/physics/ode/provide_feedback:<data-string>:L2069]: XML Element[provide_feedback], child of element[ode], not defined in SDF. Copying[provide_feedback] as children of [ode].
+[gazebo-1] [1;33m[GUI] [Wrn] [Component.hh:172] [0m[1;33mTrying to deserialize component with data type [[0m[1;33mSt10shared_ptrIN3sdf3v147ElementEE[0m[1;33m], which doesn't have [0m[1;33m`operator>>`. Component will not be deserialized.[0m[1;33m[0m
+[cliff_sensors_node-46] [INFO] [1757964871.753594887] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964871.802583970] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[create-6] [INFO] [1757964871.807806521] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[light_sensors_node-45] [INFO] [1757964871.805462988] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964871.877772385] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964871.899496941] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964871.908111201] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[robot_state_publisher-3] [WARN] [1757964871.913004778] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[cliff_sensors_node-46] [INFO] [1757964871.929628569] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964871.950969352] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964872.060289533] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964872.074429905] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964872.101623291] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964872.110182707] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964872.121016006] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[gazebo-1] [INFO] [1757964872.269855353] [tb1.controller_manager]: Received robot description from topic.
+[gazebo-1] [WARN] [1757964872.269931818] [tb1.controller_manager]: ResourceManager has already loaded a urdf. Ignoring attempt to reload a robot description.
+[create-6] [INFO] [1757964874.139918734] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[robot_state_publisher-3] [WARN] [1757964874.206950962] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[light_sensors_node-45] [INFO] [1757964874.233379646] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[robot_state_publisher-3] [WARN] [1757964874.267215706] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[cliff_sensors_node-46] [INFO] [1757964874.354154286] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[robot_state_publisher-3] [WARN] [1757964874.451581528] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[cliff_sensors_node-46] [INFO] [1757964874.551131617] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964874.726503559] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964874.766489417] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964874.772352989] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964874.858209900] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964874.917106433] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964874.929284020] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+ in time. Clearing TF buffer.
+[cliff_sensors_node-46] [INFO] [1757964894.071661240] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964894.071719696] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[robot_state_publisher-3] [WARN] [1757964894.072844382] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[motion_control-29] [WARN] [1757964894.078431206] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[light_sensors_node-45] [INFO] [1757964894.078609099] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[robot_state_publisher-3] [WARN] [1757964894.079448100] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[light_sensors_node-45] [INFO] [1757964894.080520470] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964894.080917514] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964894.082442900] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[motion_control-29] [WARN] [1757964894.083337422] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[light_sensors_node-45] [INFO] [1757964894.083684316] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[robot_state_publisher-3] [WARN] [1757964894.084112461] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[cliff_sensors_node-46] [INFO] [1757964894.086028571] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964894.086534355] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[motion_control-29] [WARN] [1757964894.087324786] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1757964894.087716549] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[motion_control-29] [WARN] [1757964894.089906293] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1757964894.092516959] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[cliff_sensors_node-46] [INFO] [1757964894.092665422] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964894.093480544] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964894.096000841] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[motion_control-29] [WARN] [1757964894.096914502] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1757964894.097640520] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[motion_control-29] [WARN] [1757964894.100252856] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1757964894.100973187] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[motion_control-29] [WARN] [1757964894.103695166] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[cliff_sensors_node-46] [INFO] [1757964894.104589327] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[robot_state_publisher-3] [WARN] [1757964894.104603861] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[light_sensors_node-45] [INFO] [1757964894.104750112] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[motion_control-29] [WARN] [1757964894.108432517] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[motion_control-29] [WARN] [1757964894.113699259] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[robot_state_publisher-3] [WARN] [1757964894.114729695] [tb1.robot_state_publisher]: Moved backwards in time, re-publishing joint transforms!
+[light_sensors_node-45] [INFO] [1757964894.116826317] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964894.117318288] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964894.118979092] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[motion_control-29] [WARN] [1757964894.119962357] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[cliff_sensors_node-46] [INFO] [1757964894.122024719] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[motion_control-29] [WARN] [1757964894.126955175] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+[light_sensors_node-45] [INFO] [1757964894.129081859] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964894.129728387] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[motion_control-29] [WARN] [1757964894.130338984] [tf2_buffer]: Detected jump back in time. Clearing TF buffer.
+ould not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[cliff_sensors_node-46] [INFO] [1757964933.772599400] [tb1.cliff_sensors_node]: Could not transform tb1/cliff_sensor_side_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964933.773521141] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-45] [INFO] [1757964933.781285748] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to arena: "arena" passed to lookupTransform argument target_frame does not exist. 
 [WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
-[parameter_bridge-53] [INFO] [1757963959.822984429] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-54] [INFO] [1757963959.823003568] [rclcpp]: signal_handler(signum=2)
-[static_transform_publisher-42] [INFO] [1757963959.823155641] [rclcpp]: signal_handler(signum=2)
-[static_transform_publisher-39] [INFO] [1757963959.823169228] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-50] [INFO] [1757963959.823138714] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-18] [INFO] [1757963959.823310739] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-37] [INFO] [1757963959.823338996] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-21] [INFO] [1757963959.823346263] [rclcpp]: signal_handler(signum=2)
-[sensors_node-33] [INFO] [1757963959.823303110] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-49] [INFO] [1757963959.823389055] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-48] [INFO] [1757963959.823395916] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-12] [INFO] [1757963959.823609649] [rclcpp]: signal_handler(signum=2)
-[static_transform_publisher-25] [INFO] [1757963959.823747007] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-51] [INFO] [1757963959.823831146] [rclcpp]: signal_handler(signum=2)
-[static_transform_publisher-35] [INFO] [1757963959.824104553] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-9] [INFO] [1757963959.824288088] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-7] [INFO] [1757963959.824731940] [rclcpp]: signal_handler(signum=2)
-[turtlebot4_node-22] [INFO] [1757963959.824785249] [rclcpp]: signal_handler(signum=2)
-[hazards_vector_publisher-27] [INFO] [1757963959.825190281] [rclcpp]: signal_handler(signum=2)
-[mock_publisher-30] [INFO] [1757963959.825391375] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-17] [INFO] [1757963959.825504403] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-10] [INFO] [1757963959.825750908] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-11] [INFO] [1757963959.825863078] [rclcpp]: signal_handler(signum=2)
-[turtlebot4_gz_hmi_node-23] [INFO] [1757963959.826066790] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-2] [INFO] [1757963959.826282555] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-14] [INFO] [1757963959.827031817] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-19] [INFO] [1757963959.828942821] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-13] [INFO] [1757963959.829899091] [rclcpp]: signal_handler(signum=2)
-[create-5] [INFO] [1757963959.829958042] [rclcpp]: signal_handler(signum=2)
-[pose_republisher_node-32] [INFO] [1757963959.830695388] [rclcpp]: signal_handler(signum=2)
-[static_transform_publisher-26] [INFO] [1757963959.831474893] [rclcpp]: signal_handler(signum=2)
-[robot_state_publisher-3] [INFO] [1757963959.832584545] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-52] [INFO] [1757963959.822984429] [rclcpp]: signal_handler(signum=2)
-[create-6] [INFO] [1757963959.834613181] [rclcpp]: signal_handler(signum=2)
-[static_transform_publisher-40] [INFO] [1757963959.834673713] [rclcpp]: signal_handler(signum=2)
-[motion_control-29] [INFO] [1757963959.835934355] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-36] [INFO] [1757963959.836455439] [rclcpp]: signal_handler(signum=2)
-[static_transform_publisher-41] [INFO] [1757963959.836428852] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-20] [INFO] [1757963959.837578362] [rclcpp]: signal_handler(signum=2)
-[static_transform_publisher-43] [INFO] [1757963959.839653446] [rclcpp]: signal_handler(signum=2)
-[static_transform_publisher-34] [INFO] [1757963959.842698794] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-16] [INFO] [1757963959.843383462] [rclcpp]: signal_handler(signum=2)
-[INFO] [parameter_bridge-21]: process has finished cleanly [pid 32513]
-[INFO] [parameter_bridge-16]: process has finished cleanly [pid 32502]
-[INFO] [parameter_bridge-13]: process has finished cleanly [pid 32499]
-[static_transform_publisher-38] [INFO] [1757963959.844375166] [rclcpp]: signal_handler(signum=2)
-[ir_intensity_vector_publisher-28] [INFO] [1757963959.842693106] [rclcpp]: signal_handler(signum=2)
-[parameter_bridge-8] [INFO] [1757963959.885438107] [rclcpp]: signal_handler(signum=2)
-[spawner-55] [INFO] [1757963959.887123146] [tb1.spawner_diffdrive_controller]: KeyboardInterrupt received! Exiting....
-[parameter_bridge-15] [INFO] [1757963959.892541766] [rclcpp]: signal_handler(signum=2)
-[robot_state-31] [INFO] [1757963959.902385316] [rclcpp]: signal_handler(signum=2)
-[static_transform_publisher-44] [INFO] [1757963959.913268734] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-51] [INFO] [1757964933.784389333] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-54] [INFO] [1757964933.784504483] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-37] [INFO] [1757964933.784471306] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-21] [INFO] [1757964933.784704359] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-11] [INFO] [1757964933.784710363] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-16] [INFO] [1757964933.784704630] [rclcpp]: signal_handler(signum=2)
+[turtlebot4_gz_hmi_node-23] [INFO] [1757964933.784636154] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-8] [INFO] [1757964933.784778974] [rclcpp]: signal_handler(signum=2)
+[turtlebot4_node-22] [INFO] [1757964933.784814950] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-35] [INFO] [1757964933.784917010] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-18] [INFO] [1757964933.785103073] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-53] [INFO] [1757964933.785246977] [rclcpp]: signal_handler(signum=2)
+[mock_publisher-30] [INFO] [1757964933.785396432] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-9] [INFO] [1757964933.785487975] [rclcpp]: signal_handler(signum=2)
+[robot_state_publisher-3] [INFO] [1757964933.785531173] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-15] [INFO] [1757964933.785638062] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-26] [INFO] [1757964933.785910251] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-14] [INFO] [1757964933.786121683] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-12] [INFO] [1757964933.786146284] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-44] [INFO] [1757964933.786358663] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-25] [INFO] [1757964933.786695536] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-50] [INFO] [1757964933.788049033] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-20] [INFO] [1757964933.788987882] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-10] [INFO] [1757964933.789301869] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-7] [INFO] [1757964933.789572614] [rclcpp]: signal_handler(signum=2)
+[robot_state-31] [INFO] [1757964933.789777952] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-40] [INFO] [1757964933.789777365] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-42] [INFO] [1757964933.792208107] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-2] [INFO] [1757964933.792252253] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-43] [INFO] [1757964933.794153784] [rclcpp]: signal_handler(signum=2)
+[motion_control-29] [INFO] [1757964933.796322854] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-17] [INFO] [1757964933.796130245] [rclcpp]: signal_handler(signum=2)
+[create-6] [INFO] [1757964933.798497477] [rclcpp]: signal_handler(signum=2)
+[create-6] [ERROR] [1757964933.812099339] [tb1.ros_gz_sim]: Failed to get XML from topic [standard_dock_description].
+[parameter_bridge-49] [INFO] [1757964933.799720521] [rclcpp]: signal_handler(signum=2)
+[ir_intensity_vector_publisher-28] [INFO] [1757964933.800406816] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-52] [INFO] [1757964933.803718900] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-13] [INFO] [1757964933.803737858] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-41] [INFO] [1757964933.803916564] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-19] [INFO] [1757964933.810343112] [rclcpp]: signal_handler(signum=2)
+[sensors_node-33] [INFO] [1757964933.810905545] [rclcpp]: signal_handler(signum=2)
+[hazards_vector_publisher-27] [INFO] [1757964933.814651731] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-36] [INFO] [1757964933.816991698] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-34] [INFO] [1757964933.817192297] [rclcpp]: signal_handler(signum=2)
 [ir_sensors_node-47] Traceback (most recent call last):
 [ir_sensors_node-47]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/ir_sensors_node", line 33, in <module>
 [ir_sensors_node-47]     sys.exit(load_entry_point('automode-tb4-sim', 'console_scripts', 'ir_sensors_node')())
@@ -283,28 +713,9 @@
 [ir_sensors_node-47]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 697, in _wait_for_ready_callbacks
 [ir_sensors_node-47]     wait_set.wait(timeout_nsec)
 [ir_sensors_node-47] KeyboardInterrupt
-[INFO] [parameter_bridge-36]: process has finished cleanly [pid 32606]
-[light_sensors_node-45] Traceback (most recent call last):
-[light_sensors_node-45]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/light_sensors_node", line 33, in <module>
-[light_sensors_node-45]     sys.exit(load_entry_point('automode-tb4-sim', 'console_scripts', 'light_sensors_node')())
-[light_sensors_node-45]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[light_sensors_node-45]   File "/home/ben/ros2_ws/automode_ws/automodeROS/build/automode_tb4_sim/automode_tb4_sim/tb4_control/sensor_nodes/light_sensors_node.py", line 104, in main
-[light_sensors_node-45]     rclpy.spin(light_sensor_node)
-[light_sensors_node-45]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 247, in spin
-[light_sensors_node-45]     executor.spin_once()
-[light_sensors_node-45]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 839, in spin_once
-[light_sensors_node-45]     self._spin_once_impl(timeout_sec)
-[light_sensors_node-45]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 823, in _spin_once_impl
-[light_sensors_node-45]     handler, entity, node = self.wait_for_ready_callbacks(
-[light_sensors_node-45]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[light_sensors_node-45]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 793, in wait_for_ready_callbacks
-[light_sensors_node-45]     return next(self._cb_iter)
-[light_sensors_node-45]            ^^^^^^^^^^^^^^^^^^^
-[light_sensors_node-45]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 697, in _wait_for_ready_callbacks
-[light_sensors_node-45]     wait_set.wait(timeout_nsec)
-[light_sensors_node-45] KeyboardInterrupt
-[INFO] [parameter_bridge-12]: process has finished cleanly [pid 32494]
-[INFO] [parameter_bridge-9]: process has finished cleanly [pid 32491]
+[static_transform_publisher-38] [INFO] [1757964933.832353581] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-48] [INFO] [1757964933.836462144] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-39] [INFO] [1757964933.837587237] [rclcpp]: signal_handler(signum=2)
 [cliff_sensors_node-46] Traceback (most recent call last):
 [cliff_sensors_node-46]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/cliff_sensors_node", line 33, in <module>
 [cliff_sensors_node-46]     sys.exit(load_entry_point('automode-tb4-sim', 'console_scripts', 'cliff_sensors_node')())
@@ -315,68 +726,111 @@
 [cliff_sensors_node-46]     executor.spin_once()
 [cliff_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 839, in spin_once
 [cliff_sensors_node-46]     self._spin_once_impl(timeout_sec)
-[cliff_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 823, in _spin_once_impl
-[cliff_sensors_node-46]     handler, entity, node = self.wait_for_ready_callbacks(
-[cliff_sensors_node-46]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[cliff_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 793, in wait_for_ready_callbacks
-[cliff_sensors_node-46]     return next(self._cb_iter)
-[cliff_sensors_node-46]            ^^^^^^^^^^^^^^^^^^^
-[cliff_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 697, in _wait_for_ready_callbacks
-[cliff_sensors_node-46]     wait_set.wait(timeout_nsec)
-[cliff_sensors_node-46] KeyboardInterrupt
-[create-6] [INFO] [1757963960.353717600] [tb1.ros_gz_sim]: Timed out when getting world names.
-[INFO] [parameter_bridge-2]: process has finished cleanly [pid 32483]
-[INFO] [parameter_bridge-8]: process has finished cleanly [pid 32490]
-[INFO] [parameter_bridge-14]: process has finished cleanly [pid 32500]
-[INFO] [parameter_bridge-17]: process has finished cleanly [pid 32504]
-[INFO] [parameter_bridge-19]: process has finished cleanly [pid 32507]
-[INFO] [parameter_bridge-7]: process has finished cleanly [pid 32489]
-[INFO] [parameter_bridge-18]: process has finished cleanly [pid 32506]
-[INFO] [parameter_bridge-37]: process has finished cleanly [pid 32607]
-[INFO] [parameter_bridge-15]: process has finished cleanly [pid 32501]
-[INFO] [parameter_bridge-20]: process has finished cleanly [pid 32508]
-[INFO] [parameter_bridge-11]: process has finished cleanly [pid 32493]
-[INFO] [static_transform_publisher-42]: process has finished cleanly [pid 32648]
-[INFO] [mock_publisher-30]: process has finished cleanly [pid 32561]
-[INFO] [static_transform_publisher-39]: process has finished cleanly [pid 32621]
-[INFO] [parameter_bridge-49]: process has finished cleanly [pid 32709]
-[INFO] [parameter_bridge-50]: process has finished cleanly [pid 32714]
-[INFO] [static_transform_publisher-34]: process has finished cleanly [pid 32597]
-[INFO] [turtlebot4_gz_hmi_node-23]: process has finished cleanly [pid 32515]
-[INFO] [static_transform_publisher-25]: process has finished cleanly [pid 32525]
-[INFO] [static_transform_publisher-26]: process has finished cleanly [pid 32526]
-[INFO] [parameter_bridge-48]: process has finished cleanly [pid 32693]
-[INFO] [static_transform_publisher-41]: process has finished cleanly [pid 32638]
-[INFO] [parameter_bridge-53]: process has finished cleanly [pid 32746]
-[INFO] [parameter_bridge-54]: process has finished cleanly [pid 32753]
-[INFO] [static_transform_publisher-43]: process has finished cleanly [pid 32660]
-[INFO] [static_transform_publisher-38]: process has finished cleanly [pid 32618]
-[INFO] [parameter_bridge-51]: process has finished cleanly [pid 32729]
-[INFO] [parameter_bridge-52]: process has finished cleanly [pid 32732]
-[INFO] [pose_republisher_node-32]: process has finished cleanly [pid 32574]
-[ERROR] [create-6]: process has died [pid 32488, exit code 255, cmd '/opt/ros/jazzy/lib/ros_gz_sim/create -name tb1/standard_dock -x 0.157 -y 0.0 -z 0.2 -Y 3.1416 -topic standard_dock_description --ros-args -r __ns:=/tb1'].
-[INFO] [static_transform_publisher-40]: process has finished cleanly [pid 32636]
-[ERROR] [light_sensors_node-45]: process has died [pid 32666, exit code -2, cmd '/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/light_sensors_node --ros-args -r __ns:=/tb1 --params-file /tmp/launch_params_1ny1e0pm'].
-[INFO] [static_transform_publisher-35]: process has finished cleanly [pid 32603]
-[ERROR] [cliff_sensors_node-46]: process has died [pid 32673, exit code -2, cmd '/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/cliff_sensors_node --ros-args -r __ns:=/tb1 --params-file /tmp/launch_params_xqugcfaq'].
-[INFO] [spawner-55]: process has finished cleanly [pid 33512]
-[INFO] [robot_state-31]: process has finished cleanly [pid 32566]
-[INFO] [static_transform_publisher-44]: process has finished cleanly [pid 32664]
-[ERROR] [ir_sensors_node-47]: process has died [pid 32680, exit code -2, cmd '/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/ir_sensors_node --ros-args -r __ns:=/tb1 --params-file /tmp/launch_params_q1kis2ps'].
-[INFO] [hazards_vector_publisher-27]: process has finished cleanly [pid 32531]
-[INFO] [ir_intensity_vector_publisher-28]: process has finished cleanly [pid 32548]
-[INFO] [robot_state_publisher-3]: process has finished cleanly [pid 32484]
-[INFO] [sensors_node-33]: process has finished cleanly [pid 32584]
-[INFO] [joint_state_publisher-4]: process has finished cleanly [pid 32486]
-[INFO] [turtlebot4_node-22]: process has finished cleanly [pid 32514]
-[INFO] [motion_control-29]: process has finished cleanly [pid 32553]
-[create-5] [INFO] [1757963963.674191143] [tb1.ros_gz_sim]: Timed out when getting world names.
-[ERROR] [create-5]: process has died [pid 32487, exit code 255, cmd '/opt/ros/jazzy/lib/ros_gz_sim/create -name tb1/turtlebot4 -x 0.0 -y 0.0 -z 0.1975 -Y 0.0 -topic robot_description --ros-args -r __ns:=/tb1'].
-[ERROR] [parameter_bridge-10]: process[parameter_bridge-10] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
-[INFO] [parameter_bridge-10]: sending signal 'SIGTERM' to process[parameter_bridge-10]
-[parameter_bridge-10] [INFO] [1757963965.400066668] [rclcpp]: signal_handler(signum=15)
-[WARNING] [launch]: user interrupted with ctrl-c (SIGINT) again, ignoring...
-[parameter_bridge-10] [INFO] [1757963966.002237531] [rclcpp]: signal_handler(signum=2)
-[ERROR] [parameter_bridge-10]: process[parameter_bridge-10] failed to terminate '10.0' seconds after receiving 'SIGTERM', escalating to 'SIGKILL'
-[INFO] [parameter_bridge-10]: sending signal 'SIGKILL' to process[parameter_bridge-10]
-[ERROR] [parameter_bridge-10]: process has died [pid 32492, exit code -9, cmd '/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge /world/arena/model/tb1/turtlebot4/link/ir_intensity_front_center_left/sensor/ir_intensity_front_center_left/scan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan --ros-args -r __node:=ir_intensity_front_center_left_bridge -r __ns:=/tb1 --params-file /tmp/launch_params_pf7mm1pe -r /world/arena/model/tb1/turtlebot4/link/ir_intensity_front_center_left/sensor/ir_intensity_front_center_left/scan:=_internal/ir_intensity_front_center_left/scan'].
+[cliff_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 834, in _spin_once_impl
+[cliff_sensors_node-46]     raise handler.exception()
+[cliff_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/task.py", line 269, in __call__
+[cliff_sensors_node-46]     self._handler.send(None)
+[cliff_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 510, in handler
+[cliff_sensors_node-46]     call_coroutine = take_from_wait_list(entity)
+[cliff_sensors_node-46]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[cliff_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 396, in _take_subscription
+[cliff_sensors_node-46]     msg_info = sub.handle.take_message(sub.msg_type, sub.raw)
+[cliff_sensors_node-46]                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[cliff_sensors_node-46] RuntimeError: Unable to convert call argument '0' to Python object (#define PYBIND11_DETAILED_ERROR_MESSAGES or compile in debug mode for details)
+[light_sensors_node-45] Traceback (most recent call last):
+[light_sensors_node-45]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/light_sensors_node", line 33, in <module>
+[light_sensors_node-45]     sys.exit(load_entry_point('automode-tb4-sim', 'console_scripts', 'light_sensors_node')())
+[light_sensors_node-45]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[light_sensors_node-45]   File "/home/ben/ros2_ws/automode_ws/automodeROS/build/automode_tb4_sim/automode_tb4_sim/tb4_control/sensor_nodes/light_sensors_node.py", line 104, in main
+[light_sensors_node-45]     rclpy.spin(light_sensor_node)
+[light_sensors_node-45]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 247, in spin
+[light_sensors_node-45]     executor.spin_once()
+[light_sensors_node-45]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 839, in spin_once
+[light_sensors_node-45]     self._spin_once_impl(timeout_sec)
+[light_sensors_node-45]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 834, in _spin_once_impl
+[light_sensors_node-45]     raise handler.exception()
+[light_sensors_node-45]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/task.py", line 269, in __call__
+[light_sensors_node-45]     self._handler.send(None)
+[light_sensors_node-45]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 510, in handler
+[light_sensors_node-45]     call_coroutine = take_from_wait_list(entity)
+[light_sensors_node-45]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[light_sensors_node-45]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 396, in _take_subscription
+[light_sensors_node-45]     msg_info = sub.handle.take_message(sub.msg_type, sub.raw)
+[light_sensors_node-45]                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[light_sensors_node-45] RuntimeError: Unable to convert call argument '0' to Python object (#define PYBIND11_DETAILED_ERROR_MESSAGES or compile in debug mode for details)
+[INFO] [parameter_bridge-36]: process has finished cleanly [pid 36644]
+[INFO] [parameter_bridge-11]: process has finished cleanly [pid 36494]
+[INFO] [static_transform_publisher-34]: process has finished cleanly [pid 36621]
+[INFO] [parameter_bridge-16]: process has finished cleanly [pid 36501]
+[INFO] [parameter_bridge-12]: process has finished cleanly [pid 36495]
+[INFO] [parameter_bridge-8]: process has finished cleanly [pid 36485]
+[INFO] [parameter_bridge-13]: process has finished cleanly [pid 36496]
+[INFO] [parameter_bridge-2]: process has finished cleanly [pid 36478]
+[INFO] [parameter_bridge-9]: process has finished cleanly [pid 36488]
+[INFO] [static_transform_publisher-42]: process has finished cleanly [pid 36719]
+[INFO] [static_transform_publisher-26]: process has finished cleanly [pid 36553]
+[INFO] [parameter_bridge-52]: process has finished cleanly [pid 36850]
+[ERROR] [create-6]: process has died [pid 36483, exit code 255, cmd '/opt/ros/jazzy/lib/ros_gz_sim/create -name tb1/standard_dock -x 0.157 -y 0.0 -z 0.2 -Y 3.1416 -topic standard_dock_description --ros-args -r __ns:=/tb1'].
+[ERROR] [cliff_sensors_node-46]: process has died [pid 36726, exit code 1, cmd '/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/cliff_sensors_node --ros-args -r __ns:=/tb1 --params-file /tmp/launch_params_gv21vm6u'].
+[ERROR] [light_sensors_node-45]: process has died [pid 36725, exit code 1, cmd '/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/light_sensors_node --ros-args -r __ns:=/tb1 --params-file /tmp/launch_params_s26z8bp6'].
+[INFO] [parameter_bridge-21]: process has finished cleanly [pid 36532]
+[INFO] [parameter_bridge-15]: process has finished cleanly [pid 36500]
+[INFO] [parameter_bridge-17]: process has finished cleanly [pid 36502]
+[INFO] [turtlebot4_node-22]: process has finished cleanly [pid 36536]
+[INFO] [joint_state_publisher-4]: process has finished cleanly [pid 36481]
+[INFO] [parameter_bridge-14]: process has finished cleanly [pid 36499]
+[INFO] [static_transform_publisher-25]: process has finished cleanly [pid 36552]
+[INFO] [static_transform_publisher-39]: process has finished cleanly [pid 36663]
+[INFO] [parameter_bridge-18]: process has finished cleanly [pid 36503]
+[ERROR] [ir_sensors_node-47]: process has died [pid 36731, exit code -2, cmd '/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/ir_sensors_node --ros-args -r __ns:=/tb1 --params-file /tmp/launch_params_8ldt6crg'].
+[INFO] [parameter_bridge-37]: process has finished cleanly [pid 36649]
+[INFO] [parameter_bridge-7]: process has finished cleanly [pid 36484]
+[INFO] [parameter_bridge-10]: process has finished cleanly [pid 36491]
+[INFO] [parameter_bridge-49]: process has finished cleanly [pid 36742]
+[INFO] [static_transform_publisher-41]: process has finished cleanly [pid 36678]
+[INFO] [parameter_bridge-48]: process has finished cleanly [pid 36740]
+[INFO] [static_transform_publisher-35]: process has finished cleanly [pid 36622]
+[INFO] [parameter_bridge-53]: process has finished cleanly [pid 36851]
+[INFO] [static_transform_publisher-38]: process has finished cleanly [pid 36655]
+[INFO] [static_transform_publisher-44]: process has finished cleanly [pid 36724]
+[INFO] [parameter_bridge-54]: process has finished cleanly [pid 36863]
+[INFO] [motion_control-29]: process has finished cleanly [pid 36589]
+[INFO] [mock_publisher-30]: process has finished cleanly [pid 36594]
+[INFO] [robot_state_publisher-3]: process has finished cleanly [pid 36480]
+[INFO] [hazards_vector_publisher-27]: process has finished cleanly [pid 36554]
+[INFO] [static_transform_publisher-43]: process has finished cleanly [pid 36722]
+[INFO] [static_transform_publisher-40]: process has finished cleanly [pid 36671]
+[INFO] [turtlebot4_gz_hmi_node-23]: process has finished cleanly [pid 36537]
+[gazebo-1] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mA new topic has been entered: '[0m[1;32mcmd_vel[0m[1;32m ' [0m[1;32m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [SignalHandler.cc:142] [0m[1;36mReceived signal[[0m[1;36m2[0m[1;36m].[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Gui.cc:535] [0m[1;36mShutting down gz-sim-gui[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [Application.cc:237] [0m[1;36mTerminating application.[0m[1;36m[0m
+[gazebo-1] [1;36m[GUI] [Dbg] [MinimalScene.cc:841] [0m[1;36mDestroy scene [[0m[1;36mscene[0m[1;36m][0m[1;36m[0m
+[INFO] [parameter_bridge-51]: process has finished cleanly [pid 36823]
+[INFO] [parameter_bridge-50]: process has finished cleanly [pid 36793]
+[INFO] [robot_state-31]: process has finished cleanly [pid 36614]
+[INFO] [ir_intensity_vector_publisher-28]: process has finished cleanly [pid 36564]
+[INFO] [sensors_node-33]: process has finished cleanly [pid 36619]
+[gazebo-1] [INFO] [1757964936.211422637] [tb1.controller_manager.pal_statistics]: Async messages lost 0
+[gazebo-1] [INFO] [1757964936.211518738] [tb1.controller_manager.pal_statistics]: publish_async_failures_ 3
+[gazebo-1] [1;36m[Dbg] [SignalHandler.cc:142] [0m[1;36mReceived signal[[0m[1;36m2[0m[1;36m].[0m
+[gazebo-1] [1;36m[Dbg] [ServerPrivate.cc:122] [0m[1;36mServer received signal[[0m[1;36m2[0m[1;36m][0m
+[gazebo-1] [1;36m[Dbg] [gz.cc:434] [0m[1;36mShutting down gz-sim-server[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:560] [0m[1;36mExiting postupdate worker thread ([0m[1;36m0[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:560] [0m[1;36mExiting postupdate worker thread ([0m[1;36m4[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:560] [0m[1;36mExiting postupdate worker thread ([0m[1;36m2[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:560] [0m[1;36mExiting postupdate worker thread ([0m[1;36m1[0m[1;36m)[0m[1;36m[0m
+[gazebo-1] [1;36m[Dbg] [SimulationRunner.cc:560] [0m[1;36mExiting postupdate worker thread ([0m[1;36m3[0m[1;36m)[0m[1;36m[0m
+[ERROR] [gazebo-1]: process has died [pid 36477, exit code -2, cmd 'ruby /opt/ros/jazzy/opt/gz_tools_vendor/bin/gz sim maze.sdf -r -v 4 --gui-config /home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/gui/standard/gui.config --force-version 8'].
+[ERROR] [parameter_bridge-20]: process[parameter_bridge-20] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[ERROR] [parameter_bridge-19]: process[parameter_bridge-19] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [parameter_bridge-20]: sending signal 'SIGTERM' to process[parameter_bridge-20]
+[INFO] [parameter_bridge-19]: sending signal 'SIGTERM' to process[parameter_bridge-19]
+[parameter_bridge-20] [INFO] [1757964938.940996188] [rclcpp]: signal_handler(signum=15)
+[parameter_bridge-19] [INFO] [1757964938.946202941] [rclcpp]: signal_handler(signum=15)
+[ERROR] [parameter_bridge-20]: process[parameter_bridge-20] failed to terminate '10.0' seconds after receiving 'SIGTERM', escalating to 'SIGKILL'
+[ERROR] [parameter_bridge-19]: process[parameter_bridge-19] failed to terminate '10.0' seconds after receiving 'SIGTERM', escalating to 'SIGKILL'
+[INFO] [parameter_bridge-20]: sending signal 'SIGKILL' to process[parameter_bridge-20]
+[INFO] [parameter_bridge-19]: sending signal 'SIGKILL' to process[parameter_bridge-19]
+[ERROR] [parameter_bridge-20]: process has died [pid 36521, exit code -9, cmd '/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge /world/maze/model/tb1/turtlebot4/link/rplidar_link/sensor/rplidar/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan --ros-args -r __node:=lidar_bridge -r __ns:=/tb1 --params-file /tmp/launch_params_rt8stcpo -r /world/maze/model/tb1/turtlebot4/link/rplidar_link/sensor/rplidar/scan:=scan'].
+[ERROR] [parameter_bridge-19]: process has died [pid 36519, exit code -9, cmd '/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge tb1/hmi/led/power@std_msgs/msg/Int32]gz.msgs.Int32 tb1/hmi/led/motors@std_msgs/msg/Int32]gz.msgs.Int32 tb1/hmi/led/comms@std_msgs/msg/Int32]gz.msgs.Int32 tb1/hmi/led/wifi@std_msgs/msg/Int32]gz.msgs.Int32 tb1/hmi/led/battery@std_msgs/msg/Int32]gz.msgs.Int32 tb1/hmi/led/user1@std_msgs/msg/Int32]gz.msgs.Int32 tb1/hmi/led/user2@std_msgs/msg/Int32]gz.msgs.Int32 --ros-args -r __node:=hmi_led_msg_bridge -r __ns:=/tb1 --params-file /tmp/launch_params_6t72l4wd -r tb1/hmi/led/power:=hmi/led/_power -r tb1/hmi/led/motors:=hmi/led/_motors -r tb1/hmi/led/comms:=hmi/led/_comms -r tb1/hmi/led/wifi:=hmi/led/_wifi -r tb1/hmi/led/battery:=hmi/led/_battery -r tb1/hmi/led/user1:=hmi/led/_user1 -r tb1/hmi/led/user2:=hmi/led/_user2'].
