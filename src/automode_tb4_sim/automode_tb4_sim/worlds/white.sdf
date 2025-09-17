@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <sdf version='1.7'>
-  <world name='arena_large'>
+  <world name='white'>
 
     <physics type="ode">
       <max_step_size>0.009</max_step_size>
@@ -101,6 +101,7 @@
 
     <!-- Surrounding walls (4 walls) -->
     <model name="wall_north">
+      <static>true</static>
       <pose>0 9 0.5 0 0 0</pose>
       <link name="link">
         <visual name="visual">
@@ -124,6 +125,7 @@
       </link>
     </model>
     <model name="wall_south">
+      <static>true</static>
       <pose>0 -9 0.5 0 0 0</pose>
       <link name="link">
         <visual name="visual">
@@ -147,6 +149,7 @@
       </link>
     </model>
     <model name="wall_east">
+      <static>true</static>
       <pose>9 0 0.5 0 0 0</pose>
       <link name="link">
         <visual name="visual">
@@ -170,6 +173,7 @@
       </link>
     </model>
     <model name="wall_west">
+      <static>true</static>
       <pose>-9 0 0.5 0 0 0</pose>
       <link name="link">
         <visual name="visual">
