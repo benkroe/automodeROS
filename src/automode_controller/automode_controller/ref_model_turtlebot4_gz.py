@@ -8,6 +8,7 @@ from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
 from rclpy.qos import qos_profile_sensor_data
 from std_msgs.msg import Float32
+from std_msgs.msg import String
 
 
 # Use of lidar
@@ -28,11 +29,13 @@ class TurtleBot4ReferenceNode(Node):
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)
         # Subscribe for lidar scan (turtlebot4)
         # self.create_subscription(LaserScan, 'scan', self._lidar_scan_cb, 10)
-        # Subscribe to raw IR and light sensor topics
+        # Subscribe to raw IR and light sensor topics and ground
         self.create_subscription(Float32MultiArray, 'ir_intensities', self._ir_cb, qos_profile_sensor_data)
         self.create_subscription(Float32, 'light_sensor_front_left', self._light_fl_cb, qos_profile_sensor_data)
         self.create_subscription(Float32, 'light_sensor_front_right', self._light_fr_cb, qos_profile_sensor_data)
         self.create_subscription(Float32, 'light_sensor_back', self._light_back_cb, qos_profile_sensor_data)
+        self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb, qos_profile_sensor_data)
+
 
         # Timer to publish RobotState periodically
         self.create_timer(0.1, self._publish_robot_state)  # 10 Hz
@@ -55,6 +58,8 @@ class TurtleBot4ReferenceNode(Node):
 
         self.latest_wheels_speed = [0.0, 0.0]  
         self.latest_cmd_vel = (0.0, 0.0) 
+
+        self.latest_ground_sensor = "white"
 
         # prox smoothening
         self.proximity_mag_history = []
@@ -107,6 +112,9 @@ class TurtleBot4ReferenceNode(Node):
             return self.proximity_mag_last, self.proximity_angle_last
         return 0.0, 0.0
     
+    def _ground_sensor_cb(self, msg: String):
+        self.latest_ground_sensor = msg.data
+
     def compute_light(self):
         # Example: Vector sum based on sensor positions
         if None not in (self.latest_light_fl, self.latest_light_fr, self.latest_light_back):
@@ -143,12 +151,14 @@ class TurtleBot4ReferenceNode(Node):
         msg.ground_black_floor = self.ground_black_floor
         msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
         msg.light_magnitude, msg.light_angle = self.compute_light()
+        self.ground_black_floor = (self.latest_ground_sensor == "black")
 
         # Log a single summary message including wheel speeds
         self.get_logger().info(
             f"RobotState: id={msg.robot_id}, neighbours={msg.neighbour_count}, black_floor={msg.ground_black_floor}, "
             f"proximity(mag={msg.proximity_magnitude:.2f}, ang={msg.proximity_angle:.1f}), "
             f"light(mag={msg.light_magnitude:.2f}, ang={msg.light_angle:.1f}), "
+            f"ground={self.latest_ground_sensor}, "
             f"wheels(received=[{self.latest_wheels_speed[0]:.2f}, {self.latest_wheels_speed[1]:.2f}], "
             f"published=[{self.latest_cmd_vel[0]:.2f}, {self.latest_cmd_vel[1]:.2f}])"
         )

@@ -43,6 +43,7 @@ setup(
             'light_sensors_node = automode_tb4_sim.tb4_control.sensor_nodes.light_sensors_node:main',
             'cliff_sensors_node = automode_tb4_sim.tb4_control.sensor_nodes.cliff_sensors_node:main',
             'ir_sensors_node = automode_tb4_sim.tb4_control.sensor_nodes.ir_sensors_node:main',
+            'ground_sensor_node = automode_tb4_sim.tb4_control.sensor_nodes.ground_sensor_node:main',
             # Processing nodes
             'light_processing_node = automode_tb4_sim.tb4_control.control_nodes.light_processing_node:main',
             'cliff_processing_node = automode_tb4_sim.tb4_control.control_nodes.cliff_processing_node:main',
