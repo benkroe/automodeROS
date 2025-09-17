@@ -24,7 +24,7 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('turtlebot4_gz_bringup'), 'launch', 'turtlebot4_gz.launch.py')
         ]),
         launch_arguments={
-            'world': 'arena',
+            'world': 'white',
             'z': '0.2',
             'namespace': turtlebot4_id,
         }.items()
@@ -33,7 +33,7 @@ def generate_launch_description():
     static_tf_arena = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['0', '0', '0', '0', '0', '0', 'world', 'arena'],
+        arguments=['0', '0', '0', '0', '0', '0', 'world', 'white'],
         name='static_tf_arena'
     )
 
