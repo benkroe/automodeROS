@@ -90,5 +90,9 @@ def generate_launch_description():
         delay = 20.0
         robot_launches.extend(robot_group(robot_ns, idx, delay=delay))
 
+
     return LaunchDescription([
         static_tf_arena,
+        genome_id_arg,
+        *robot_launches,
+    ])
