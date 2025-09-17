@@ -49,6 +49,31 @@
       </link>
     </model>
 
+    <!-- Light marker object at (6, 6, 0.25) -->
+    <model name="light_marker">
+      <pose>6 6 0.25 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <sphere>
+              <radius>0.3</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>1 1 0 1</ambient> <!-- Yellow color -->
+            <diffuse>1 1 0 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <sphere>
+              <radius>0.3</radius>
+            </sphere>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
     <!-- Black patch (small area) -->
     <model name="black_patch">
       <pose>2 2 0 0 0 0</pose>

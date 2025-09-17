@@ -17,22 +17,15 @@ from math import sqrt
 class LightSensor(Node):
 
     # lights position from arena.sdf
-    LIGHT_1_X = 0
-    LIGHT_1_Y = -0.8
-
-    LIGHT_2_X = 1.5
-    LIGHT_2_Y = -0.8
-
-    LIGHT_3_X = -1.5
-    LIGHT_3_Y = -0.8
+    LIGHT_1_X = 6
+    LIGHT_1_Y = 6
     
-
     def __init__(self):
 
         super().__init__('light_sensors_node')
         
         self.light_sensors_list = ['light_sensor_front_left', 'light_sensor_front_right', 'light_sensor_back']
-        self.base_frame = 'arena' # to get the position related to the arena
+        self.base_frame = 'white' # to get the position related to the arena
         
 
         self.tf_buffer = Buffer()

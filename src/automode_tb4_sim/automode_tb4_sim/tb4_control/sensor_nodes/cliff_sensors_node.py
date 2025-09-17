@@ -22,7 +22,7 @@ class Cliff_Sensor(Node):
 
 
         self.cliff_sensors_list = ['cliff_sensor_side_left', 'cliff_sensor_side_right', 'cliff_sensor_front_left', 'cliff_sensor_front_right']
-        self.base_frame = 'arena' # to get the position related to the arena
+        self.base_frame = 'white' # to get the position related to the arena
 
         super().__init__('cliff_sensors_node')
 
