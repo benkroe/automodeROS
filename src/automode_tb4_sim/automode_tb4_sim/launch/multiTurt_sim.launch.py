@@ -93,7 +93,7 @@ def generate_launch_description():
     robot_launches = []
     robot_names = [f'tb{i}' for i in range(1, 3)]  # Only two robots: tb1 and tb2
     for idx, robot_ns in enumerate(robot_names):
-        delay = 0.0 if idx == 0 else 10.0  # 10 second delay for the second robot
+        delay = 20.0
         robot_launches.extend(robot_group(robot_ns, idx, delay=delay))
 
     return LaunchDescription([
