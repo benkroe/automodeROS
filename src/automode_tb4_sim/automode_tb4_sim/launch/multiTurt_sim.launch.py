@@ -20,7 +20,7 @@ def robot_group(robot_ns, idx, delay=0.0):
             }.items()
         )
     else:
-        # Additional robots: spawn only
+        # Second robot: spawn only
         robot_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 os.path.join(get_package_share_directory('turtlebot4_gz_bringup'), 'launch', 'turtlebot4_spawn.launch.py')
@@ -91,9 +91,9 @@ def generate_launch_description():
     ]
 
     robot_launches = []
-    robot_names = [f'tb{i}' for i in range(1, 6)]
+    robot_names = [f'tb{i}' for i in range(1, 3)]  # Only two robots: tb1 and tb2
     for idx, robot_ns in enumerate(robot_names):
-        delay = 0.0 if idx == 0 else 10.0 * idx
+        delay = 0.0 if idx == 0 else 10.0  # 10 second delay for the second robot
         robot_launches.extend(robot_group(robot_ns, idx, delay=delay))
 
     return LaunchDescription([
@@ -101,4 +101,4 @@ def generate_launch_description():
         genome_id_arg,
         *robot_launches,
         *object_bridges,
-    ])
+    ])   
