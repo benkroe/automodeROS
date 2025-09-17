@@ -24,9 +24,29 @@
 
 
     <!-- Flat white floor -->
-    <include>
-      <uri>model://ground_plane</uri>
-    </include>
+    <model name="custom_floor">
+      <pose>0 0 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>18 18 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>18 18 0.01</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
 
     <!-- Black patch (small area) -->
     <model name="black_patch">
