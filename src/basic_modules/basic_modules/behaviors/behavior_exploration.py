@@ -72,7 +72,7 @@ class Behavior(BehaviorBase):
         msg = self._Float32MultiArray()
 
         # Check if obstacle ahead and we need to turn
-        if proximity_magnitude > self._obstacle_threshold:
+        if proximity_magnitude > self._obstacle_threshold and 135 < proximity_angle < 225:
             # Obstacle detected, initiate turn
             if proximity_angle > 180:
                 turn_direction = [self._turn_speed, -self._turn_speed]  # Turn left
