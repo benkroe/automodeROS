@@ -10,6 +10,10 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        # Launch files
+        ('share/' + package_name + '/launch', [
+            'launch/automode_tb4.launch.py'
+        ]),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

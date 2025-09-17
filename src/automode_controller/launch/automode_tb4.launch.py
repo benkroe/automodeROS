@@ -81,7 +81,7 @@ def generate_launch_description():
         module_package_arg,
         log_dir_arg,
         condition_node,
-        behavior_node,
         delayed_controller_node,
+        behavior_node,
         ref_model_node
     ])
