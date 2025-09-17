@@ -56,7 +56,6 @@ class Behavior(BehaviorBase):
         # If currently turning, keep publishing turn speeds
         if self._turning_time > time.time():
             msg = self._Float32MultiArray()
-            # Use last turn direction (store it as an attribute)
             if hasattr(self, "_last_turn_direction"):
                 msg.data = self._last_turn_direction
                 self._pub.publish(msg)
@@ -71,19 +70,18 @@ class Behavior(BehaviorBase):
 
         msg = self._Float32MultiArray()
 
-        # Check if obstacle ahead and we need to turn
-        if proximity_magnitude > self._obstacle_threshold and 135 < proximity_angle < 225:
+        # Only turn if obstacle is close AND roughly in front (angle near 0)
+        if proximity_magnitude > self._obstacle_threshold and abs(proximity_angle) < 45:
             # Obstacle detected, initiate turn
-            if proximity_angle > 180:
+            if proximity_angle < 0:
                 turn_direction = [self._turn_speed, -self._turn_speed]  # Turn left
             else:
                 turn_direction = [-self._turn_speed, self._turn_speed]  # Turn right
 
-            self._last_turn_direction = turn_direction  # Store direction for duration of turn
-
-            msg.data = turn_direction
+            self._last_turn_direction = turn_direction
             rwm = int(self._params.get("rwm", 100))
             self._turning_time = time.time() + (random.uniform(0, rwm))/10
+            msg.data = turn_direction
             self._pub.publish(msg)
         else:
             msg.data = [self._forward_speed, self._forward_speed]
