@@ -80,15 +80,6 @@ def generate_launch_description():
         name='static_tf_arena'
     )
 
-    # Object pose bridges
-    object_bridges = [
-        Node(
-            name=f'object{i}_pose_bridge',
-            package='ros_gz_bridge',
-            executable='parameter_bridge',
-            arguments=[f'/model/object{i}/pose@geometry_msgs/msg/Pose[ignition.msgs.Pose]']
-        ) for i in range(1, 8)
-    ]
 
     robot_launches = []
     robot_names = [f'tb{i}' for i in range(1, 3)]  # Only two robots: tb1 and tb2
@@ -100,5 +91,4 @@ def generate_launch_description():
         static_tf_arena,
         genome_id_arg,
         *robot_launches,
-        *object_bridges,
     ])   
