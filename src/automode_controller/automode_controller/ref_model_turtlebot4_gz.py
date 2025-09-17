@@ -6,7 +6,8 @@ from geometry_msgs.msg import TwistStamped
 from std_msgs.msg import Float32MultiArray
 from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
-#from rclpy.qos import qos_profile_sensor_data
+from rclpy.qos import qos_profile_sensor_data
+from std_msgs.msg import Float32
 
 
 # Use of lidar
@@ -26,12 +27,13 @@ class TurtleBot4ReferenceNode(Node):
         # Subscriber for wheels_speed (from automode)
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)
         # Subscribe for lidar scan (turtlebot4)
-        self.create_subscription(LaserScan, 'scan', self._lidar_scan_cb, 10)
+        # self.create_subscription(LaserScan, 'scan', self._lidar_scan_cb, 10)
         # Subscribe to raw IR and light sensor topics
-        self.create_subscription(Float32MultiArray, 'ir_intensities', self._ir_cb, 10)
-        self.create_subscription(Float32, 'light_sensor_front_left', self._light_fl_cb, 10)
-        self.create_subscription(Float32, 'light_sensor_front_right', self._light_fr_cb, 10)
-        self.create_subscription(Float32, 'light_sensor_back', self._light_back_cb, 10)
+        self.create_subscription(Float32MultiArray, 'ir_intensities', self._ir_cb, qos_profile_sensor_data)
+        self.create_subscription(Float32, 'light_sensor_front_left', self._light_fl_cb, qos_profile_sensor_data)
+        self.create_subscription(Float32, 'light_sensor_front_right', self._light_fr_cb, qos_profile_sensor_data)
+        self.create_subscription(Float32, 'light_sensor_back', self._light_back_cb, qos_profile_sensor_data)
+
         # Timer to publish RobotState periodically
         self.create_timer(0.1, self._publish_robot_state)  # 10 Hz
 
@@ -50,6 +52,9 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_light_fl = None
         self.latest_light_fr = None
         self.latest_light_back = None
+
+        self.latest_wheels_speed = [0.0, 0.0]  
+        self.latest_cmd_vel = (0.0, 0.0) 
 
 
     def _ir_cb(self, msg):
@@ -92,11 +97,13 @@ class TurtleBot4ReferenceNode(Node):
             self.get_logger().warning("wheels_speed message must have 2 elements")
             return
         left, right = msg.data
+        self.latest_wheels_speed = [left, right]
         twist_stamped = TwistStamped()
         twist_stamped.header.stamp = self.get_clock().now().to_msg()
         twist_stamped.header.frame_id = "base_link"
         twist_stamped.twist.linear.x = (left + right) / 2.0
         twist_stamped.twist.angular.z = (right - left) / 0.3  # 0.3 is wheel_base (meters), adjust as needed
+        self.latest_cmd_vel = (twist_stamped.twist.linear.x, twist_stamped.twist.angular.z)
         self._cmd_vel_pub.publish(twist_stamped)
 
     def _publish_robot_state(self):
@@ -107,6 +114,15 @@ class TurtleBot4ReferenceNode(Node):
         msg.ground_black_floor = self.ground_black_floor
         msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
         msg.light_magnitude, msg.light_angle = self.compute_light()
+
+        # Log a single summary message including wheel speeds
+        self.get_logger().info(
+            f"RobotState: id={msg.robot_id}, neighbours={msg.neighbour_count}, black_floor={msg.ground_black_floor}, "
+            f"proximity(mag={msg.proximity_magnitude:.2f}, ang={msg.proximity_angle:.1f}), "
+            f"light(mag={msg.light_magnitude:.2f}, ang={msg.light_angle:.1f}), "
+            f"wheels(received=[{self.latest_wheels_speed[0]:.2f}, {self.latest_wheels_speed[1]:.2f}], "
+            f"published=[{self.latest_cmd_vel[0]:.2f}, {self.latest_cmd_vel[1]:.2f}])"
+        )
 
         self._robot_state_pub.publish(msg)
 
