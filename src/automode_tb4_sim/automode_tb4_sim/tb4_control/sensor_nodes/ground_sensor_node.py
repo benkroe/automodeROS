@@ -32,7 +32,7 @@ class GroundSensor(Node):
         self.namespace = self.get_namespace().strip('/')
 
     def on_timer(self):
-        target_frame = f'{self.namespace}/{self.sensor_frame}' if self.namespace else self.sensor_frame
+        target_frame = f'{self.namespace}/light_sensor_front_left'
 
         try:
             t = self.tf_buffer.lookup_transform(
