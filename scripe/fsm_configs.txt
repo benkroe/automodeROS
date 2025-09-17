@@ -7,3 +7,7 @@
 ### 02 
 # All states and conditions in a circle differnt parameters
 --fsm-config --nstates 6 --s0 0 --rwm0 0 --n0 1 --n0x0 0 --c0x0 0 --p0x0 0 --s1 1 --n1 1 --n1x0 1 --c1x0 0 --p1x0 0 --s2 2 --n2 1 --n2x0 2 --c2x0 2 --p2x0 0 --s3 3 --n3 1 --n3x0 3 --c3x0 3 --p3x0 2 --w3x0 2 --s4 4 --att4 1 --n4 1 --n4x0 4 --c4x0 4 --p4x0 2 --w4x0 0 --s5 5 --rep5 1 --n5 1 --n5x0 0 --c5x0 5 --p5x0 0 
+
+## 03
+# Explore and stop on black_floor
+--fsm-config --nstates 2 --s0 0 --rwm0 0 --n0 1 --n0x0 0 --c0x0 0 --p0x0 0.5 --s1 0 --rwm1 0 
