@@ -19,6 +19,7 @@ setup(
         # Install worlds
         ('share/' + package_name + '/worlds', [
             'automode_tb4_sim/worlds/arena.sdf',
+            'automode_tb4_sim/worlds/white.sdf',
             'automode_tb4_sim/worlds/ground_extended_slope.sdf',
             'automode_tb4_sim/worlds/ground_plane_arena_2.stl',
             'automode_tb4_sim/worlds/ground_plane_arena_3.stl',
