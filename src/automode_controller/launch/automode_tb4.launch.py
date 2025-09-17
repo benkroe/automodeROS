@@ -15,15 +15,10 @@ def generate_launch_description():
         default_value='basic_modules',
         description='Module package for condition and behavior nodes'
     )
-    log_dir_arg = DeclareLaunchArgument(
-        'log_dir',
-        default_value='output_logs',
-        description='Directory for node log files'
-    )
 
     ns = LaunchConfiguration('robot_namespace')
     module_pkg = LaunchConfiguration('module_package')
-    log_dir = LaunchConfiguration('log_dir')
+
 
     condition_node = Node(
         package='automode_controller',
@@ -35,7 +30,7 @@ def generate_launch_description():
             {'module_package': module_pkg}
         ],
         output='log',
-        log_dir=log_dir
+
     )
 
     behavior_node = Node(
@@ -48,7 +43,7 @@ def generate_launch_description():
             {'module_package': module_pkg}
         ],
         output='log',
-        log_dir=log_dir
+
     )
 
     ref_model_node = Node(
@@ -58,7 +53,7 @@ def generate_launch_description():
         namespace=ns,
         parameters=[{'use_sim_time': True}],
         output='log',
-        log_dir=log_dir
+
     )
 
     controller_node = Node(
@@ -68,7 +63,7 @@ def generate_launch_description():
         namespace=ns,
         parameters=[{'use_sim_time': True}],
         output='log',
-        log_dir=log_dir
+
     )
 
     delayed_controller_node = TimerAction(
