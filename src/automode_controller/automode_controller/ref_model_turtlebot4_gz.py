@@ -84,7 +84,8 @@ class TurtleBot4ReferenceNode(Node):
     
     def compute_proximity(self):
         if self.latest_ir:
-            angles = np.linspace(0, 360, len(self.latest_ir), endpoint=False)
+            FORWARD_SENSOR_ANGLE = 75  # adjust this to match your hardware
+            angles = (np.linspace(0, 360, len(self.latest_ir), endpoint=False) - FORWARD_SENSOR_ANGLE) % 360
             weights = np.array(self.latest_ir)
             total = np.sum(weights)
             if total > 0:
