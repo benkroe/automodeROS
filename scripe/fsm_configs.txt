@@ -10,4 +10,4 @@
 
 ## 03
 # Explore and stop on black_floor
---fsm-config --nstates 2 --s0 0 --rwm0 0 --n0 1 --n0x0 0 --c0x0 0 --p0x0 0.5 --s1 0 --rwm1 0 
+--fsm-config --nstates 2 --s0 0 --rwm0 0 --n0 1 --n0x0 0 --c0x0 0 --p0x0 0.5 --s1 1 
