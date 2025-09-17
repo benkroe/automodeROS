@@ -76,7 +76,7 @@
 
     <!-- Black patch (small area) -->
     <model name="black_patch">
-      <pose>2 2 0 0 0 0</pose>
+      <pose>2 2 0.01 0 0 0</pose>
       <link name="link">
         <visual name="visual">
           <geometry>
