@@ -4,9 +4,14 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, GroupAction, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node, PushROSNamespace
 
 def robot_group(robot_ns, idx, delay=0.0):
+    # Declare a launch argument for the namespace
+    robot_ns_arg = DeclareLaunchArgument(robot_ns, default_value=robot_ns)
+    robot_ns_lc = LaunchConfiguration(robot_ns)
+
     if idx == 0:
         # First robot: full simulation launch
         robot_launch = IncludeLaunchDescription(
@@ -14,7 +19,7 @@ def robot_group(robot_ns, idx, delay=0.0):
                 os.path.join(get_package_share_directory('turtlebot4_gz_bringup'), 'launch', 'turtlebot4_gz.launch.py')
             ]),
             launch_arguments={
-                'namespace': robot_ns,
+                'namespace': robot_ns_lc,
                 'world': 'white',
                 'z': '0.2'
             }.items()
@@ -26,7 +31,7 @@ def robot_group(robot_ns, idx, delay=0.0):
                 os.path.join(get_package_share_directory('turtlebot4_gz_bringup'), 'launch', 'turtlebot4_spawn.launch.py')
             ]),
             launch_arguments={
-                'namespace': robot_ns,
+                'namespace': robot_ns_lc,
                 'x': str(idx * 1.5),
                 'y': str(idx * 1.5),
                 'z': '0.2'
@@ -37,11 +42,11 @@ def robot_group(robot_ns, idx, delay=0.0):
         PythonLaunchDescriptionSource([
             os.path.join(os.path.dirname(__file__), 'tf_broadcaster_launch.py')
         ]),
-        launch_arguments={'turtlebot4_id': robot_ns}.items()
+        launch_arguments={'turtlebot4_id': robot_ns_lc}.items()
     )
 
     robot_sensors_and_controller = GroupAction([
-        PushROSNamespace(robot_ns),
+        PushROSNamespace(robot_ns_lc),
         Node(
             package='automode_tb4_sim',
             executable='light_sensors_node',
@@ -64,7 +69,7 @@ def robot_group(robot_ns, idx, delay=0.0):
         )
     ])
 
-    group = [robot_launch, tf_broadcaster, robot_sensors_and_controller]
+    group = [robot_ns_arg, robot_launch, tf_broadcaster, robot_sensors_and_controller]
     if delay > 0.0:
         return [TimerAction(period=delay, actions=group)]
     else:
@@ -80,7 +85,6 @@ def generate_launch_description():
         name='static_tf_arena'
     )
 
-
     robot_launches = []
     robot_names = [f'tb{i}' for i in range(1, 3)]  # Only two robots: tb1 and tb2
     for idx, robot_ns in enumerate(robot_names):
@@ -91,4 +95,4 @@ def generate_launch_description():
         static_tf_arena,
         genome_id_arg,
         *robot_launches,
-    ])   
+    ])
