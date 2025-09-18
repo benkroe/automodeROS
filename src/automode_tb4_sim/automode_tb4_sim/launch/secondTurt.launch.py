@@ -17,6 +17,14 @@ turtlebot4_id_arg = DeclareLaunchArgument(
 turtlebot4_id = LaunchConfiguration('turtlebot4_id')
 
 def generate_launch_description():
+        # Static transform for arena/world
+    static_tf_arena = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['0', '0', '0', '0', '0', '0', 'world', 'white'],
+        name='static_tf_arena'
+    )
+
     # Launch the second TurtleBot4 in Gazebo
     turtlebot4_simulator = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -51,6 +59,7 @@ def generate_launch_description():
     ])
 
     return LaunchDescription([
+        static_tf_arena,
         turtlebot4_id_arg,
         turtlebot4_simulator,
         robot_sensors_node,
