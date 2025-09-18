@@ -38,6 +38,15 @@ def generate_launch_description():
         }.items()
     )
 
+    tf_broadcaster = IncludeLaunchDescription(
+    PythonLaunchDescriptionSource([
+        os.path.join(
+            os.path.dirname(__file__), 'tf_broadcaster_launch.py'
+        )
+    ]),
+    launch_arguments={'turtlebot4_id': turtlebot4_id}.items()
+)
+
     # Sensor nodes for the second robot
     robot_sensors_node = GroupAction([
         PushROSNamespace(turtlebot4_id),
@@ -62,5 +71,6 @@ def generate_launch_description():
         static_tf_arena,
         turtlebot4_id_arg,
         turtlebot4_simulator,
+        tf_broadcaster,
         robot_sensors_node,
     ])
