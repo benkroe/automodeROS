@@ -6,7 +6,9 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, GroupAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node, PushROSNamespace
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfigurationfrom 
+from launch.substitutions.path_join_substitution import PathJoinSubstitution
+
 
 # Declare the namespace for the second robot
 turtlebot4_id_arg = DeclareLaunchArgument(
@@ -36,17 +38,6 @@ def generate_launch_description():
             'y': '2.0',
             'z': '0.2'
         }.items()
-    )
-
-    ros_gz_bridge = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(get_package_share_directory('turtlebot4_gz_bringup'), 'launch', 'ros_gz_bridge.launch.py')
-        ]),
-        launch_arguments=[
-            ('model', LaunchConfiguration('model')),
-            ('robot_name', [turtlebot4_id, '/turtlebot4']),  # Correct robot name for Gazebo topics
-            ('namespace', turtlebot4_id)
-        ]
     )
 
     tf_broadcaster = IncludeLaunchDescription(
@@ -99,6 +90,26 @@ def generate_launch_description():
     #         'side_left'
     #     ]
     # ]
+
+    pkg_irobot_create_gz_bringup = get_package_share_directory('irobot_create_gz_bringup')
+    create3_ros_gz_bridge_launch = PathJoinSubstitution(
+        [pkg_irobot_create_gz_bringup, 'launch', 'create3_ros_gz_bridge.launch.py']
+    )
+
+    # Set robot_name and dock_name to match your Gazebo model names
+    robot_name = [turtlebot4_id, '/turtlebot4']
+    dock_name = [turtlebot4_id, '/standard_dock']
+    world = 'white'  # or 'warehouse', depending on your setup
+
+    create3_bridge = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([create3_ros_gz_bridge_launch]),
+        launch_arguments=[
+            ('robot_name', robot_name),
+            ('dock_name', dock_name),
+            ('namespace', turtlebot4_id),
+            ('world', world)
+        ]
+    )
 
     return LaunchDescription([
         static_tf_arena,
