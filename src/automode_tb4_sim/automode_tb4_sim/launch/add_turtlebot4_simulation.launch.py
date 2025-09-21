@@ -6,7 +6,7 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, GroupAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node, PushROSNamespace
-from launch.substitutions import LaunchConfigurationfrom 
+from launch.substitutions import LaunchConfiguration
 from launch.substitutions.path_join_substitution import PathJoinSubstitution
 
 
