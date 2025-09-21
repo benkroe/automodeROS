@@ -38,6 +38,17 @@ def generate_launch_description():
         }.items()
     )
 
+    ros_gz_bridge = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('turtlebot4_gz_bringup'), 'launch', 'ros_gz_bridge.launch.py')
+        ]),
+        launch_arguments=[
+            ('model', LaunchConfiguration('model')),
+            ('robot_name', LaunchConfiguration('namespace')),  # or the correct robot name
+            ('namespace', LaunchConfiguration('namespace'))
+        ]
+    )
+
     tf_broadcaster = IncludeLaunchDescription(
     PythonLaunchDescriptionSource([
         os.path.join(
@@ -67,33 +78,34 @@ def generate_launch_description():
         ),
     ])
 
-     # Add IR sensor bridges for tb2
-    ir_sensor_bridges = [
-        Node(
-            package='ros_gz_bridge',
-            executable='parameter_bridge',
-            name=f'ir_intensity_{sensor}_bridge',
-            arguments=[
-                f'/world/white/model/tb2/turtlebot4/link/ir_intensity_{sensor}/sensor/ir_intensity_{sensor}/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan'
-            ],
-            parameters=[{'use_sim_time': True}]
-        )
-        for sensor in [
-            'front_center_left',
-            'front_center_right',
-            'front_left',
-            'front_right',
-            'left',
-            'right',
-            'side_left'
-        ]
-    ]
+    #  # Add IR sensor bridges for tb2
+    # ir_sensor_bridges = [
+    #     Node(
+    #         package='ros_gz_bridge',
+    #         executable='parameter_bridge',
+    #         name=f'ir_intensity_{sensor}_bridge',
+    #         arguments=[
+    #             f'/world/white/model/tb2/turtlebot4/link/ir_intensity_{sensor}/sensor/ir_intensity_{sensor}/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan'
+    #         ],
+    #         parameters=[{'use_sim_time': True}]
+    #     )
+    #     for sensor in [
+    #         'front_center_left',
+    #         'front_center_right',
+    #         'front_left',
+    #         'front_right',
+    #         'left',
+    #         'right',
+    #         'side_left'
+    #     ]
+    # ]
 
     return LaunchDescription([
         static_tf_arena,
         turtlebot4_id_arg,
         turtlebot4_simulator,
+        ros_gz_bridge,
         tf_broadcaster,
         robot_sensors_node,
-        *ir_sensor_bridges,
+        #*ir_sensor_bridges,
     ])
