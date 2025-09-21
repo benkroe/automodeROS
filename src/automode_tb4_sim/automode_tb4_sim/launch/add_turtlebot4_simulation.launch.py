@@ -44,8 +44,8 @@ def generate_launch_description():
         ]),
         launch_arguments=[
             ('model', LaunchConfiguration('model')),
-            ('robot_name', LaunchConfiguration('namespace')),  # or the correct robot name
-            ('namespace', LaunchConfiguration('namespace'))
+            ('robot_name', [turtlebot4_id, '/turtlebot4']),  # Correct robot name for Gazebo topics
+            ('namespace', turtlebot4_id)
         ]
     )
 
