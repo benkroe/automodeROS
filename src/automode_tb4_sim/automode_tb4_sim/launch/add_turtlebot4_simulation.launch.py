@@ -107,7 +107,6 @@ def generate_launch_description():
     # Set robot_name and dock_name to match your Gazebo model names
     robot_name = [turtlebot4_id, '/turtlebot4']
     dock_name = [turtlebot4_id, '/standard_dock']
-    world = 'white'  # or 'warehouse', depending on your setup
 
     create3_bridge = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([create3_ros_gz_bridge_launch]),
