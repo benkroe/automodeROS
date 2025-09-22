@@ -43,7 +43,7 @@ def generate_launch_description():
             'namespace': turtlebot4_id,
             'x': '2.0',
             'y': '2.0',
-            'z': '0.2'
+            'z': '0.2',
             'world': world
         }.items()
     )
