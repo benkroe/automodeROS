@@ -6,7 +6,6 @@ from tf2_ros import TransformException
 from std_msgs.msg import String
 from rclpy.qos import qos_profile_sensor_data
 from math import atan2
-import math
 from tf_transformations import euler_from_quaternion
 
 # This node publishes neighbour count and attraction angle as a string message.
@@ -33,8 +32,6 @@ class NeighboursSensor(Node):
         # List of robot namespaces to check (could be parameterized)
         self.robot_namespaces = ['tb1', 'tb2', 'tb3', 'tb4']
 
-
-
     def on_timer(self):
         own_frame = f'{self.namespace}/turtlebot4/base_link'
         try:
@@ -50,7 +47,7 @@ class NeighboursSensor(Node):
         own_x = own_transform.transform.translation.x
         own_y = own_transform.transform.translation.y
         q = own_transform.transform.rotation
-        # Convert quaternion to yaw
+        from tf_transformations import euler_from_quaternion
         yaw = euler_from_quaternion([q.x, q.y, q.z, q.w])[2]
 
         count = 0
@@ -73,8 +70,7 @@ class NeighboursSensor(Node):
                 dist = (dx ** 2 + dy ** 2) ** 0.5
                 if dist <= self.DETECTION_RADIUS:
                     count += 1
-                    world_angle = math.atan2(dy, dx)
-                    # Compute relative angle to robot's heading
+                    world_angle = atan2(dy, dx)
                     rel_angle = self.normalize_angle(world_angle - yaw)
                     angles.append(rel_angle)
             except TransformException:
@@ -92,9 +88,9 @@ class NeighboursSensor(Node):
         self.neighbours_publisher.publish(msg)
 
     def normalize_angle(self, angle):
-        """Normalize angle to [-pi, pi]."""
-        return math.atan2(math.sin(angle), math.cos(angle))
-
+        from math import atan2, sin, cos
+        return atan2(sin(angle), cos(angle))
+    
 def main(args=None):
     rclpy.init(args=args)
     node = NeighboursSensor()
