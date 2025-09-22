@@ -60,10 +60,10 @@ class Behavior(BehaviorBase):
             RobotState, 'robotState', self._robot_state_cb, 10
         )
 
+        
     def execute_step(self) -> Tuple[bool, str, bool]:
         """
-        Always drive in the direction of attraction_angle from RobotState.
-        If robot state is not available, do nothing (like exploration).
+        Drive straight if facing the attraction direction, otherwise turn toward it.
         """
         if self._pub is None or self._Float32MultiArray is None:
             return False, "Communication not set up", False
@@ -71,29 +71,32 @@ class Behavior(BehaviorBase):
         msg = self._Float32MultiArray()
 
         if self._last_robot_state is not None:
-            attraction_angle = self._last_robot_state.attraction_angle
-            vector_length = self._attraction_gain
-            angle_rad = attraction_angle  # Already in radians
+            angle_rad = self._last_robot_state.attraction_angle
+            gain = self._attraction_gain
 
-            # Calculate wheel speeds for differential drive
-            v_cos = vector_length * math.cos(angle_rad)
-            v_sin = vector_length * math.sin(angle_rad)
-            left_wheel_speed = v_cos - v_sin
-            right_wheel_speed = v_cos + v_sin
+            # If angle is small (facing the vector), drive straight
+            if abs(angle_rad) < math.radians(20):  # within ±20 degrees
+                left_wheel_speed = gain
+                right_wheel_speed = gain
+                action = "driving straight"
+            else:
+                # Otherwise, turn in place toward the vector
+                turn_speed = gain * math.copysign(1.0, angle_rad)
+                left_wheel_speed = -turn_speed
+                right_wheel_speed = turn_speed
+                action = "turning toward vector"
 
-            # Saturate speeds
             left_wheel_speed = max(min(left_wheel_speed, self._wheel_speed_limit), -self._wheel_speed_limit)
             right_wheel_speed = max(min(right_wheel_speed, self._wheel_speed_limit), -self._wheel_speed_limit)
 
             msg.data = [left_wheel_speed, right_wheel_speed]
             self._pub.publish(msg)
             return True, (
-                f"Attraction direct (angle: {math.degrees(angle_rad):.1f}°, "
-                f"att: {self._attraction_gain:.1f}), "
+                f"Attraction ({action}, angle: {math.degrees(angle_rad):.1f}°, "
+                f"att: {gain:.1f}), "
                 f"wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]"
             ), False
         else:
-            # No robot state yet, do nothing (like exploration)
             msg.data = [0.0, 0.0]
             self._pub.publish(msg)
             return True, "No robot state available, stopped", False
