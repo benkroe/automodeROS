@@ -77,32 +77,6 @@ def generate_launch_description():
         ),
     ])
 
-    #  # Add IR sensor bridges for tb2
-    # ir_sensor_bridges = [
-    #     Node(
-    #         package='ros_gz_bridge',
-    #         executable='parameter_bridge',
-    #         name=f'ir_intensity_{sensor}_bridge',
-    #         arguments=[
-    #             f'/world/white/model/tb2/turtlebot4/link/ir_intensity_{sensor}/sensor/ir_intensity_{sensor}/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan'
-    #         ],
-    #         parameters=[{'use_sim_time': True}]
-    #     )
-    #     for sensor in [
-    #         'front_center_left',
-    #         'front_center_right',
-    #         'front_left',
-    #         'front_right',
-    #         'left',
-    #         'right',
-    #         'side_left'
-    #     ]
-    # ]
-
-    pkg_irobot_create_gz_bringup = get_package_share_directory('irobot_create_gz_bringup')
-    create3_ros_gz_bridge_launch = PathJoinSubstitution(
-        [pkg_irobot_create_gz_bringup, 'launch', 'create3_ros_gz_bridge.launch.py']
-    )
 
     # Set robot_name and dock_name to match your Gazebo model names
     robot_name = [turtlebot4_id, '/turtlebot4']
@@ -123,9 +97,6 @@ def generate_launch_description():
         static_tf_arena,
         turtlebot4_id_arg,
         turtlebot4_simulator,
-        #create3_bridge, 
-        #ros_gz_bridge,
         tf_broadcaster,
         robot_sensors_node,
-        #*ir_sensor_bridges,
     ])
