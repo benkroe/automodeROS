@@ -90,7 +90,7 @@ class NeighboursSensor(Node):
     def normalize_angle(self, angle):
         from math import atan2, sin, cos
         return atan2(sin(angle), cos(angle))
-    
+        
 def main(args=None):
     rclpy.init(args=args)
     node = NeighboursSensor()
