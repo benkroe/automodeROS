@@ -18,6 +18,13 @@ turtlebot4_id_arg = DeclareLaunchArgument(
 )
 turtlebot4_id = LaunchConfiguration('turtlebot4_id')
 
+world_arg = DeclareLaunchArgument(
+    'world',
+    default_value='white',
+    description='Simulation world name'
+)
+world = LaunchConfiguration('world')
+
 def generate_launch_description():
         # Static transform for arena/world
     static_tf_arena = Node(
@@ -37,6 +44,7 @@ def generate_launch_description():
             'x': '2.0',
             'y': '2.0',
             'z': '0.2'
+            'world': world
         }.items()
     )
 
@@ -112,10 +120,11 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        world_arg,
         static_tf_arena,
         turtlebot4_id_arg,
         turtlebot4_simulator,
-        create3_ros_gz_bridge_launch, 
+        #create3_bridge, 
         #ros_gz_bridge,
         tf_broadcaster,
         robot_sensors_node,
