@@ -79,7 +79,12 @@ def generate_launch_description():
             package='automode_tb4_sim',
             executable='ground_sensor_node',
             parameters=[{'use_sim_time': True}]
-        )
+        ),
+        Node(
+            package='automode_tb4_sim',
+            executable='neighbour_sensor_node',
+            parameters=[{'use_sim_time': True}]
+        ),
     ])
 
 
