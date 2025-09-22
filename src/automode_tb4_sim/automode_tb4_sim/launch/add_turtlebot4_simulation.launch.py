@@ -75,22 +75,17 @@ def generate_launch_description():
             executable='ir_sensors_node',
             parameters=[{'use_sim_time': True}]
         ),
+        Node(
+            package='automode_tb4_sim',
+            executable='ground_sensor_node',
+            parameters=[{'use_sim_time': True}]
+        ),
     ])
 
 
     # Set robot_name and dock_name to match your Gazebo model names
     robot_name = [turtlebot4_id, '/turtlebot4']
     dock_name = [turtlebot4_id, '/standard_dock']
-
-    create3_bridge = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([create3_ros_gz_bridge_launch]),
-        launch_arguments=[
-            ('robot_name', robot_name),
-            ('dock_name', dock_name),
-            ('namespace', turtlebot4_id),
-            ('world', world)
-        ]
-    )
 
     return LaunchDescription([
         world_arg,
