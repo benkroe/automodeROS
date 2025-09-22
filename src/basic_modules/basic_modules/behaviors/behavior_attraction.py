@@ -60,38 +60,43 @@ class Behavior(BehaviorBase):
             RobotState, 'robotState', self._robot_state_cb, 10
         )
 
-   
     def execute_step(self) -> Tuple[bool, str, bool]:
         """
-        Move directly in the attraction_angle direction, ignoring neighbor count and checks.
+        Always drive in the direction of attraction_angle from RobotState.
+        If robot state is not available, do nothing (like exploration).
         """
-        if self._last_robot_state is None or self._pub is None or self._Float32MultiArray is None:
-            return False, "No robot state or communication not set up", False
+        if self._pub is None or self._Float32MultiArray is None:
+            return False, "Communication not set up", False
 
-        attraction_angle = self._last_robot_state.attraction_angle
-        vector_length = self._attraction_gain
-        angle_rad = attraction_angle  # Already in radians
-
-        # Map vector into differential drive wheel speeds
-        v_cos = vector_length * math.cos(angle_rad)
-        v_sin = vector_length * math.sin(angle_rad)
-        left_wheel_speed = v_cos - v_sin
-        right_wheel_speed = v_cos + v_sin
-
-        # Saturate speeds to limits
-        left_wheel_speed = max(min(left_wheel_speed, self._wheel_speed_limit), -self._wheel_speed_limit)
-        right_wheel_speed = max(min(right_wheel_speed, self._wheel_speed_limit), -self._wheel_speed_limit)
-
-        # Publish
         msg = self._Float32MultiArray()
-        msg.data = [left_wheel_speed, right_wheel_speed]
-        self._pub.publish(msg)
 
-        return True, (
-            f"Attraction direct (angle: {math.degrees(attraction_angle):.1f}°, "
-            f"att: {self._attraction_gain:.1f}), "
-            f"wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]"
-        ), False
+        if self._last_robot_state is not None:
+            attraction_angle = self._last_robot_state.attraction_angle
+            vector_length = self._attraction_gain
+            angle_rad = attraction_angle  # Already in radians
+
+            # Calculate wheel speeds for differential drive
+            v_cos = vector_length * math.cos(angle_rad)
+            v_sin = vector_length * math.sin(angle_rad)
+            left_wheel_speed = v_cos - v_sin
+            right_wheel_speed = v_cos + v_sin
+
+            # Saturate speeds
+            left_wheel_speed = max(min(left_wheel_speed, self._wheel_speed_limit), -self._wheel_speed_limit)
+            right_wheel_speed = max(min(right_wheel_speed, self._wheel_speed_limit), -self._wheel_speed_limit)
+
+            msg.data = [left_wheel_speed, right_wheel_speed]
+            self._pub.publish(msg)
+            return True, (
+                f"Attraction direct (angle: {math.degrees(angle_rad):.1f}°, "
+                f"att: {self._attraction_gain:.1f}), "
+                f"wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]"
+            ), False
+        else:
+            # No robot state yet, do nothing (like exploration)
+            msg.data = [0.0, 0.0]
+            self._pub.publish(msg)
+            return True, "No robot state available, stopped", False
 
     def reset(self) -> None:
         """Reset the behavior state and clean up resources."""
@@ -111,4 +116,4 @@ class Behavior(BehaviorBase):
 
         self._pub = None
         self._sub = None
-        self._Float32MultiArray = None
+        self._Float32MultiArray
