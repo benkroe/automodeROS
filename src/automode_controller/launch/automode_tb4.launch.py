@@ -15,9 +15,15 @@ def generate_launch_description():
         default_value='basic_modules',
         description='Module package for condition and behavior nodes'
     )
+    fsm_config_arg = DeclareLaunchArgument(
+        'fsm_config',
+        default_value='',
+        description='Path to FSM config file'
+    )
 
     ns = LaunchConfiguration('robot_namespace')
     module_pkg = LaunchConfiguration('module_package')
+    fsm_config = LaunchConfiguration('fsm_config')
 
 
     condition_node = Node(
@@ -61,9 +67,11 @@ def generate_launch_description():
         executable='controller_node',
         name='controller_node',
         namespace=ns,
-        parameters=[{'use_sim_time': True}],
+        parameters=[
+            {'use_sim_time': True},
+            {'fsm_config': fsm_config}
+        ],
         output='log',
-
     )
 
     delayed_controller_node = TimerAction(
