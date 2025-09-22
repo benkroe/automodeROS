@@ -32,7 +32,7 @@ class GroundSensor(Node):
         self.namespace = self.get_namespace().strip('/')
 
     def on_timer(self):
-        target_frame = f'{self.namespace}/light_sensor_front_left'
+        target_frame = f'{self.namespace}/turtlebot4/base_link'
 
         try:
             t = self.tf_buffer.lookup_transform(

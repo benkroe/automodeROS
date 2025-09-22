@@ -69,6 +69,11 @@ class TurtleBot4ReferenceNode(Node):
         self.proximity_mag_last = 0.0
         self.proximity_hysteresis = 2.0  # Minimum change to update
 
+        # neighbour count and direction
+        self.create_subscription(String, 'neighbours_info', self._neighbours_cb, qos_profile_sensor_data)
+        self.latest_neighbour_count = 0
+        self.latest_attraction_angle = 0.0
+
 
     def _ir_cb(self, msg):
         self.latest_ir = msg.data
@@ -81,6 +86,14 @@ class TurtleBot4ReferenceNode(Node):
 
     def _light_back_cb(self, msg):
         self.latest_light_back = msg.data
+
+    def _neighbours_cb(self, msg: String):
+        try:
+            angle_str, count_str = msg.data.split(',')
+            self.latest_attraction_angle = float(angle_str)
+            self.latest_neighbour_count = int(count_str)
+        except Exception as e:
+            self.get_logger().warning(f"Failed to parse neighbours_info: {msg.data} ({e})")
     
     def compute_proximity(self):
         if self.latest_ir:
@@ -147,7 +160,8 @@ class TurtleBot4ReferenceNode(Node):
         # Fill RobotState message (expand with real sensor data)
         msg = RobotState()
         msg.robot_id = self.robot_id
-        msg.neighbour_count = self.neighbour_count
+        msg.neighbour_count = self.latest_neighbour_count
+        msg.attraction_angle = self.latest_attraction_angle
         msg.ground_black_floor = self.ground_black_floor
         msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
         msg.light_magnitude, msg.light_angle = self.compute_light()
