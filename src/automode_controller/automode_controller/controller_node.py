@@ -186,10 +186,10 @@ class ControllerNode(Node):
             
             # Get behavior descriptions
             behavior_descriptions = None
-            if behavior_list_client.wait_for_service(timeout_sec=5.0):
+            if behavior_list_client.wait_for_service(timeout_sec=30.0):
                 request = Trigger.Request()
                 future = behavior_list_client.call_async(request)
-                rclpy.spin_until_future_complete(self, future, timeout_sec=5.0)
+                rclpy.spin_until_future_complete(self, future, timeout_sec=30.0)
                 
                 if future.result() and future.result().success:
                     behavior_descriptions = json.loads(future.result().message)
@@ -201,11 +201,11 @@ class ControllerNode(Node):
             
             # Get condition descriptions
             condition_descriptions = None
-            if condition_list_client.wait_for_service(timeout_sec=5.0):
+            if condition_list_client.wait_for_service(timeout_sec=30.0):
                 request = Trigger.Request()
                 future = condition_list_client.call_async(request)
-                rclpy.spin_until_future_complete(self, future, timeout_sec=5.0)
-                
+                rclpy.spin_until_future_complete(self, future, timeout_sec=30.0)
+
                 if future.result() and future.result().success:
                     condition_descriptions = json.loads(future.result().message)
                     self.get_logger().info(f"Retrieved {len(condition_descriptions)} condition descriptions")
