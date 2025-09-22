@@ -47,8 +47,7 @@ class NeighboursSensor(Node):
         own_y = own_transform.transform.translation.y
 
         count = 0
-        sum_dx = 0.0
-        sum_dy = 0.0
+        angles = []
 
         for ns in self.robot_namespaces:
             if ns == self.namespace:
@@ -67,13 +66,14 @@ class NeighboursSensor(Node):
                 dist = (dx ** 2 + dy ** 2) ** 0.5
                 if dist <= self.DETECTION_RADIUS:
                     count += 1
-                    sum_dx += dx
-                    sum_dy += dy
+                    angles.append(atan2(dy, dx))
             except TransformException:
                 continue
 
         if count > 0:
-            attraction_angle = atan2(sum_dy, sum_dx)
+            # Average direction (unit vector)
+            avg_angle = sum(angles) / len(angles)
+            attraction_angle = avg_angle
         else:
             attraction_angle = 0.0
 

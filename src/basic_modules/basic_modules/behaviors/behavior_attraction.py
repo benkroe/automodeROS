@@ -60,39 +60,19 @@ class Behavior(BehaviorBase):
             RobotState, 'robotState', self._robot_state_cb, 10
         )
 
+   
     def execute_step(self) -> Tuple[bool, str, bool]:
         """
-        Execute attraction behavior - move toward neighboring robots.
-
-        Returns:
-            (success, message, goal_reached) 
-            goal_reached always False for pure attraction
+        Move directly in the attraction_angle direction, ignoring neighbor count and checks.
         """
-        if self._last_robot_state is None:
-            return True, "No robot state data available", False
+        if self._last_robot_state is None or self._pub is None or self._Float32MultiArray is None:
+            return False, "No robot state or communication not set up", False
 
-        if self._pub is None or self._Float32MultiArray is None:
-            return False, "Communication not set up", False
-
-        prox_mag = self._last_robot_state.proximity_magnitude
-        prox_ang = self._last_robot_state.proximity_angle
-        neighbor_count = self._last_robot_state.neighbour_count
-
-        # If no neighbors or too weak signal → stop
-        if neighbor_count == 0 or prox_mag <= self._neighbor_threshold:
-            msg = self._Float32MultiArray()
-            msg.data = [0.0, 0.0]
-            self._pub.publish(msg)
-            return True, f"No neighbors detected, stopped", False
-
-        # Attraction vector scaled by att
-        vector_length = self._attraction_gain * prox_mag
-        angle_rad = math.radians(prox_ang)
+        attraction_angle = self._last_robot_state.attraction_angle
+        vector_length = self._attraction_gain
+        angle_rad = attraction_angle  # Already in radians
 
         # Map vector into differential drive wheel speeds
-        # Standard ARGoS-style mapping: 
-        #   left  = v·cos(θ) - v·sin(θ)
-        #   right = v·cos(θ) + v·sin(θ)
         v_cos = vector_length * math.cos(angle_rad)
         v_sin = vector_length * math.sin(angle_rad)
         left_wheel_speed = v_cos - v_sin
@@ -108,8 +88,7 @@ class Behavior(BehaviorBase):
         self._pub.publish(msg)
 
         return True, (
-            f"Attraction active (neighbors: {neighbor_count}, "
-            f"prox: {prox_mag:.3f}, angle: {prox_ang:.1f}°, "
+            f"Attraction direct (angle: {math.degrees(attraction_angle):.1f}°, "
             f"att: {self._attraction_gain:.1f}), "
             f"wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]"
         ), False
