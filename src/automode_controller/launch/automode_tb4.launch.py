@@ -75,7 +75,7 @@ def generate_launch_description():
     )
 
     delayed_controller_node = TimerAction(
-        period=10.0,
+        period=20.0,
         actions=[controller_node]
     )
 

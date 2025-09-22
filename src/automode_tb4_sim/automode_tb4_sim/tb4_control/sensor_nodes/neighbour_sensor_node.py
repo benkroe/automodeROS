@@ -11,7 +11,7 @@ from math import atan2
 
 class NeighboursSensor(Node):
 
-    DETECTION_RADIUS = 1.5  # meters
+    DETECTION_RADIUS = 20  # meters
 
     def __init__(self):
         super().__init__('neighbours_sensor_node')
