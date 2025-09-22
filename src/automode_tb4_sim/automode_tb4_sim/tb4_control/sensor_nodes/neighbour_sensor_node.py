@@ -6,6 +6,8 @@ from tf2_ros import TransformException
 from std_msgs.msg import String
 from rclpy.qos import qos_profile_sensor_data
 from math import atan2
+import math
+from tf_transformations import euler_from_quaternion
 
 # This node publishes neighbour count and attraction angle as a string message.
 
@@ -31,55 +33,67 @@ class NeighboursSensor(Node):
         # List of robot namespaces to check (could be parameterized)
         self.robot_namespaces = ['tb1', 'tb2', 'tb3', 'tb4']
 
-    def on_timer(self):
-        own_frame = f'{self.namespace}/turtlebot4/base_link'
+
+
+def on_timer(self):
+    own_frame = f'{self.namespace}/turtlebot4/base_link'
+    try:
+        own_transform = self.tf_buffer.lookup_transform(
+            self.base_frame,
+            own_frame,
+            rclpy.time.Time()
+        )
+    except TransformException:
+        self.get_logger().info(f'Could not transform {own_frame} to {self.base_frame}')
+        return
+
+    own_x = own_transform.transform.translation.x
+    own_y = own_transform.transform.translation.y
+    q = own_transform.transform.rotation
+    # Convert quaternion to yaw
+    yaw = euler_from_quaternion([q.x, q.y, q.z, q.w])[2]
+
+    count = 0
+    angles = []
+
+    for ns in self.robot_namespaces:
+        if ns == self.namespace:
+            continue
+        target_frame = f'{ns}/turtlebot4/base_link'
         try:
-            own_transform = self.tf_buffer.lookup_transform(
+            t = self.tf_buffer.lookup_transform(
                 self.base_frame,
-                own_frame,
+                target_frame,
                 rclpy.time.Time()
             )
+            x = t.transform.translation.x
+            y = t.transform.translation.y
+            dx = x - own_x
+            dy = y - own_y
+            dist = (dx ** 2 + dy ** 2) ** 0.5
+            if dist <= self.DETECTION_RADIUS:
+                count += 1
+                world_angle = math.atan2(dy, dx)
+                # Compute relative angle to robot's heading
+                rel_angle = self.normalize_angle(world_angle - yaw)
+                angles.append(rel_angle)
         except TransformException:
-            self.get_logger().info(f'Could not transform {own_frame} to {self.base_frame}')
-            return
+            continue
 
-        own_x = own_transform.transform.translation.x
-        own_y = own_transform.transform.translation.y
+    if count > 0:
+        x_sum = sum(math.cos(a) for a in angles)
+        y_sum = sum(math.sin(a) for a in angles)
+        attraction_angle = math.atan2(y_sum, x_sum)
+    else:
+        attraction_angle = 0.0
 
-        count = 0
-        angles = []
+    msg = String()
+    msg.data = f"{attraction_angle},{count}"
+    self.neighbours_publisher.publish(msg)
 
-        for ns in self.robot_namespaces:
-            if ns == self.namespace:
-                continue
-            target_frame = f'{ns}/turtlebot4/base_link'
-            try:
-                t = self.tf_buffer.lookup_transform(
-                    self.base_frame,
-                    target_frame,
-                    rclpy.time.Time()
-                )
-                x = t.transform.translation.x
-                y = t.transform.translation.y
-                dx = x - own_x
-                dy = y - own_y
-                dist = (dx ** 2 + dy ** 2) ** 0.5
-                if dist <= self.DETECTION_RADIUS:
-                    count += 1
-                    angles.append(atan2(dy, dx))
-            except TransformException:
-                continue
-
-        if count > 0:
-            # Average direction (unit vector)
-            avg_angle = sum(angles) / len(angles)
-            attraction_angle = avg_angle
-        else:
-            attraction_angle = 0.0
-
-        msg = String()
-        msg.data = f"{attraction_angle},{count}"
-        self.neighbours_publisher.publish(msg)
+def normalize_angle(self, angle):
+    """Normalize angle to [-pi, pi]."""
+    return math.atan2(math.sin(angle), math.cos(angle))
 
 def main(args=None):
     rclpy.init(args=args)
