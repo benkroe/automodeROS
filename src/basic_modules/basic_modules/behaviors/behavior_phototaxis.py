@@ -80,7 +80,7 @@ class Behavior(BehaviorBase):
         # light_angle: 0° = straight ahead, 90° = right, 180° = behind, 270° = left
 
         # Base forward speed proportional to light magnitude
-        base_speed = min(self._forward_speed * light_magnitude, self._forward_speed)
+        base_speed = self._forward_speed
 
         # IMPROVED: Convert angle to turning direction with proper wrapping
         # We want the SHORTEST turn toward the light
