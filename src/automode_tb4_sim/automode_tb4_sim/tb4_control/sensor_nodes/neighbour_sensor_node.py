@@ -95,7 +95,7 @@ class NeighboursSensor(Node):
 
         self.neighbours_publisher.publish(msg)
 
-    def normalize_angle(angle):
+    def normalize_angle(self, angle):
         from math import atan2, sin, cos
         return atan2(sin(angle), cos(angle))
         
