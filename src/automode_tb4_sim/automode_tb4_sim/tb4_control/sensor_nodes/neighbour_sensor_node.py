@@ -7,7 +7,7 @@ from std_msgs.msg import String
 from rclpy.qos import qos_profile_sensor_data
 from math import atan2
 import math
-from tf_transformations import euler_from_quaternion
+
 
 # This node publishes neighbour count and attraction angle as a string message.
 
