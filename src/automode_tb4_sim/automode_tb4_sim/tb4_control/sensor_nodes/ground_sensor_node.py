@@ -12,9 +12,9 @@ class GroundSensor(Node):
     BLACK_X = -9
     BLACK_Y = -9
     BLACK_SIZE = 2  # meters (patch is 2x2)
-    WHITE_X = 0
-    WHITE_Y = 0
-    WHITE_SIZE = 20  # meters (arena is 20x20, adjust as needed)
+    WHITE_X = -2
+    WHITE_Y = -2
+    WHITE_SIZE = 4  # meters (arena is 20x20, adjust as needed)
 
     def __init__(self):
         super().__init__('ground_sensor_node')
@@ -49,16 +49,16 @@ class GroundSensor(Node):
         x = t.transform.translation.x
         y = t.transform.translation.y
 
-        # Check if sensor is over the black patch
-        if (GroundSensor.BLACK_X <= x <= GroundSensor.BLACK_X + GroundSensor.BLACK_SIZE and
-            GroundSensor.BLACK_Y <= y <= GroundSensor.BLACK_Y + GroundSensor.BLACK_SIZE):
-            color = "black"
-        # Check if sensor is over the white floor
-        elif (GroundSensor.WHITE_X <= x <= GroundSensor.WHITE_X + GroundSensor.WHITE_SIZE and
-              GroundSensor.WHITE_Y <= y <= GroundSensor.WHITE_Y + GroundSensor.WHITE_SIZE):
+        # Check if sensor is over the white patch FIRST
+        if (GroundSensor.WHITE_X <= x <= GroundSensor.WHITE_X + GroundSensor.WHITE_SIZE and
+            GroundSensor.WHITE_Y <= y <= GroundSensor.WHITE_Y + GroundSensor.WHITE_SIZE):
             color = "white"
+        # Then check for black patch
+        elif (GroundSensor.BLACK_X <= x <= GroundSensor.BLACK_X + GroundSensor.BLACK_SIZE and
+              GroundSensor.BLACK_Y <= y <= GroundSensor.BLACK_Y + GroundSensor.BLACK_SIZE):
+            color = "black"
         else:
-            # On gray: keep previous color
+            # On grey: keep previous color
             color = self.last_color
 
         self.last_color = color
