@@ -17,7 +17,7 @@ class Behavior(BehaviorBase):
 
         self._forward_speed = 1.0       # Forward movement speed
         self._turn_speed = 1.0          # Turning speed (will calibrate later)
-        self._light_threshold = 0.5     # Light detection threshold
+        self._light_threshold = 0.0     # Light detection threshold
 
     @staticmethod
     def get_description() -> Dict[str, Any]:

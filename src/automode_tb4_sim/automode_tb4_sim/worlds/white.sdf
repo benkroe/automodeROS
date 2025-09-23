@@ -24,7 +24,7 @@
 
 
     <!-- Flat white floor -->
-    <model name="custom_floor">
+    <model name="grey_floor">
       <static>true</static>
       <pose>0 0 0 0 0 0</pose>
       <link name="link">
@@ -35,8 +35,8 @@
             </box>
           </geometry>
           <material>
-            <ambient>1 1 1 1</ambient>
-            <diffuse>1 1 1 1</diffuse>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
           </material>
         </visual>
         <collision name="collision">
@@ -51,7 +51,8 @@
 
     <!-- Light marker object at (6, 6, 0.25) -->
     <model name="light_marker">
-      <pose>6 6 0.25 0 0 0</pose>
+      <static>true</static>
+      <pose>0 0 1.0 0 0 0</pose> <!-- Centered at (0,0), 1 meter above the floor -->
       <link name="link">
         <visual name="visual">
           <geometry>
@@ -76,6 +77,7 @@
 
     <!-- Black patch (small area) -->
     <model name="black_patch">
+    <static>true</static>
       <pose>-8 -8 0.01 0 0 0</pose>
       <link name="link">
         <visual name="visual">
@@ -93,6 +95,31 @@
           <geometry>
             <box>
               <size>2 2 0.01</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="white_patch">
+      <static>true</static>
+      <pose>0 0 0.011 0 0 0</pose> <!-- Slightly above the grey floor -->
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>4 4 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>4 4 0.01</size>
             </box>
           </geometry>
         </collision>
