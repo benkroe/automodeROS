@@ -66,12 +66,15 @@ class Behavior(BehaviorBase):
         light_magnitude = self._last_robot_state.light_magnitude
         light_angle = self._last_robot_state.light_angle
 
-        # If no light detected, stop movement
-        if light_magnitude < self._light_threshold:
-            msg = self._Float32MultiArray()
-            msg.data = [0.0, 0.0] 
-            self._pub.publish(msg)
-            return True, f"No light detected (magnitude: {light_magnitude:.3f}), stopped", False
+
+        # if light_magnitude < self._light_threshold:
+        #     msg = self._Float32MultiArray()
+        #     msg.data = [0.0, 0.0] 
+        #     self._pub.publish(msg)
+        #     return True, f"No light detected (magnitude: {light_magnitude:.3f}), stopped", False
+
+        # Instead, always move toward the light direction, even if magnitude is zero
+        base_speed = self._forward_speed  # Always use forward speed
 
         # Calculate wheel speeds based on light direction
         # light_angle: 0° = straight ahead, 90° = right, 180° = behind, 270° = left
