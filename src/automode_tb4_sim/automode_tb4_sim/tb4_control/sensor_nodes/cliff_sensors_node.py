@@ -11,6 +11,10 @@ import numpy as np
 
 # this node emulate the set of cliff sensors available on the TurtleBot4, it creates the tf static (one for each cliff sensor) based on the position of each sensor outputs a value
 
+# BASE_FRAME = 'white'
+BASE_FRAME = 'mission'
+
+
 class Cliff_Sensor(Node):
 
     # limits of the 4 different areas (from arena.sdf file)
@@ -22,7 +26,7 @@ class Cliff_Sensor(Node):
 
 
         self.cliff_sensors_list = ['cliff_sensor_side_left', 'cliff_sensor_side_right', 'cliff_sensor_front_left', 'cliff_sensor_front_right']
-        self.base_frame = 'white' # to get the position related to the arena
+        self.base_frame = self.BASE_FRAME # to get the position related to the arena
 
         super().__init__('cliff_sensors_node')
 
