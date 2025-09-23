@@ -35,7 +35,7 @@ def generate_launch_description():
             'z': '0.2',
             'namespace': turtlebot4_id,
         }.items()
-    )
+    ) 
     
     static_tf_arena = Node(
         package='tf2_ros',
