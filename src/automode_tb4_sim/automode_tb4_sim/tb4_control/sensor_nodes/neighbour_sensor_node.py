@@ -6,6 +6,7 @@ from tf2_ros import TransformException
 from std_msgs.msg import String
 from rclpy.qos import qos_profile_sensor_data
 from math import atan2
+import math
 from tf_transformations import euler_from_quaternion
 
 # This node publishes neighbour count and attraction angle as a string message.
@@ -47,8 +48,8 @@ class NeighboursSensor(Node):
         own_x = own_transform.transform.translation.x
         own_y = own_transform.transform.translation.y
         q = own_transform.transform.rotation
-        from tf_transformations import euler_from_quaternion
-        yaw = euler_from_quaternion([q.x, q.y, q.z, q.w])[2]
+       
+        yaw = quaternion_to_yaw(q)
 
         count = 0
         angles = []
@@ -85,12 +86,21 @@ class NeighboursSensor(Node):
 
         msg = String()
         msg.data = f"{attraction_angle},{count}"
+        self.get_logger().info(f"Publishing neighbours_info: {msg.data}")
         self.neighbours_publisher.publish(msg)
 
-    def normalize_angle(self, angle):
-        from math import atan2, sin, cos
-        return atan2(sin(angle), cos(angle))
+        self.neighbours_publisher.publish(msg)
+
+def normalize_angle(angle):
+    from math import atan2, sin, cos
+    return atan2(sin(angle), cos(angle))
         
+def quaternion_to_yaw(q):
+    import math
+    siny_cosp = 2.0 * (q.w * q.z + q.x * q.y)
+    cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z)
+    return math.atan2(siny_cosp, cosy_cosp)
+
 def main(args=None):
     rclpy.init(args=args)
     node = NeighboursSensor()
