@@ -30,7 +30,7 @@ def generate_launch_description():
     static_tf_arena = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['0', '0', '0', '0', '0', '0', 'world', 'white'],
+        arguments=['0', '0', '0', '0', '0', '0', 'world', LaunchConfiguration('world')],
         name='static_tf_arena'
     )
 

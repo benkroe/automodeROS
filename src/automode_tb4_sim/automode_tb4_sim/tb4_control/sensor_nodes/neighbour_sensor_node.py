@@ -10,6 +10,9 @@ import math
 
 
 # This node publishes neighbour count and attraction angle as a string message.
+BASE_FRAME = 'mission'
+#BASE_FRAME = 'white'
+
 
 class NeighboursSensor(Node):
 
@@ -19,7 +22,7 @@ class NeighboursSensor(Node):
         super().__init__('neighbours_sensor_node')
 
         self.sensor_frame = 'neighbours_info'
-        self.base_frame = 'white'  # Arena/world frame
+        self.base_frame = BASE_FRAME
 
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)

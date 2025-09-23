@@ -18,13 +18,20 @@ def generate_launch_description():
     )
     turtlebot4_id = LaunchConfiguration('turtlebot4_id')
 
+    world_arg = DeclareLaunchArgument(
+        'world',
+        default_value='white',
+        description='Simulation world name'
+    )
+    world = LaunchConfiguration('world')
+
     # Gazebo simulator with TurtleBot4
     turtlebot4_simulator = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory('turtlebot4_gz_bringup'), 'launch', 'turtlebot4_gz.launch.py')
         ]),
         launch_arguments={
-            'world': 'white',
+            'world': world,
             'z': '0.2',
             'namespace': turtlebot4_id,
         }.items()
@@ -33,7 +40,7 @@ def generate_launch_description():
     static_tf_arena = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['0', '0', '0', '0', '0', '0', 'world', 'white'],
+        arguments=['0', '0', '0', '0', '0', '0', 'world', world],
         name='static_tf_arena'
     )
 
@@ -90,6 +97,7 @@ def generate_launch_description():
 
 
     return LaunchDescription([
+        world_arg,
         static_tf_arena,
         genome_id_arg,
         turtlebot4_id_arg,

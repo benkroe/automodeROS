@@ -15,15 +15,21 @@ from math import sqrt
 
 class LightSensor(Node):
 
-    # Light source position from arena.sdf
+    # # Light source position from arena.sdf
+    # BASE_FRAME = 'white'
+    # LIGHT_1_X = 0
+    # LIGHT_1_Y = 0
+
+    # Light source position from mission.sdf
+    BASE_FRAME = 'mission'
     LIGHT_1_X = 0
-    LIGHT_1_Y = 0
+    LIGHT_1_Y = 2.5
 
     def __init__(self):
         super().__init__('light_sensors_node')
 
         self.light_sensors_list = ['light_sensor_front_left', 'light_sensor_front_right', 'light_sensor_back']
-        self.base_frame = 'white'  # Reference frame for the arena
+        self.base_frame = self.BASE_FRAME  # Reference frame for the arena
 
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
