@@ -17,7 +17,7 @@ def generate_launch_description():
     )
     fsm_config_arg = DeclareLaunchArgument(
         'fsm_config',
-        default_value='',
+        default_value='--fsm-config --nstates 1 --s0 0 --rwm0 50 ',
         description='Path to FSM config file'
     )
 
