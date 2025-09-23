@@ -80,6 +80,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        fsm_config_arg,
         namespace_arg,
         module_package_arg,
         condition_node,
