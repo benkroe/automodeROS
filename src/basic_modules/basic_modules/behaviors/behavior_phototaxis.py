@@ -97,13 +97,9 @@ class Behavior(BehaviorBase):
         angle_factor = abs(turn_angle) / 180.0  # 0.0 (straight) to 1.0 (behind)
         turn_adjustment = self._turn_speed * angle_factor
 
-        # Apply differential steering
-        if turn_angle > 0:  # Light is to the right
-            left_wheel_speed = base_speed
-            right_wheel_speed = max(base_speed - turn_adjustment, 0.0)
-        else:  # Light is to the left
-            left_wheel_speed = max(base_speed - turn_adjustment, 0.0)
-            right_wheel_speed = base_speed
+        # Differential drive: left/right wheel speeds
+        left_wheel_speed = base_speed - self._turn_speed * (turn_angle / 180.0)
+        right_wheel_speed = base_speed + self._turn_speed * (turn_angle / 180.0)
 
         # Publish wheel speeds
         msg = self._Float32MultiArray()

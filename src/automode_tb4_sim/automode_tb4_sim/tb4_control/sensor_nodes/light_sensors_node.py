@@ -16,8 +16,8 @@ from math import sqrt
 class LightSensor(Node):
 
     # Light source position from arena.sdf
-    LIGHT_1_X = 6
-    LIGHT_1_Y = 6
+    LIGHT_1_X = 0
+    LIGHT_1_Y = 0
 
     def __init__(self):
         super().__init__('light_sensors_node')
