@@ -67,7 +67,7 @@ class Behavior(BehaviorBase):
         light_angle = self._last_robot_state.light_angle
 
         # If no light detected, stop movement
-        if light_magnitude <= self._light_threshold:
+        if light_magnitude < self._light_threshold:
             msg = self._Float32MultiArray()
             msg.data = [0.0, 0.0] 
             self._pub.publish(msg)
