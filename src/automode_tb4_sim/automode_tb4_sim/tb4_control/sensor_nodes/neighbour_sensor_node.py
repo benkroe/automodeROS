@@ -77,8 +77,6 @@ class NeighboursSensor(Node):
                     rel_angle = self.normalize_angle(world_angle - yaw)
                     angles.append(rel_angle)
             except TransformException:
-                self.get_logger().info(f"Could not transform {target_frame} to {self.base_frame}")
-
                 continue
 
         if count > 0:
