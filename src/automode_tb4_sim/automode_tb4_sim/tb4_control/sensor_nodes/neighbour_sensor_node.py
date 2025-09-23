@@ -69,12 +69,16 @@ class NeighboursSensor(Node):
                 dx = x - own_x
                 dy = y - own_y
                 dist = (dx ** 2 + dy ** 2) ** 0.5
+                self.get_logger().info(f"Neighbour {ns}: dx={dx:.2f}, dy={dy:.2f}, dist={dist:.2f}")
+
                 if dist <= self.DETECTION_RADIUS:
                     count += 1
                     world_angle = atan2(dy, dx)
                     rel_angle = self.normalize_angle(world_angle - yaw)
                     angles.append(rel_angle)
             except TransformException:
+                self.get_logger().info(f"Could not transform {target_frame} to {self.base_frame}")
+
                 continue
 
         if count > 0:
