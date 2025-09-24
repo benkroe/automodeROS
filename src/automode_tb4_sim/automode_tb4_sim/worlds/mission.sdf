@@ -12,7 +12,7 @@
       <ambient>1 1 1 1</ambient>
       <background>1 1 1 1</background>
       <shadows>0</shadows>
-      <grid>false<grid>
+      <grid>false</grid>
     </scene>
     
     <plugin name="gz::sim::systems::Physics" filename="gz-sim-physics-system" />
