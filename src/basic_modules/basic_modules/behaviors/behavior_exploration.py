@@ -17,9 +17,9 @@ class Behavior(BehaviorBase):
         self._Float32MultiArray = None
         self._turning_time = time.time()
 
-        self._obstacle_threshold = 10  # Proximity magnitude threshold for obstacle detection
-        self._forward_speed = 1.0       # Forward movement speed
-        self._turn_speed = 0.3          # Turning speed (will calibrate later)
+        self._obstacle_threshold = 50  # Proximity magnitude threshold for obstacle detection
+        self._forward_speed = 1.5       # Forward movement speed
+        self._turn_speed = 0.6          # Turning speed (will calibrate later)
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
@@ -71,7 +71,7 @@ class Behavior(BehaviorBase):
         msg = self._Float32MultiArray()
 
         # Only turn if obstacle is close AND roughly in front (angle near 0)
-        if proximity_magnitude > self._obstacle_threshold and abs(proximity_angle) < 45:
+        if proximity_magnitude > self._obstacle_threshold and abs(proximity_angle) < 30:
             # Obstacle detected, initiate turn
             if proximity_angle < 0:
                 turn_direction = [self._turn_speed, -self._turn_speed]  # Turn left
