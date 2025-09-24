@@ -2,7 +2,6 @@
 <sdf version='1.7'>
   <world name='mission'>
 
-    <!-- Physics -->
     <physics type="ode">
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1.0</real_time_factor>
@@ -13,7 +12,16 @@
       <ambient>1 1 1 1</ambient>
       <background>1 1 1 1</background>
       <shadows>0</shadows>
+      <grid>false<grid>
     </scene>
+    
+    <plugin name="gz::sim::systems::Physics" filename="gz-sim-physics-system" />
+    <plugin name="gz::sim::systems::UserCommands" filename="gz-sim-user-commands-system" />
+    <plugin name="gz::sim::systems::SceneBroadcaster" filename="gz-sim-scene-broadcaster-system" />
+    <plugin name="gz::sim::systems::Contact" filename="gz-sim-contact-system" />
+    <plugin name="gz::sim::systems::Sensors" filename="gz-sim-sensors-system">
+        <render_engine>ogre2</render_engine>
+    </plugin>
 
     <!-- Grey floor -->
     <model name="floor">
