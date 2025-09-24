@@ -64,7 +64,7 @@ class TurtleBot4ReferenceNode(Node):
         # prox smoothening
         self.proximity_mag_history = []
         self.proximity_angle_history = []
-        self.proximity_smoothing_window = 5  # Number of samples for moving average
+        self.proximity_smoothing_window = 3  # Number of samples for moving average
         self.proximity_angle_last = 0.0
         self.proximity_mag_last = 0.0
         self.proximity_hysteresis = 2.0  # Minimum change to update
