@@ -1,0 +1,549 @@
+[INFO] [launch]: All log files can be found below /home/ben/.ros/log/2025-09-24-13-45-28-073070-srv-37302
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [static_transform_publisher-1]: process started with pid [37307]
+[INFO] [gazebo-2]: process started with pid [37308]
+[INFO] [parameter_bridge-3]: process started with pid [37309]
+[INFO] [robot_state_publisher-4]: process started with pid [37310]
+[INFO] [joint_state_publisher-5]: process started with pid [37312]
+[INFO] [create-6]: process started with pid [37313]
+[INFO] [create-7]: process started with pid [37314]
+[INFO] [parameter_bridge-8]: process started with pid [37315]
+[INFO] [parameter_bridge-9]: process started with pid [37318]
+[INFO] [parameter_bridge-10]: process started with pid [37319]
+[INFO] [parameter_bridge-11]: process started with pid [37320]
+[INFO] [parameter_bridge-12]: process started with pid [37321]
+[INFO] [parameter_bridge-13]: process started with pid [37322]
+[INFO] [parameter_bridge-14]: process started with pid [37323]
+[INFO] [parameter_bridge-15]: process started with pid [37324]
+[INFO] [parameter_bridge-16]: process started with pid [37326]
+[INFO] [parameter_bridge-17]: process started with pid [37332]
+[INFO] [parameter_bridge-18]: process started with pid [37333]
+[INFO] [parameter_bridge-19]: process started with pid [37336]
+[INFO] [parameter_bridge-20]: process started with pid [37337]
+[INFO] [parameter_bridge-21]: process started with pid [37339]
+[INFO] [parameter_bridge-22]: process started with pid [37347]
+[INFO] [turtlebot4_node-23]: process started with pid [37349]
+[INFO] [turtlebot4_gz_hmi_node-24]: process started with pid [37356]
+[INFO] [spawner-25]: process started with pid [37359]
+[INFO] [static_transform_publisher-26]: process started with pid [37365]
+[INFO] [static_transform_publisher-27]: process started with pid [37372]
+[INFO] [hazards_vector_publisher-28]: process started with pid [37377]
+[INFO] [ir_intensity_vector_publisher-29]: process started with pid [37394]
+[INFO] [motion_control-30]: process started with pid [37413]
+[INFO] [mock_publisher-31]: process started with pid [37420]
+[INFO] [robot_state-32]: process started with pid [37424]
+[INFO] [pose_republisher_node-33]: process started with pid [37429]
+[INFO] [sensors_node-34]: process started with pid [37477]
+[INFO] [static_transform_publisher-35]: process started with pid [37482]
+[INFO] [static_transform_publisher-36]: process started with pid [37486]
+[INFO] [parameter_bridge-37]: process started with pid [37499]
+[INFO] [parameter_bridge-38]: process started with pid [37504]
+[INFO] [static_transform_publisher-39]: process started with pid [37522]
+[INFO] [static_transform_publisher-40]: process started with pid [37523]
+[INFO] [static_transform_publisher-41]: process started with pid [37524]
+[INFO] [static_transform_publisher-42]: process started with pid [37525]
+[INFO] [static_transform_publisher-43]: process started with pid [37527]
+[INFO] [static_transform_publisher-44]: process started with pid [37543]
+[INFO] [static_transform_publisher-45]: process started with pid [37573]
+[INFO] [light_sensors_node-46]: process started with pid [37577]
+[INFO] [cliff_sensors_node-47]: process started with pid [37590]
+[INFO] [ir_sensors_node-48]: process started with pid [37595]
+[INFO] [ground_sensor_node-49]: process started with pid [37615]
+[INFO] [neighbour_sensor_node-50]: process started with pid [37624]
+[INFO] [parameter_bridge-51]: process started with pid [37627]
+[INFO] [parameter_bridge-52]: process started with pid [37688]
+[INFO] [parameter_bridge-53]: process started with pid [37689]
+[INFO] [parameter_bridge-54]: process started with pid [37690]
+[INFO] [parameter_bridge-55]: process started with pid [37705]
+[INFO] [parameter_bridge-56]: process started with pid [37717]
+[INFO] [parameter_bridge-57]: process started with pid [37745]
+[static_transform_publisher-1] [WARN] [1758721533.786426413] []: Old-style arguments are deprecated; see --help for new-style arguments
+[static_transform_publisher-1] [INFO] [1758721534.013960643] [static_tf_arena]: Spinning until stopped - publishing transform
+[static_transform_publisher-1] translation: ('0.000000', '0.000000', '0.000000')
+[static_transform_publisher-1] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-1] from 'world' to 'mission'
+[parameter_bridge-3] [INFO] [1758721534.089732246] [clock_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[robot_state_publisher-4] [WARN] [1758721533.906961004] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[robot_state_publisher-4] [INFO] [1758721533.907559866] [tb1.robot_state_publisher]: Robot initialized
+[create-6] [INFO] [1758721533.955680219] [tb1.ros_gz_sim]: Requesting list of world names.
+[create-7] [INFO] [1758721534.053380727] [tb1.ros_gz_sim]: Requesting list of world names.
+[parameter_bridge-8] [INFO] [1758721533.990363618] [tb1.cmd_vel_bridge]: Creating GZ->ROS Bridge: [tb1/cmd_vel (ignition.msgs.Twist) -> tb1/cmd_vel (geometry_msgs/msg/TwistStamped)] (Lazy 0)
+[parameter_bridge-8] [INFO] [1758721533.995351412] [tb1.cmd_vel_bridge]: Creating ROS->GZ Bridge: [/model/tb1/turtlebot4/cmd_vel (geometry_msgs/msg/TwistStamped) -> /model/tb1/turtlebot4/cmd_vel (ignition.msgs.Twist)] (Lazy 0)
+[parameter_bridge-10] [INFO] [1758721533.925874609] [tb1.bumper_contact_bridge]: Creating GZ->ROS Bridge: [tb1/bumper_contact (ignition.msgs.Contacts) -> tb1/bumper_contact (ros_gz_interfaces/msg/Contacts)] (Lazy 0)
+[parameter_bridge-11] [INFO] [1758721534.065832021] [tb1.ir_intensity_front_center_left_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/ir_intensity_front_center_left/sensor/ir_intensity_front_center_left/scan (ignition.msgs.LaserScan) -> /world/mission/model/tb1/turtlebot4/link/ir_intensity_front_center_left/sensor/ir_intensity_front_center_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-15] [INFO] [1758721534.099974697] [tb1.ir_intensity_left_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/ir_intensity_left/sensor/ir_intensity_left/scan (ignition.msgs.LaserScan) -> /world/mission/model/tb1/turtlebot4/link/ir_intensity_left/sensor/ir_intensity_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-16] [INFO] [1758721534.001127923] [tb1.ir_intensity_right_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/ir_intensity_right/sensor/ir_intensity_right/scan (ignition.msgs.LaserScan) -> /world/mission/model/tb1/turtlebot4/link/ir_intensity_right/sensor/ir_intensity_right/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-17] [INFO] [1758721534.068421568] [tb1.ir_intensity_side_left_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/ir_intensity_side_left/sensor/ir_intensity_side_left/scan (ignition.msgs.LaserScan) -> /world/mission/model/tb1/turtlebot4/link/ir_intensity_side_left/sensor/ir_intensity_side_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[static_transform_publisher-27] [WARN] [1758721533.970519783] []: Old-style arguments are deprecated; see --help for new-style arguments
+[static_transform_publisher-36] [WARN] [1758721534.158500860] []: Old-style arguments are deprecated; see --help for new-style arguments
+[parameter_bridge-19] [INFO] [1758721534.165682962] [tb1.hmi_buttons_msg_bridge]: Creating GZ->ROS Bridge: [tb1/hmi/buttons (gz.msgs.Int32) -> tb1/hmi/buttons (std_msgs/msg/Int32)] (Lazy 0)
+[static_transform_publisher-35] [WARN] [1758721534.181296845] []: Old-style arguments are deprecated; see --help for new-style arguments
+[static_transform_publisher-26] [WARN] [1758721534.184200561] []: Old-style arguments are deprecated; see --help for new-style arguments
+[create-6] [INFO] [1758721534.195579572] [tb1.ros_gz_sim]: Waiting messages on topic [robot_description].
+[create-7] [INFO] [1758721534.330506623] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[parameter_bridge-13] [INFO] [1758721534.425456934] [tb1.ir_intensity_front_left_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/ir_intensity_front_left/sensor/ir_intensity_front_left/scan (ignition.msgs.LaserScan) -> /world/mission/model/tb1/turtlebot4/link/ir_intensity_front_left/sensor/ir_intensity_front_left/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[create-6] [INFO] [1758721534.488316056] [tb1.ros_gz_sim]: Entity creation successful.
+[static_transform_publisher-27] [INFO] [1758721534.537363298] [tb1.tf_namespaced_base_link_publisher]: Spinning until stopped - publishing transform
+[static_transform_publisher-27] translation: ('0.000000', '0.000000', '0.000000')
+[static_transform_publisher-27] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-27] from 'tb1/base_link' to 'base_link'
+[parameter_bridge-22] [INFO] [1758721534.561947293] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/image (gz.msgs.Image) -> /world/mission/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/image (sensor_msgs/msg/Image)] (Lazy 0)
+[parameter_bridge-22] [INFO] [1758721534.568031654] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/depth_image (gz.msgs.Image) -> /world/mission/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/depth_image (sensor_msgs/msg/Image)] (Lazy 0)
+[parameter_bridge-22] [INFO] [1758721534.570153874] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/points (gz.msgs.PointCloudPacked) -> /world/mission/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/points (sensor_msgs/msg/PointCloud2)] (Lazy 0)
+[parameter_bridge-22] [INFO] [1758721534.570810966] [tb1.camera_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/camera_info (gz.msgs.CameraInfo) -> /world/mission/model/tb1/turtlebot4/link/oakd_rgb_camera_frame/sensor/rgbd_camera/camera_info (sensor_msgs/msg/CameraInfo)] (Lazy 0)
+[parameter_bridge-20] [INFO] [1758721534.728519919] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/power (std_msgs/msg/Int32) -> tb1/hmi/led/power (gz.msgs.Int32)] (Lazy 0)
+[parameter_bridge-20] [INFO] [1758721534.735478401] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/motors (std_msgs/msg/Int32) -> tb1/hmi/led/motors (gz.msgs.Int32)] (Lazy 0)
+[INFO] [create-6]: process has finished cleanly [pid 37313]
+[static_transform_publisher-41] [INFO] [1758721534.965051525] [tb1.static_tf_lightSensorBack]: Spinning until stopped - publishing transform
+[static_transform_publisher-41] translation: ('-0.110000', '0.000000', '0.350000')
+[static_transform_publisher-41] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-41] from 'tb1/turtlebot4' to 'tb1/light_sensor_back'
+[static_transform_publisher-40] [INFO] [1758721534.972711967] [tb1.static_tf_lightSensorFrontR]: Spinning until stopped - publishing transform
+[static_transform_publisher-40] translation: ('0.090000', '-0.080000', '0.350000')
+[static_transform_publisher-40] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-40] from 'tb1/turtlebot4' to 'tb1/light_sensor_front_right'
+[robot_state-32] [INFO] [1758721534.978310404] [tb1.robot_state]: Advertised topic: battery_state
+[robot_state-32] [INFO] [1758721534.988634377] [tb1.robot_state]: Subscription to topic: dock_status
+[robot_state-32] [INFO] [1758721534.990147940] [tb1.robot_state]: Advertised topic: stop_status
+[robot_state-32] [INFO] [1758721534.995626668] [tb1.robot_state]: Subscription to topic: odom
+[motion_control-30] [INFO] [1758721535.022515517] [tb1.motion_control]: Enabling REFLEX_BUMP
+[motion_control-30] [INFO] [1758721535.022690025] [tb1.motion_control]: Enabling REFLEX_CLIFF
+[motion_control-30] [INFO] [1758721535.022798314] [tb1.motion_control]: Enabling REFLEX_STUCK
+[motion_control-30] [INFO] [1758721535.022840203] [tb1.motion_control]: Enabling REFLEX_WHEEL_DROP
+[parameter_bridge-20] [INFO] [1758721535.111362598] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/comms (std_msgs/msg/Int32) -> tb1/hmi/led/comms (gz.msgs.Int32)] (Lazy 0)
+[parameter_bridge-20] [INFO] [1758721535.114455493] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/wifi (std_msgs/msg/Int32) -> tb1/hmi/led/wifi (gz.msgs.Int32)] (Lazy 0)
+[parameter_bridge-20] [INFO] [1758721535.116698416] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/battery (std_msgs/msg/Int32) -> tb1/hmi/led/battery (gz.msgs.Int32)] (Lazy 0)
+[parameter_bridge-20] [INFO] [1758721535.120647962] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/user1 (std_msgs/msg/Int32) -> tb1/hmi/led/user1 (gz.msgs.Int32)] (Lazy 0)
+[gazebo-2] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:413:17: QML ToolButton: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-2] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-2] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-2] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:413:17: QML ToolButton: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-2] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-2] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[static_transform_publisher-35] [INFO] [1758721535.203297113] [tb1.rplidar_stf]: Spinning until stopped - publishing transform
+[static_transform_publisher-35] translation: ('0.000000', '0.000000', '0.000000')
+[static_transform_publisher-35] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-35] from 'rplidar_link' to 'tb1/turtlebot4/rplidar_link/rplidar'
+[cliff_sensors_node-47] Traceback (most recent call last):
+[cliff_sensors_node-47]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/cliff_sensors_node", line 33, in <module>
+[cliff_sensors_node-47]     sys.exit(load_entry_point('automode-tb4-sim==0.0.0', 'console_scripts', 'cliff_sensors_node')())
+[cliff_sensors_node-47]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[cliff_sensors_node-47]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/python3.12/site-packages/automode_tb4_sim/tb4_control/sensor_nodes/cliff_sensors_node.py", line 88, in main
+[cliff_sensors_node-47]     cliff_sensor_node = Cliff_Sensor()
+[cliff_sensors_node-47]                         ^^^^^^^^^^^^^^
+[cliff_sensors_node-47]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/python3.12/site-packages/automode_tb4_sim/tb4_control/sensor_nodes/cliff_sensors_node.py", line 29, in __init__
+[cliff_sensors_node-47]     self.base_frame = self.BASE_FRAME # to get the position related to the arena
+[cliff_sensors_node-47]                       ^^^^^^^^^^^^^^^
+[cliff_sensors_node-47] AttributeError: 'Cliff_Sensor' object has no attribute 'BASE_FRAME'
+[gazebo-2] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:413:17: QML ToolButton: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-2] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[gazebo-2] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file:///usr/lib/aarch64-linux-gnu/qt5/qml/QtQuick/Dialogs/DefaultFileDialog.qml:309:21: QML Button: Binding loop detected for property "implicitHeight"[0m[1;33m[0m
+[ERROR] [cliff_sensors_node-47]: process has died [pid 37590, exit code 1, cmd '/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/cliff_sensors_node --ros-args -r __ns:=/tb1 --params-file /tmp/launch_params_tvaggx01'].
+[hazards_vector_publisher-28] [INFO] [1758721535.288922879] [tb1.hazards_vector_publisher]: Advertised topic: hazard_detection
+[hazards_vector_publisher-28] [INFO] [1758721535.290644805] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/bumper/event
+[hazards_vector_publisher-28] [INFO] [1758721535.291469950] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_front_left/event
+[hazards_vector_publisher-28] [INFO] [1758721535.292573423] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_front_right/event
+[hazards_vector_publisher-28] [INFO] [1758721535.293157344] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_side_left/event
+[hazards_vector_publisher-28] [INFO] [1758721535.293603997] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/cliff_side_right/event
+[hazards_vector_publisher-28] [INFO] [1758721535.294026996] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/wheel_drop/left_wheel/event
+[hazards_vector_publisher-28] [INFO] [1758721535.294457850] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/wheel_drop/right_wheel/event
+[hazards_vector_publisher-28] [INFO] [1758721535.294825374] [tb1.hazards_vector_publisher]: Subscription to topic: _internal/backup_limit
+[create-7] [INFO] [1758721535.330901138] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[parameter_bridge-18] [INFO] [1758721535.394961459] [tb1.hmi_display_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/display/raw (std_msgs/msg/String) -> tb1/hmi/display/raw (gz.msgs.StringMsg)] (Lazy 0)
+[parameter_bridge-18] [INFO] [1758721535.400430528] [tb1.hmi_display_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/display/selected (std_msgs/msg/Int32) -> tb1/hmi/display/selected (gz.msgs.Int32)] (Lazy 0)
+[ir_intensity_vector_publisher-29] [INFO] [1758721535.434313202] [tb1.ir_intensity_vector_publisher]: Advertised topic: ir_intensity
+[ir_intensity_vector_publisher-29] [INFO] [1758721535.439686124] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_center_left
+[ir_intensity_vector_publisher-29] [INFO] [1758721535.441873616] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_center_right
+[ir_intensity_vector_publisher-29] [INFO] [1758721535.442375654] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_left
+[ir_intensity_vector_publisher-29] [INFO] [1758721535.443572566] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_front_right
+[ir_intensity_vector_publisher-29] [INFO] [1758721535.444774217] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_left
+[ir_intensity_vector_publisher-29] [INFO] [1758721535.447036324] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_right
+[ir_intensity_vector_publisher-29] [INFO] [1758721535.448250479] [tb1.ir_intensity_vector_publisher]: Subscription to topic: _internal/ir_intensity_side_left
+[turtlebot4_node-23] [INFO] [1758721535.463270736] [tb1.turtlebot4_node]: Init Turtlebot4 Node Main
+[static_transform_publisher-36] [INFO] [1758721535.470302118] [tb1.camera_stf]: Spinning until stopped - publishing transform
+[static_transform_publisher-36] translation: ('0.000000', '0.000000', '0.000000')
+[static_transform_publisher-36] rotation: ('0.499952', '-0.500000', '0.500000', '0.500048')
+[static_transform_publisher-36] from 'oakd_rgb_camera_optical_frame' to 'tb1/turtlebot4/oakd_rgb_camera_frame/rgbd_camera'
+[parameter_bridge-14] [INFO] [1758721535.480149285] [tb1.ir_intensity_front_right_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/ir_intensity_front_right/sensor/ir_intensity_front_right/scan (ignition.msgs.LaserScan) -> /world/mission/model/tb1/turtlebot4/link/ir_intensity_front_right/sensor/ir_intensity_front_right/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[static_transform_publisher-43] [INFO] [1758721535.497881371] [tb1.static_tf_cliffSensorSideR]: Spinning until stopped - publishing transform
+[static_transform_publisher-43] translation: ('0.060000', '-0.145000', '0.000000')
+[static_transform_publisher-43] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-43] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_side_right'
+[turtlebot4_node-23] [INFO] [1758721535.520315339] [tb1.turtlebot4_node]: Buttons Init
+[turtlebot4_node-23] [INFO] [1758721535.522074009] [tb1.turtlebot4_node]: Init Display
+[turtlebot4_node-23] [INFO] [1758721535.525455659] [tb1.turtlebot4_node]: Leds Init
+[turtlebot4_node-23] [INFO] [1758721535.548067069] [tb1.turtlebot4_node]: Turtlebot4 standard running.
+[parameter_bridge-21] [INFO] [1758721535.562979669] [tb1.lidar_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/rplidar_link/sensor/rplidar/scan (gz.msgs.LaserScan) -> /world/mission/model/tb1/turtlebot4/link/rplidar_link/sensor/rplidar/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-20] [INFO] [1758721535.807587856] [tb1.hmi_led_msg_bridge]: Creating ROS->GZ Bridge: [tb1/hmi/led/user2 (std_msgs/msg/Int32) -> tb1/hmi/led/user2 (gz.msgs.Int32)] (Lazy 0)
+[parameter_bridge-12] [INFO] [1758721535.819288845] [tb1.ir_intensity_front_center_right_bridge]: Creating GZ->ROS Bridge: [/world/mission/model/tb1/turtlebot4/link/ir_intensity_front_center_right/sensor/ir_intensity_front_center_right/scan (ignition.msgs.LaserScan) -> /world/mission/model/tb1/turtlebot4/link/ir_intensity_front_center_right/sensor/ir_intensity_front_center_right/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-38] [INFO] [1758721535.843919153] [tb1.robot_pose_poseArray_bridge]: Creating GZ->ROS Bridge: [/model/tb1/turtlebot4/pose (gz.msgs.Pose_V) -> /model/tb1/turtlebot4/pose (geometry_msgs/msg/PoseArray)] (Lazy 0)
+[mock_publisher-31] [INFO] [1758721535.867870025] [tb1.mock_publisher]: Advertised mocked topic: slip_status
+[gazebo-2] [1;32m[Msg] [0m[1;32mGazebo Sim GUI    v[0m[1;32m8.9.0[0m[1;32m[0m
+[gazebo-2] [1;32m[Msg] [0m[1;32mDetected Wayland. Setting Qt to use the xcb plugin: [0m[1;32m'QT_QPA_PLATFORM=xcb'.[0m[1;32m[0m
+[gazebo-2] [1;36m[Dbg] [Gui.cc:275] [0m[1;36mWaiting for subscribers to [[0m[1;36m/gazebo/starting_world[0m[1;36m]...[0m[1;36m[0m
+[gazebo-2] [1;36m[Dbg] [Application.cc:96] [0m[1;36mInitializing application.[0m[1;36m[0m
+[gazebo-2] [1;36m[Dbg] [Application.cc:170] [0m[1;36mQt using OpenGL graphics interface[0m[1;36m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Application.cc:657] [0m[1;36mCreate main window[0m[1;36m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [PathManager.cc:68] [0m[1;36mRequesting resource paths through [[0m[1;36m/gazebo/resource_paths/get[0m[1;36m][0m[1;36m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Gui.cc:355] [0m[1;36mGUI requesting list of world names. The server may be busy [0m[1;36mdownloading resources. Please be patient.[0m[1;36m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [PathManager.cc:57] [0m[1;36mReceived resource paths.[0m[1;36m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [GuiRunner.cc:149] [0m[1;36mRequesting initial state from [[0m[1;36m/world/mission/state[0m[1;36m]...[0m[1;36m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoading config [[0m[1;32m/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/gui/standard/gui.config[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mMinimalScene[0m[1;36m][0m[1;36m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [MinimalScene.cc:802] [0m[1;36mCreating gz-rendering interface for OpenGL[0m[1;36m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [MinimalScene.cc:802] [0m[1;36mCreating gz-rendering interface for OpenGL[0m[1;36m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [MinimalScene.cc:986] [0m[1;36mCreating render thread interface for OpenGL[0m[1;36m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [MinimalScene.cc:802] [0m[1;36mCreating gz-rendering interface for OpenGL[0m[1;36m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [MinimalScene.cc:986] [0m[1;36mCreating render thread interface for OpenGL[0m[1;36m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32m3D View[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mMinimalScene[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_gui_vendor/lib/gz-gui-8/plugins/libMinimalScene.so[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mGzSceneManager[0m[1;36m][0m[1;36m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mScene Manager[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mGzSceneManager[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_sim_vendor/lib/gz-sim-8/plugins/gui/libGzSceneManager.so[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mInteractiveViewControl[0m[1;36m][0m[1;36m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mCamera view controller topic advertised on [[0m[1;32m/gui/camera/view_control[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mCamera reference visual topic advertised on [[0m[1;32m/gui/camera/view_control/reference_visual[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mCamera view control sensitivity advertised on [[0m[1;32m/gui/camera/view_control/sensitivity[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mInteractive view control[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mInteractiveViewControl[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_gui_vendor/lib/gz-gui-8/plugins/libInteractiveViewControl.so[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mWorldControl[0m[1;36m][0m[1;36m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mUsing world control service [[0m[1;32m/world/mission/control[0m[1;32m][0m[1;32m[0m
+[static_transform_publisher-26] [INFO] [1758721535.897754673] [tb1.tf_namespaced_odom_publisher]: Spinning until stopped - publishing transform
+[static_transform_publisher-26] translation: ('0.000000', '0.000000', '0.000000')
+[static_transform_publisher-26] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-26] from 'odom' to 'tb1/odom'
+[gazebo-2] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file::/Turtlebot4Hmi/Turtlebot4Hmi.qml:102:7: Unable to assign [undefined] to QString[0m[1;33m[0m
+[parameter_bridge-9] [INFO] [1758721536.129020157] [tb1.pose_bridge]: Creating GZ->ROS Bridge: [/model/tb1/turtlebot4/pose (ignition.msgs.Pose_V) -> /model/tb1/turtlebot4/pose (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-54] [INFO] [1758721536.179317078] [object4_pose_bridge]: Creating GZ->ROS Bridge: [/model/object4/pose (ignition.msgs.Pose]) -> /model/object4/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-54] [WARN] [1758721536.179498493] [object4_pose_bridge]: Failed to create a bridge for topic [/model/object4/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object4/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[static_transform_publisher-39] [INFO] [1758721536.196892441] [tb1.static_tf_lightSensorFrontL]: Spinning until stopped - publishing transform
+[static_transform_publisher-39] translation: ('0.090000', '0.080000', '0.350000')
+[static_transform_publisher-39] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-39] from 'tb1/turtlebot4' to 'tb1/light_sensor_front_left'
+[motion_control-30] [INFO] [1758721536.197762545] [tb1.motion_control]: Robot max speed is now 0.460000 m/s
+[parameter_bridge-8] [INFO] [1758721536.198194798] [tb1.cmd_vel_bridge]: Passing message from ROS geometry_msgs/msg/TwistStamped to Gazebo gz.msgs.Twist (showing msg only once per type)
+[parameter_bridge-52] [INFO] [1758721536.309689447] [object2_pose_bridge]: Creating GZ->ROS Bridge: [/model/object2/pose (ignition.msgs.Pose]) -> /model/object2/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-52] [WARN] [1758721536.309923945] [object2_pose_bridge]: Failed to create a bridge for topic [/model/object2/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object2/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[create-7] [INFO] [1758721536.331120151] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[parameter_bridge-53] [INFO] [1758721536.432971391] [object3_pose_bridge]: Creating GZ->ROS Bridge: [/model/object3/pose (ignition.msgs.Pose]) -> /model/object3/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-53] [WARN] [1758721536.433227737] [object3_pose_bridge]: Failed to create a bridge for topic [/model/object3/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object3/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[parameter_bridge-56] [INFO] [1758721536.505916015] [object6_pose_bridge]: Creating GZ->ROS Bridge: [/model/object6/pose (ignition.msgs.Pose]) -> /model/object6/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-56] [WARN] [1758721536.506183826] [object6_pose_bridge]: Failed to create a bridge for topic [/model/object6/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object6/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mListening to stats on [[0m[1;32m/world/mission/stats[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [WorldControl.cc:237] [0m[1;36mUsing an event to share WorldControl msgs with the server[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mWorld control[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mWorldControl[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_gui_vendor/lib/gz-gui-8/plugins/libWorldControl.so[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mWorldStats[0m[1;36m][0m[1;36m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mListening to stats on [[0m[1;32m/world/mission/stats[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mWorld stats[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mWorldStats[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_gui_vendor/lib/gz-gui-8/plugins/libWorldStats.so[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mTransformControl[0m[1;36m][0m[1;36m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mTransform control[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mTransformControl[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_sim_vendor/lib/gz-sim-8/plugins/gui/libTransformControl.so[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mShapes[0m[1;36m][0m[1;36m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mShapes[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mShapes[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_sim_vendor/lib/gz-sim-8/plugins/gui/libShapes.so[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mTurtlebot4Hmi[0m[1;36m][0m[1;36m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mTurtlebot4 HMI[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mTurtlebot4Hmi[0m[1;32m] from path [[0m[1;32m/home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_gui_plugins/share/turtlebot4_gz_gui_plugins/lib/libTurtlebot4Hmi.so[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Application.cc:528] [0m[1;36mLoading plugin [[0m[1;36mTeleop[0m[1;36m][0m[1;36m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mA new topic has been entered: '[0m[1;32m/cmd_vel[0m[1;32m ' [0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mAdded plugin [[0m[1;32mTeleop[0m[1;32m] to main window[0m[1;32m[0m
+[gazebo-2] [1;32m[GUI] [0m[1;32m[Msg] [0m[1;32mLoaded plugin [[0m[1;32mTeleop[0m[1;32m] from path [[0m[1;32m/opt/ros/jazzy/opt/gz_gui_vendor/lib/gz-gui-8/plugins/libTeleop.so[0m[1;32m][0m[1;32m[0m
+[gazebo-2] [1;36m[GUI] [Dbg] [Application.cc:671] [0m[1;36mApplying config[0m[1;36m[0m
+[gazebo-2] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="turtlebot4"]/joint[@name="wheel_drop_left_joint"]/physics/ode/provide_feedback:<data-string>:L1876]: XML Element[provide_feedback], child of element[ode], not defined in SDF. Copying[provide_feedback] as children of [ode].
+[gazebo-2] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="turtlebot4"]/joint[@name="wheel_drop_right_joint"]/physics/ode/provide_feedback:<data-string>:L1997]: XML Element[provide_feedback], child of element[ode], not defined in SDF. Copying[provide_feedback] as children of [ode].
+[static_transform_publisher-45] [INFO] [1758721536.576776696] [tb1.static_tf_cliffSensorFrontR]: Spinning until stopped - publishing transform
+[static_transform_publisher-45] translation: ('0.160000', '-0.045000', '0.000000')
+[static_transform_publisher-45] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-45] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_front_right'
+[parameter_bridge-51] [INFO] [1758721536.649953245] [object1_pose_bridge]: Creating GZ->ROS Bridge: [/model/object1/pose (ignition.msgs.Pose]) -> /model/object1/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-51] [WARN] [1758721536.650105093] [object1_pose_bridge]: Failed to create a bridge for topic [/model/object1/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object1/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[joint_state_publisher-5] [INFO] [1758721536.653949736] [tb1.joint_state_publisher]: Waiting for robot_description to be published on the robot_description topic...
+[gazebo-2] [1;33m[GUI] [Wrn] [Component.hh:172] [0m[1;33mTrying to deserialize component with data type [[0m[1;33mSt10shared_ptrIN3sdf3v147ElementEE[0m[1;33m], which doesn't have [0m[1;33m`operator>>`. Component will not be deserialized.[0m[1;33m[0m
+[parameter_bridge-55] [INFO] [1758721536.689441805] [object5_pose_bridge]: Creating GZ->ROS Bridge: [/model/object5/pose (ignition.msgs.Pose]) -> /model/object5/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-55] [WARN] [1758721536.689589952] [object5_pose_bridge]: Failed to create a bridge for topic [/model/object5/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object5/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[parameter_bridge-37] [INFO] [1758721536.751378100] [tb1.robot_pose_tf_bridge]: Creating GZ->ROS Bridge: [/model/tb1/turtlebot4/pose (gz.msgs.Pose_V) -> /model/tb1/turtlebot4/pose (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[static_transform_publisher-42] [INFO] [1758721536.852987575] [tb1.static_tf_cliffSensorSideL]: Spinning until stopped - publishing transform
+[static_transform_publisher-42] translation: ('0.060000', '0.145000', '0.000000')
+[static_transform_publisher-42] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-42] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_side_left'
+[parameter_bridge-57] [INFO] [1758721536.859547839] [object7_pose_bridge]: Creating GZ->ROS Bridge: [/model/object7/pose (ignition.msgs.Pose]) -> /model/object7/pose (geometry_msgs/msg/Pose)] (Lazy 0)
+[parameter_bridge-57] [WARN] [1758721536.859859029] [object7_pose_bridge]: Failed to create a bridge for topic [/model/object7/pose] with ROS2 type [geometry_msgs/msg/Pose] to topic [/model/object7/pose] with Gazebo Transport type [ignition.msgs.Pose]]: No template specialization for the pair
+[static_transform_publisher-44] [INFO] [1758721536.932757204] [tb1.static_tf_cliffSensorFrontL]: Spinning until stopped - publishing transform
+[static_transform_publisher-44] translation: ('0.160000', '0.045000', '0.000000')
+[static_transform_publisher-44] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-44] from 'tb1/turtlebot4' to 'tb1/cliff_sensor_front_left'
+[gazebo-2] [1;33m[GUI] [Wrn] [Application.cc:908] [0m[1;33m[QT] file::/WorldStats/WorldStats.qml:53:3: QML RowLayout: Binding loop detected for property "x"[0m[1;33m[0m
+[create-7] [INFO] [1758721537.343812440] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[light_sensors_node-46] [INFO] [1758721537.408818067] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-46] [INFO] [1758721537.412258173] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_right to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-46] [INFO] [1758721537.413158204] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_back to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-46] [INFO] [1758721537.415026245] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-46] [INFO] [1758721537.415571301] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_right to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-46] [INFO] [1758721537.417952486] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_back to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[ERROR] [pose_republisher_node-33]: process has died [pid 37429, exit code -11, cmd '/home/ben/ros2_ws/create3_ws/install/irobot_create_gz_toolbox/lib/irobot_create_gz_toolbox/pose_republisher_node --ros-args -r __node:=pose_republisher_node -r __ns:=/tb1 --params-file /home/ben/ros2_ws/create3_ws/install/irobot_create_gz_bringup/share/irobot_create_gz_bringup/config/pose_republisher_params.yaml --params-file /tmp/launch_params_t4_qzjd6 --params-file /tmp/launch_params_4_lm1qol --params-file /tmp/launch_params_lvv_4bau'].
+[light_sensors_node-46] [INFO] [1758721537.539942726] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-46] [INFO] [1758721537.540691947] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_right to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-46] [INFO] [1758721537.565890196] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_back to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[parameter_bridge-18] [INFO] [1758721537.690776840] [tb1.hmi_display_msg_bridge]: Passing message from ROS std_msgs/msg/Int32 to Gazebo gz.msgs.Int32 (showing msg only once per type)
+[parameter_bridge-18] [INFO] [1758721537.690898625] [tb1.hmi_display_msg_bridge]: Passing message from ROS std_msgs/msg/String to Gazebo gz.msgs.StringMsg (showing msg only once per type)
+[parameter_bridge-20] [INFO] [1758721537.701130920] [tb1.hmi_led_msg_bridge]: Passing message from ROS std_msgs/msg/Int32 to Gazebo gz.msgs.Int32 (showing msg only once per type)
+[gazebo-2] libEGL warning: egl: failed to create dri2 screen
+[light_sensors_node-46] [INFO] [1758721537.732504305] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-46] [INFO] [1758721537.732881353] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_right to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-46] [INFO] [1758721537.733212991] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_back to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[gazebo-2] MESA: error: ZINK: failed to choose pdev
+[gazebo-2] libEGL warning: egl: failed to create dri2 screen
+[gazebo-2] libEGL warning: NEEDS EXTENSION: falling back to kms_swrast
+[light_sensors_node-46] [INFO] [1758721537.796394452] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_left to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-46] [INFO] [1758721537.796663166] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_front_right to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[light_sensors_node-46] [INFO] [1758721537.796892924] [tb1.light_sensors_node]: Could not transform tb1/light_sensor_back to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[ground_sensor_node-49] [INFO] [1758721537.806696080] [tb1.ground_sensor_node]: Could not transform tb1/turtlebot4/base_link to mission: "mission" passed to lookupTransform argument target_frame does not exist. 
+[neighbour_sensor_node-50] [INFO] [1758721537.962471043] [tb1.neighbours_sensor_node]: Publishing neighbours_info: 0.0,0
+[ground_sensor_node-49] [INFO] [1758721538.071337777] [tb1.ground_sensor_node]: Could not transform tb1/turtlebot4/base_link to mission: "tb1/turtlebot4/base_link" passed to lookupTransform argument source_frame does not exist. 
+[ground_sensor_node-49] [INFO] [1758721538.093086983] [tb1.ground_sensor_node]: Could not transform tb1/turtlebot4/base_link to mission: "tb1/turtlebot4/base_link" passed to lookupTransform argument source_frame does not exist. 
+[spawner-25] [WARN] [1758721538.105339483] [tb1.spawner_joint_state_broadcaster]: [93mController already loaded, skipping load_controller[0m
+[spawner-25] [ERROR] [1758721538.136863227] [tb1.spawner_joint_state_broadcaster]: [91mFailed to configure controller[0m
+[ground_sensor_node-49] [INFO] [1758721538.176657966] [tb1.ground_sensor_node]: Could not transform tb1/turtlebot4/base_link to mission: "tb1/turtlebot4/base_link" passed to lookupTransform argument source_frame does not exist. 
+[create-7] [INFO] [1758721538.344322059] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[ground_sensor_node-49] [INFO] [1758721538.429709490] [tb1.ground_sensor_node]: Could not transform tb1/turtlebot4/base_link to mission: "tb1/turtlebot4/base_link" passed to lookupTransform argument source_frame does not exist. 
+[ground_sensor_node-49] [INFO] [1758721538.474870335] [tb1.ground_sensor_node]: Could not transform tb1/turtlebot4/base_link to mission: "tb1/turtlebot4/base_link" passed to lookupTransform argument source_frame does not exist. 
+[ground_sensor_node-49] [INFO] [1758721538.540969234] [tb1.ground_sensor_node]: Could not transform tb1/turtlebot4/base_link to mission: "tb1/turtlebot4/base_link" passed to lookupTransform argument source_frame does not exist. 
+[ERROR] [spawner-25]: process has died [pid 37359, exit code 1, cmd '/opt/ros/jazzy/lib/controller_manager/spawner joint_state_broadcaster -c controller_manager --controller-manager-timeout 30 --ros-args -r __ns:=/tb1'].
+[ERROR] [launch_ros.actions.node]: Error while expanding or validating node name or namespace for 'package=controller_manager, executable=spawner, name=None, namespace=<launch.substitutions.launch_configuration.LaunchConfiguration object at 0xf0496f71ee40>':
+[ERROR] [launch]: Caught exception in launch (see debug for traceback): launch configuration 'namespace' does not exist
+[INFO] [parameter_bridge-57]: sending signal 'SIGINT' to process[parameter_bridge-57]
+[INFO] [parameter_bridge-56]: sending signal 'SIGINT' to process[parameter_bridge-56]
+[INFO] [parameter_bridge-55]: sending signal 'SIGINT' to process[parameter_bridge-55]
+[INFO] [parameter_bridge-54]: sending signal 'SIGINT' to process[parameter_bridge-54]
+[INFO] [parameter_bridge-53]: sending signal 'SIGINT' to process[parameter_bridge-53]
+[INFO] [parameter_bridge-52]: sending signal 'SIGINT' to process[parameter_bridge-52]
+[INFO] [parameter_bridge-51]: sending signal 'SIGINT' to process[parameter_bridge-51]
+[INFO] [neighbour_sensor_node-50]: sending signal 'SIGINT' to process[neighbour_sensor_node-50]
+[INFO] [ground_sensor_node-49]: sending signal 'SIGINT' to process[ground_sensor_node-49]
+[INFO] [ir_sensors_node-48]: sending signal 'SIGINT' to process[ir_sensors_node-48]
+[INFO] [light_sensors_node-46]: sending signal 'SIGINT' to process[light_sensors_node-46]
+[INFO] [static_transform_publisher-45]: sending signal 'SIGINT' to process[static_transform_publisher-45]
+[INFO] [static_transform_publisher-44]: sending signal 'SIGINT' to process[static_transform_publisher-44]
+[INFO] [static_transform_publisher-43]: sending signal 'SIGINT' to process[static_transform_publisher-43]
+[INFO] [static_transform_publisher-42]: sending signal 'SIGINT' to process[static_transform_publisher-42]
+[INFO] [parameter_bridge-56]: process has finished cleanly [pid 37717]
+[INFO] [parameter_bridge-55]: process has finished cleanly [pid 37705]
+[INFO] [static_transform_publisher-41]: sending signal 'SIGINT' to process[static_transform_publisher-41]
+[INFO] [parameter_bridge-57]: process has finished cleanly [pid 37745]
+[INFO] [parameter_bridge-54]: process has finished cleanly [pid 37690]
+[INFO] [parameter_bridge-53]: process has finished cleanly [pid 37689]
+[INFO] [static_transform_publisher-40]: sending signal 'SIGINT' to process[static_transform_publisher-40]
+[INFO] [parameter_bridge-52]: process has finished cleanly [pid 37688]
+[INFO] [parameter_bridge-51]: process has finished cleanly [pid 37627]
+[INFO] [static_transform_publisher-39]: sending signal 'SIGINT' to process[static_transform_publisher-39]
+[INFO] [parameter_bridge-38]: sending signal 'SIGINT' to process[parameter_bridge-38]
+[INFO] [parameter_bridge-37]: sending signal 'SIGINT' to process[parameter_bridge-37]
+[INFO] [static_transform_publisher-45]: process has finished cleanly [pid 37573]
+[INFO] [static_transform_publisher-36]: sending signal 'SIGINT' to process[static_transform_publisher-36]
+[ERROR] [neighbour_sensor_node-50]: process has died [pid 37624, exit code -2, cmd '/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/neighbour_sensor_node --ros-args -r __ns:=/tb1 --params-file /tmp/launch_params_ujb4vswf'].
+[ERROR] [light_sensors_node-46]: process has died [pid 37577, exit code -2, cmd '/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/light_sensors_node --ros-args -r __ns:=/tb1 --params-file /tmp/launch_params_fn8dcftv'].
+[INFO] [static_transform_publisher-35]: sending signal 'SIGINT' to process[static_transform_publisher-35]
+[INFO] [sensors_node-34]: sending signal 'SIGINT' to process[sensors_node-34]
+[INFO] [robot_state-32]: sending signal 'SIGINT' to process[robot_state-32]
+[INFO] [mock_publisher-31]: sending signal 'SIGINT' to process[mock_publisher-31]
+[ERROR] [ground_sensor_node-49]: process has died [pid 37615, exit code -2, cmd '/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/ground_sensor_node --ros-args -r __ns:=/tb1 --params-file /tmp/launch_params_g027_9go'].
+[INFO] [motion_control-30]: sending signal 'SIGINT' to process[motion_control-30]
+[INFO] [static_transform_publisher-44]: process has finished cleanly [pid 37543]
+[INFO] [ir_intensity_vector_publisher-29]: sending signal 'SIGINT' to process[ir_intensity_vector_publisher-29]
+[INFO] [static_transform_publisher-42]: process has finished cleanly [pid 37525]
+[INFO] [static_transform_publisher-41]: process has finished cleanly [pid 37524]
+[INFO] [hazards_vector_publisher-28]: sending signal 'SIGINT' to process[hazards_vector_publisher-28]
+[INFO] [parameter_bridge-38]: process has finished cleanly [pid 37504]
+[INFO] [static_transform_publisher-43]: process has finished cleanly [pid 37527]
+[INFO] [static_transform_publisher-39]: process has finished cleanly [pid 37522]
+[INFO] [static_transform_publisher-27]: sending signal 'SIGINT' to process[static_transform_publisher-27]
+[ERROR] [ir_sensors_node-48]: process has died [pid 37595, exit code -2, cmd '/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/ir_sensors_node --ros-args -r __ns:=/tb1 --params-file /tmp/launch_params_hvgzaw4_'].
+[INFO] [static_transform_publisher-26]: sending signal 'SIGINT' to process[static_transform_publisher-26]
+[INFO] [parameter_bridge-37]: process has finished cleanly [pid 37499]
+[INFO] [turtlebot4_gz_hmi_node-24]: sending signal 'SIGINT' to process[turtlebot4_gz_hmi_node-24]
+[INFO] [static_transform_publisher-40]: process has finished cleanly [pid 37523]
+[INFO] [turtlebot4_node-23]: sending signal 'SIGINT' to process[turtlebot4_node-23]
+[INFO] [static_transform_publisher-35]: process has finished cleanly [pid 37482]
+[INFO] [static_transform_publisher-36]: process has finished cleanly [pid 37486]
+[INFO] [parameter_bridge-22]: sending signal 'SIGINT' to process[parameter_bridge-22]
+[INFO] [parameter_bridge-21]: sending signal 'SIGINT' to process[parameter_bridge-21]
+[INFO] [mock_publisher-31]: process has finished cleanly [pid 37420]
+[INFO] [parameter_bridge-20]: sending signal 'SIGINT' to process[parameter_bridge-20]
+[INFO] [robot_state-32]: process has finished cleanly [pid 37424]
+[INFO] [parameter_bridge-19]: sending signal 'SIGINT' to process[parameter_bridge-19]
+[INFO] [parameter_bridge-18]: sending signal 'SIGINT' to process[parameter_bridge-18]
+[INFO] [ir_intensity_vector_publisher-29]: process has finished cleanly [pid 37394]
+[INFO] [parameter_bridge-17]: sending signal 'SIGINT' to process[parameter_bridge-17]
+[INFO] [static_transform_publisher-27]: process has finished cleanly [pid 37372]
+[INFO] [parameter_bridge-16]: sending signal 'SIGINT' to process[parameter_bridge-16]
+[INFO] [parameter_bridge-15]: sending signal 'SIGINT' to process[parameter_bridge-15]
+[INFO] [static_transform_publisher-26]: process has finished cleanly [pid 37365]
+[INFO] [sensors_node-34]: process has finished cleanly [pid 37477]
+[INFO] [hazards_vector_publisher-28]: process has finished cleanly [pid 37377]
+[INFO] [parameter_bridge-14]: sending signal 'SIGINT' to process[parameter_bridge-14]
+[INFO] [parameter_bridge-13]: sending signal 'SIGINT' to process[parameter_bridge-13]
+[INFO] [parameter_bridge-12]: sending signal 'SIGINT' to process[parameter_bridge-12]
+[INFO] [parameter_bridge-11]: sending signal 'SIGINT' to process[parameter_bridge-11]
+[INFO] [parameter_bridge-10]: sending signal 'SIGINT' to process[parameter_bridge-10]
+[INFO] [parameter_bridge-21]: process has finished cleanly [pid 37339]
+[INFO] [parameter_bridge-9]: sending signal 'SIGINT' to process[parameter_bridge-9]
+[INFO] [parameter_bridge-22]: process has finished cleanly [pid 37347]
+[INFO] [parameter_bridge-8]: sending signal 'SIGINT' to process[parameter_bridge-8]
+[INFO] [turtlebot4_gz_hmi_node-24]: process has finished cleanly [pid 37356]
+[INFO] [create-7]: sending signal 'SIGINT' to process[create-7]
+[INFO] [motion_control-30]: process has finished cleanly [pid 37413]
+[INFO] [parameter_bridge-20]: process has finished cleanly [pid 37337]
+[INFO] [joint_state_publisher-5]: sending signal 'SIGINT' to process[joint_state_publisher-5]
+[INFO] [robot_state_publisher-4]: sending signal 'SIGINT' to process[robot_state_publisher-4]
+[INFO] [parameter_bridge-3]: sending signal 'SIGINT' to process[parameter_bridge-3]
+[INFO] [parameter_bridge-18]: process has finished cleanly [pid 37333]
+[INFO] [parameter_bridge-19]: process has finished cleanly [pid 37336]
+[INFO] [gazebo-2]: sending signal 'SIGINT' to process[gazebo-2]
+[INFO] [static_transform_publisher-1]: sending signal 'SIGINT' to process[static_transform_publisher-1]
+[INFO] [parameter_bridge-17]: process has finished cleanly [pid 37332]
+[gazebo-2] [1;33m[GUI] [Wrn] [Ogre2RenderTarget.cc:668] [0m[1;33mAnti-aliasing level of '[0m[1;33m[0m[1;33m' [0m[1;33mis not supported; valid FSAA levels are: [0m[1;33m[ 0 4 ][0m[1;33m. Setting to 1[0m[1;33m[0m
+[parameter_bridge-57] [INFO] [1758721538.729151226] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-56] [INFO] [1758721538.764278704] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-55] [INFO] [1758721538.780423380] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-54] [INFO] [1758721538.804894075] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-53] [INFO] [1758721538.847189708] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-52] [INFO] [1758721538.856634593] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-51] [INFO] [1758721538.868029268] [rclcpp]: signal_handler(signum=2)
+[neighbour_sensor_node-50] Traceback (most recent call last):
+[neighbour_sensor_node-50]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/neighbour_sensor_node", line 33, in <module>
+[neighbour_sensor_node-50]     sys.exit(load_entry_point('automode-tb4-sim==0.0.0', 'console_scripts', 'neighbour_sensor_node')())
+[neighbour_sensor_node-50]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[neighbour_sensor_node-50]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/python3.12/site-packages/automode_tb4_sim/tb4_control/sensor_nodes/neighbour_sensor_node.py", line 112, in main
+[neighbour_sensor_node-50]     rclpy.spin(node)
+[neighbour_sensor_node-50]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 247, in spin
+[neighbour_sensor_node-50]     executor.spin_once()
+[neighbour_sensor_node-50]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 839, in spin_once
+[neighbour_sensor_node-50]     self._spin_once_impl(timeout_sec)
+[neighbour_sensor_node-50]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 823, in _spin_once_impl
+[neighbour_sensor_node-50]     handler, entity, node = self.wait_for_ready_callbacks(
+[neighbour_sensor_node-50]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[neighbour_sensor_node-50]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 793, in wait_for_ready_callbacks
+[neighbour_sensor_node-50]     return next(self._cb_iter)
+[neighbour_sensor_node-50]            ^^^^^^^^^^^^^^^^^^^
+[neighbour_sensor_node-50]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 697, in _wait_for_ready_callbacks
+[neighbour_sensor_node-50]     wait_set.wait(timeout_nsec)
+[neighbour_sensor_node-50] KeyboardInterrupt
+[ground_sensor_node-49] Traceback (most recent call last):
+[ground_sensor_node-49]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/ground_sensor_node", line 33, in <module>
+[ground_sensor_node-49]     sys.exit(load_entry_point('automode-tb4-sim==0.0.0', 'console_scripts', 'ground_sensor_node')())
+[ground_sensor_node-49]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[ground_sensor_node-49]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/python3.12/site-packages/automode_tb4_sim/tb4_control/sensor_nodes/ground_sensor_node.py", line 93, in main
+[ground_sensor_node-49]     rclpy.spin(ground_sensor_node)
+[ground_sensor_node-49]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 247, in spin
+[ground_sensor_node-49]     executor.spin_once()
+[ground_sensor_node-49]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 839, in spin_once
+[ground_sensor_node-49]     self._spin_once_impl(timeout_sec)
+[ground_sensor_node-49]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 823, in _spin_once_impl
+[ground_sensor_node-49]     handler, entity, node = self.wait_for_ready_callbacks(
+[ground_sensor_node-49]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[ground_sensor_node-49]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 793, in wait_for_ready_callbacks
+[ground_sensor_node-49]     return next(self._cb_iter)
+[ground_sensor_node-49]            ^^^^^^^^^^^^^^^^^^^
+[ground_sensor_node-49]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 697, in _wait_for_ready_callbacks
+[ground_sensor_node-49]     wait_set.wait(timeout_nsec)
+[ground_sensor_node-49] KeyboardInterrupt
+[ir_sensors_node-48] Traceback (most recent call last):
+[ir_sensors_node-48]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/ir_sensors_node", line 33, in <module>
+[ir_sensors_node-48]     sys.exit(load_entry_point('automode-tb4-sim==0.0.0', 'console_scripts', 'ir_sensors_node')())
+[ir_sensors_node-48]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[ir_sensors_node-48]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/python3.12/site-packages/automode_tb4_sim/tb4_control/sensor_nodes/ir_sensors_node.py", line 99, in main
+[ir_sensors_node-48]     rclpy.spin(ir_sensor_node)
+[ir_sensors_node-48]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 247, in spin
+[ir_sensors_node-48]     executor.spin_once()
+[ir_sensors_node-48]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 839, in spin_once
+[ir_sensors_node-48]     self._spin_once_impl(timeout_sec)
+[ir_sensors_node-48]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 823, in _spin_once_impl
+[ir_sensors_node-48]     handler, entity, node = self.wait_for_ready_callbacks(
+[ir_sensors_node-48]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[ir_sensors_node-48]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 793, in wait_for_ready_callbacks
+[ir_sensors_node-48]     return next(self._cb_iter)
+[ir_sensors_node-48]            ^^^^^^^^^^^^^^^^^^^
+[ir_sensors_node-48]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 697, in _wait_for_ready_callbacks
+[ir_sensors_node-48]     wait_set.wait(timeout_nsec)
+[ir_sensors_node-48] KeyboardInterrupt
+[light_sensors_node-46] Traceback (most recent call last):
+[light_sensors_node-46]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/automode_tb4_sim/light_sensors_node", line 33, in <module>
+[light_sensors_node-46]     sys.exit(load_entry_point('automode-tb4-sim==0.0.0', 'console_scripts', 'light_sensors_node')())
+[light_sensors_node-46]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[light_sensors_node-46]   File "/home/ben/ros2_ws/automode_ws/automodeROS/install/automode_tb4_sim/lib/python3.12/site-packages/automode_tb4_sim/tb4_control/sensor_nodes/light_sensors_node.py", line 78, in main
+[light_sensors_node-46]     rclpy.spin(light_sensor_node)
+[light_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 247, in spin
+[light_sensors_node-46]     executor.spin_once()
+[light_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 839, in spin_once
+[light_sensors_node-46]     self._spin_once_impl(timeout_sec)
+[light_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 823, in _spin_once_impl
+[light_sensors_node-46]     handler, entity, node = self.wait_for_ready_callbacks(
+[light_sensors_node-46]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[light_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 793, in wait_for_ready_callbacks
+[light_sensors_node-46]     return next(self._cb_iter)
+[light_sensors_node-46]            ^^^^^^^^^^^^^^^^^^^
+[light_sensors_node-46]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 697, in _wait_for_ready_callbacks
+[light_sensors_node-46]     wait_set.wait(timeout_nsec)
+[light_sensors_node-46] KeyboardInterrupt
+[static_transform_publisher-45] [INFO] [1758721539.038638289] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-44] [INFO] [1758721539.091279922] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-43] [INFO] [1758721539.143621469] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-42] [INFO] [1758721539.175156092] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-41] [INFO] [1758721539.198922795] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-40] [INFO] [1758721539.271274335] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-39] [INFO] [1758721539.284635816] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-38] [INFO] [1758721539.322218868] [rclcpp]: signal_handler(signum=2)
+[create-7] [INFO] [1758721539.347418833] [tb1.ros_gz_sim]: Waiting messages on topic [standard_dock_description].
+[parameter_bridge-37] [INFO] [1758721539.355489229] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-36] [INFO] [1758721539.372972147] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-35] [INFO] [1758721539.384672414] [rclcpp]: signal_handler(signum=2)
+[sensors_node-34] [INFO] [1758721539.419462478] [rclcpp]: signal_handler(signum=2)
+[robot_state-32] [INFO] [1758721539.428531941] [rclcpp]: signal_handler(signum=2)
+[mock_publisher-31] [INFO] [1758721539.441874283] [rclcpp]: signal_handler(signum=2)
+[motion_control-30] [INFO] [1758721539.463542148] [rclcpp]: signal_handler(signum=2)
+[ir_intensity_vector_publisher-29] [INFO] [1758721539.484080494] [rclcpp]: signal_handler(signum=2)
+[hazards_vector_publisher-28] [INFO] [1758721539.504501524] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-27] [INFO] [1758721539.524403453] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-26] [INFO] [1758721539.554626826] [rclcpp]: signal_handler(signum=2)
+[turtlebot4_gz_hmi_node-24] [INFO] [1758721539.589362090] [rclcpp]: signal_handler(signum=2)
+[turtlebot4_node-23] [INFO] [1758721539.620928897] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-22] [INFO] [1758721539.646909454] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-21] [INFO] [1758721539.659863418] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-20] [INFO] [1758721539.676418725] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-19] [INFO] [1758721539.696462436] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-18] [INFO] [1758721539.715106695] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-17] [INFO] [1758721539.736799116] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-16] [INFO] [1758721539.750132340] [rclcpp]: signal_handler(signum=2)
+[INFO] [parameter_bridge-14]: process has finished cleanly [pid 37323]
+[parameter_bridge-15] [INFO] [1758721539.757985888] [rclcpp]: signal_handler(signum=2)
+[INFO] [parameter_bridge-16]: process has finished cleanly [pid 37326]
+[parameter_bridge-14] [INFO] [1758721539.765552486] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-13] [INFO] [1758721539.776325187] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-12] [INFO] [1758721539.786705312] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-11] [INFO] [1758721539.797058174] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-10] [INFO] [1758721539.810271643] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-9] [INFO] [1758721539.819366881] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-8] [INFO] [1758721539.829558053] [rclcpp]: signal_handler(signum=2)
+[create-7] [INFO] [1758721539.839626628] [rclcpp]: signal_handler(signum=2)
+[create-7] [ERROR] [1758721539.840023221] [tb1.ros_gz_sim]: Failed to get XML from topic [standard_dock_description].
+[robot_state_publisher-4] [INFO] [1758721539.857048066] [rclcpp]: signal_handler(signum=2)
+[parameter_bridge-3] [INFO] [1758721539.865761922] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-1] [INFO] [1758721539.889319180] [rclcpp]: signal_handler(signum=2)
+[INFO] [parameter_bridge-15]: process has finished cleanly [pid 37324]
+[INFO] [parameter_bridge-13]: process has finished cleanly [pid 37322]
+[INFO] [turtlebot4_node-23]: process has finished cleanly [pid 37349]
+[INFO] [parameter_bridge-12]: process has finished cleanly [pid 37321]
+[INFO] [parameter_bridge-11]: process has finished cleanly [pid 37320]
+[INFO] [parameter_bridge-9]: process has finished cleanly [pid 37318]
+[INFO] [parameter_bridge-10]: process has finished cleanly [pid 37319]
+[INFO] [parameter_bridge-8]: process has finished cleanly [pid 37315]
+[ERROR] [create-7]: process has died [pid 37314, exit code 255, cmd '/opt/ros/jazzy/lib/ros_gz_sim/create -name tb1/standard_dock -x 0.157 -y 0.0 -z 0.2 -Y 3.1416 -topic standard_dock_description --ros-args -r __ns:=/tb1'].
+[INFO] [parameter_bridge-3]: process has finished cleanly [pid 37309]
+[INFO] [robot_state_publisher-4]: process has finished cleanly [pid 37310]
+[INFO] [static_transform_publisher-1]: process has finished cleanly [pid 37307]
+[INFO] [joint_state_publisher-5]: process has finished cleanly [pid 37312]
+[ERROR] [gazebo-2]: process[gazebo-2] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [gazebo-2]: sending signal 'SIGTERM' to process[gazebo-2]
+[ERROR] [gazebo-2]: process has died [pid 37308, exit code -15, cmd 'ruby /opt/ros/jazzy/opt/gz_tools_vendor/bin/gz sim mission.sdf -r -v 4 --gui-config /home/ben/ros2_ws/turtlebot4_ws/install/turtlebot4_gz_bringup/share/turtlebot4_gz_bringup/gui/standard/gui.config --force-version 8'].
