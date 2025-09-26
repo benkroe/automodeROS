@@ -52,7 +52,7 @@
     <!-- White patch on one half -->
     <model name="white_patch">
       <static>true</static>
-      <pose>0 0.5 0.011 0 0 0</pose> <!-- Slightly above floor -->
+      <pose>0 -1.0 0.011 0 0 0</pose> <!-- Slightly above floor -->
       <link name="link">
         <visual name="visual">
           <geometry>
