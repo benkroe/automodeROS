@@ -15,6 +15,7 @@ setup(
             'automode_tb4_sim/launch/turtlebot4_simulation.launch.py',
             'automode_tb4_sim/launch/tf_broadcaster_launch.py',
             'automode_tb4_sim/launch/add_turtlebot4_simulation.launch.py',
+            'automode_tb4_sim/launch/mission_foraging.launch.py',
         ]),
         # Install worlds
         ('share/' + package_name + '/worlds', [
