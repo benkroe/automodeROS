@@ -22,7 +22,7 @@ def generate_launch_description():
         description='Path to FSM config file'
     )
 
-    ns = LaunchConfiguration('robot_namespace')
+    namespace = LaunchConfiguration('robot_namespace')
     module_pkg = LaunchConfiguration('module_package')
     fsm_config = LaunchConfiguration('fsm_config')
 
@@ -30,7 +30,7 @@ def generate_launch_description():
         package='automode_controller',
         executable='condition_node',
         name='condition_node',
-        namespace=ns,
+        namespace=namespace,
         parameters=[
             {'use_sim_time': True},
             {'module_package': module_pkg}
@@ -42,7 +42,7 @@ def generate_launch_description():
         package='automode_controller',
         executable='behavior_node',
         name='behavior_node',
-        namespace=ns,
+        namespace=namespace,
         parameters=[
             {'use_sim_time': True},
             {'module_package': module_pkg}
@@ -54,7 +54,7 @@ def generate_launch_description():
         package='automode_controller',
         executable='ref_model_turtlebot4_gz',
         name='turtlebot4_reference_node',
-        namespace=ns,
+        namespace=namespace,
         parameters=[{'use_sim_time': True}],
         output='log',
     )
@@ -63,7 +63,7 @@ def generate_launch_description():
         package='automode_controller',
         executable='controller_node',
         name='controller_node',
-        namespace=ns,
+        namespace=namespace,
         parameters=[
             {'use_sim_time': True},
             {'fsm_config': fsm_config}

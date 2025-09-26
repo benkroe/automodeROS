@@ -67,11 +67,6 @@ def generate_launch_description():
         ),
         Node(
             package='automode_tb4_sim',
-            executable='cliff_sensors_node',
-            parameters=[{'use_sim_time': True}]
-        ),
-        Node(
-            package='automode_tb4_sim',
             executable='ir_sensors_node',
             parameters=[{'use_sim_time': True}]
         ),
