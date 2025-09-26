@@ -20,7 +20,7 @@ turtlebot4_id = LaunchConfiguration('turtlebot4_id')
 
 world_arg = DeclareLaunchArgument(
     'world',
-    default_value='white',
+    default_value='mission',
     description='Simulation world name'
 )
 world = LaunchConfiguration('world')
@@ -41,8 +41,8 @@ def generate_launch_description():
         ]),
         launch_arguments={
             'namespace': turtlebot4_id,
-            'x': '2.0',
-            'y': '2.0',
+            'x': '1.0',
+            'y': '1.0',
             'z': '0.2',
             'world': world
         }.items()
