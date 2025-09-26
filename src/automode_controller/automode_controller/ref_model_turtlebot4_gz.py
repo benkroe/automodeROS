@@ -167,16 +167,16 @@ class TurtleBot4ReferenceNode(Node):
         msg.light_magnitude, msg.light_angle = self.compute_light()
         self.ground_black_floor = (self.latest_ground_sensor == "black")
 
-        # Log a single summary message including wheel speeds
-        self.get_logger().info(
-            f"RobotState: id={msg.robot_id}, neighbours={msg.neighbour_count}, "
-            f"attraction_angle={msg.attraction_angle:.2f}, black_floor={msg.ground_black_floor}, "
-            f"proximity(mag={msg.proximity_magnitude:.2f}, ang={msg.proximity_angle:.1f}), "
-            f"light(mag={msg.light_magnitude:.2f}, ang={msg.light_angle:.1f}), "
-            f"ground={self.latest_ground_sensor}, "
-            f"wheels(received=[{self.latest_wheels_speed[0]:.2f}, {self.latest_wheels_speed[1]:.2f}], "
-            f"published=[{self.latest_cmd_vel[0]:.2f}, {self.latest_cmd_vel[1]:.2f}])"
-        )
+        # # Log a single summary message including wheel speeds
+        # self.get_logger().info(
+        #     f"RobotState: id={msg.robot_id}, neighbours={msg.neighbour_count}, "
+        #     f"attraction_angle={msg.attraction_angle:.2f}, black_floor={msg.ground_black_floor}, "
+        #     f"proximity(mag={msg.proximity_magnitude:.2f}, ang={msg.proximity_angle:.1f}), "
+        #     f"light(mag={msg.light_magnitude:.2f}, ang={msg.light_angle:.1f}), "
+        #     f"ground={self.latest_ground_sensor}, "
+        #     f"wheels(received=[{self.latest_wheels_speed[0]:.2f}, {self.latest_wheels_speed[1]:.2f}], "
+        #     f"published=[{self.latest_cmd_vel[0]:.2f}, {self.latest_cmd_vel[1]:.2f}])"
+        # )
 
         self._robot_state_pub.publish(msg)
 
