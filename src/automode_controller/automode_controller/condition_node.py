@@ -269,7 +269,8 @@ class ConditionNode(Node):
             while rclpy.ok():
                 # Debug output
                 if step_count % 10 == 0:
-                    self.get_logger().info(f'Condition "{req_name}" running step {step_count}')
+                    # self.get_logger().info(f'Condition "{req_name}" running step {step_count}')
+                    pass # Logger for debugging
                 
                 # CHECK: Per-goal cancellation instead of global
                 goal_id = str(goal_handle.goal_id)

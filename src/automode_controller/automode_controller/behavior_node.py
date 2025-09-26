@@ -239,8 +239,8 @@ class BehaviorNode(Node):
             while rclpy.ok():
                 # Add debug output
                 if step_count % 10 == 0:  # Every 1 second
-                    self.get_logger().info(f'Behavior "{req_name}" step {step_count}, cancel_requested: {goal_handle.is_cancel_requested}')
-                
+                    # self.get_logger().info(f'Behavior "{req_name}" step {step_count}, cancel_requested: {goal_handle.is_cancel_requested}')
+                    pass # Logger for debugging
                 if goal_handle.is_cancel_requested:
                     return self._handle_cancellation(req_name, step_count, "User requested cancellation", goal_handle, result)
 

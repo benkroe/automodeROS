@@ -91,7 +91,7 @@ class NeighboursSensor(Node):
 
         msg = String()
         msg.data = f"{attraction_angle},{count}"
-        self.get_logger().info(f"Publishing neighbours_info: {msg.data}")
+        # self.get_logger().info(f"Publishing neighbours_info: {msg.data}") Logger to see neigboru sensor information
         self.neighbours_publisher.publish(msg)
 
         self.neighbours_publisher.publish(msg)
