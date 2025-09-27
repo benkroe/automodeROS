@@ -17,14 +17,14 @@ class CategoriesCreator(Node):
             "Behavior",
             "s",
             0,
-            "behavior_categories_config.json"
+            "nodeCategories.json"
         )
         self._create_config_file(
             self.condition_list_client,
             "Condition",
             "c",
-            1,
-            "condition_categories_config.json"
+            0,
+            "edgeCategories.json"
         )
 
     def _create_config_file(self, client, categories_name, categoryid, typeid, output_path):
@@ -36,21 +36,6 @@ class CategoriesCreator(Node):
         request = Trigger.Request()
         future = client.call_async(request)
         rclpy.spin_until_future_complete(self, future, timeout_sec=30.0)
-
-        # Debug message
-        if future.result() and future.result().success:
-            raw_message = future.result().message
-            self.get_logger().info(f"Raw service response: {raw_message}")
-            try:
-                descriptions = json.loads(raw_message)
-            except Exception as e:
-                self.get_logger().error(f"JSON decode error: {e}")
-                return
-            self.get_logger().info(f"Decoded descriptions: {descriptions}")
-            config = self._format_config(descriptions, categories_name, categoryid, typeid)
-            with open(output_path, 'w') as f:
-                json.dump(config, f, indent=2)
-            self.get_logger().info(f"Config file written to {output_path}")
 
 
         if future.result() and future.result().success:

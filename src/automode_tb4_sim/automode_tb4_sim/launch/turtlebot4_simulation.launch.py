@@ -10,7 +10,6 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    genome_id_arg = DeclareLaunchArgument('genome_id', default_value='test', description='Genome identifier')
     turtlebot4_id_arg = DeclareLaunchArgument(
         'turtlebot4_id',
         default_value='tb1',
@@ -20,7 +19,7 @@ def generate_launch_description():
 
     world_arg = DeclareLaunchArgument(
         'world',
-        default_value='white',
+        default_value='mission',
         description='Simulation world name'
     )
     world = LaunchConfiguration('world')
@@ -44,15 +43,6 @@ def generate_launch_description():
         name='static_tf_arena'
     )
 
-    # Object pose bridges
-    object_bridges = [
-        Node(
-            name=f'object{i}_pose_bridge',
-            package='ros_gz_bridge',
-            executable='parameter_bridge',
-            arguments=[f'/model/object{i}/pose@geometry_msgs/msg/Pose[ignition.msgs.Pose]']
-        ) for i in range(1, 8)
-    ]
 
     # TF broadcaster launch (assumes you have a tf_broadcaster_launch.py)
     tf_broadcaster = IncludeLaunchDescription(
@@ -94,10 +84,8 @@ def generate_launch_description():
     return LaunchDescription([
         world_arg,
         static_tf_arena,
-        genome_id_arg,
         turtlebot4_id_arg,
         turtlebot4_simulator,
         tf_broadcaster,
         robot_sensors_and_controller,
-        *object_bridges,
     ])

@@ -82,11 +82,6 @@ def generate_launch_description():
         ),
     ])
 
-
-    # Set robot_name and dock_name to match your Gazebo model names
-    robot_name = [turtlebot4_id, '/turtlebot4']
-    dock_name = [turtlebot4_id, '/standard_dock']
-
     return LaunchDescription([
         world_arg,
         static_tf_arena,
