@@ -23,6 +23,8 @@ setup(
             'behavior_test_node = automode_tools.behavior_test_node:main',
             'condition_test_node = automode_tools.condition_test_node:main',
             'robotState_test_pub = automode_tools.robotState_test_pub:main',
+            'behavior_categories_creator = automode_tools.behavior_categories_creator:main',
+            'condition_categories_creator = automode_tools.condition_categories_creator:main',
         ],
     },
 )
