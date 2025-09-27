@@ -29,6 +29,14 @@ class CategoriesCreator(Node):
 
     def _create_config_file(self, client, categories_name, categoryid, typeid, output_path):
 
+        if not client.wait_for_service(timeout_sec=30.0):
+            self.get_logger().error(f"{categories_name} list service not available!")
+            return
+
+        request = Trigger.Request()
+        future = client.call_async(request)
+        rclpy.spin_until_future_complete(self, future, timeout_sec=30.0)
+
         # Debug message
         if future.result() and future.result().success:
             raw_message = future.result().message
@@ -44,18 +52,6 @@ class CategoriesCreator(Node):
                 json.dump(config, f, indent=2)
             self.get_logger().info(f"Config file written to {output_path}")
 
-
-
-
-
-
-        if not client.wait_for_service(timeout_sec=30.0):
-            self.get_logger().error(f"{categories_name} list service not available!")
-            return
-
-        request = Trigger.Request()
-        future = client.call_async(request)
-        rclpy.spin_until_future_complete(self, future, timeout_sec=30.0)
 
         if future.result() and future.result().success:
             descriptions = json.loads(future.result().message)
