@@ -64,19 +64,13 @@ class CategoriesCreator(Node):
 
     def _format_config(self, descriptions, categories_name, categoryid, typeid):
         categories = []
-        for idx, desc in enumerate(descriptions):
-            if isinstance(desc, str):
-                if not desc.strip():
-                    continue
-                try:
-                    desc = json.loads(desc)
-                except Exception as e:
-                    self.get_logger().warn(f"Could not parse description: {desc} ({e})")
-                    continue
+        # descriptions is a dict mapping name -> description dict
+        for idx, desc in enumerate(descriptions.values()):
             cat = {
                 "name": desc.get("name", ""),
-                "id": desc.get("id", idx),
+                "id": desc.get("type", idx),  # Use "type" field for id if present
                 "display_name": desc.get("display_name", desc.get("name", "")),
+                "description": desc.get("description", ""),
                 "params": desc.get("params", [])
             }
             categories.append(cat)
