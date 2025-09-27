@@ -52,6 +52,7 @@ class Behavior(BehaviorBase):
         self._sub = self._node.create_subscription(RobotState, 'robotState', self._robot_state_cb, 10)
 
     def execute_step(self) -> Tuple[bool, str, bool]:
+        # self._node.get_logger().debug(f'Random number: {self._last_robot_state.random_number}')
         if self._node is None or self._pub is None:
             return False, "behavior_stop not initialised; call setup_communication(node) first"
         try:

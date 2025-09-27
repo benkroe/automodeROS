@@ -35,6 +35,7 @@ class TurtleBot4ReferenceNode(Node):
         self.create_subscription(Float32, 'light_sensor_front_right', self._light_fr_cb, qos_profile_sensor_data)
         self.create_subscription(Float32, 'light_sensor_back', self._light_back_cb, qos_profile_sensor_data)
         self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb, qos_profile_sensor_data)
+        # self.create_subscription(String, 'random_number', self._random_number_cb, qos_profile_sensor_data)
 
 
         # Timer to publish RobotState periodically
@@ -48,6 +49,7 @@ class TurtleBot4ReferenceNode(Node):
         self.proximity_angle = 0.0
         self.light_magnitude = 0.0
         self.light_angle = 0.0
+        # self.random_number = 4
 
         
         # Store latest sensor values
@@ -60,6 +62,8 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_cmd_vel = (0.0, 0.0) 
 
         self.latest_ground_sensor = "white"
+
+        # self.latest_random_number = 4
 
         # prox smoothening
         self.proximity_mag_history = []
@@ -74,6 +78,8 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_neighbour_count = 0
         self.latest_attraction_angle = 0.0
 
+    # def _neigbours_cb(self, msg):
+    #     self.latest_random_number = msg.data
 
     def _ir_cb(self, msg):
         self.latest_ir = msg.data
@@ -165,7 +171,9 @@ class TurtleBot4ReferenceNode(Node):
         msg.ground_black_floor = self.ground_black_floor
         msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
         msg.light_magnitude, msg.light_angle = self.compute_light()
+        # msg.random_number = self.latest_random_number
         self.ground_black_floor = (self.latest_ground_sensor == "black")
+        
 
         # # Log a single summary message including wheel speeds
         # self.get_logger().info(
