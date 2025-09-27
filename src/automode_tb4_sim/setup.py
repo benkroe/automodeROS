@@ -15,7 +15,6 @@ setup(
             'automode_tb4_sim/launch/turtlebot4_simulation.launch.py',
             'automode_tb4_sim/launch/tf_broadcaster_launch.py',
             'automode_tb4_sim/launch/add_turtlebot4_simulation.launch.py',
-            'automode_tb4_sim/launch/mission_foraging.launch.py',
         ]),
         # Install worlds
         ('share/' + package_name + '/worlds', [
@@ -34,7 +33,6 @@ setup(
         'console_scripts': [
             # Sensor nodes
             'light_sensors_node = automode_tb4_sim.tb4_control.sensor_nodes.light_sensors_node:main',
-            'cliff_sensors_node = automode_tb4_sim.tb4_control.sensor_nodes.cliff_sensors_node:main',
             'ir_sensors_node = automode_tb4_sim.tb4_control.sensor_nodes.ir_sensors_node:main',
             'ground_sensor_node = automode_tb4_sim.tb4_control.sensor_nodes.ground_sensor_node:main',
             'neighbour_sensor_node = automode_tb4_sim.tb4_control.sensor_nodes.neighbour_sensor_node:main',
