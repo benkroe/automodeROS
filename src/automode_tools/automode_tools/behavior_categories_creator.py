@@ -29,9 +29,11 @@ class BehaviorCategoriesCreator(Node):
             self.get_logger().error("Failed to get behavior descriptions")
 
     def _format_config(self, behavior_descriptions):
-        # This assumes behavior_descriptions is a list of dicts with keys matching your example
         categories = []
         for idx, desc in enumerate(behavior_descriptions):
+            # If desc is a string, parse it as JSON
+            if isinstance(desc, str):
+                desc = json.loads(desc)
             cat = {
                 "name": desc.get("name", ""),
                 "id": desc.get("id", idx),

@@ -36,9 +36,12 @@ class CategoriesCreator(Node):
             self.get_logger().error(f"Failed to get {category_name.lower()} descriptions")
             return []
 
-    def _format_config(self, descriptions, categories_name, categoryid, typeid):
+    def _format_config(self, behavior_descriptions):
         categories = []
-        for idx, desc in enumerate(descriptions):
+        for idx, desc in enumerate(behavior_descriptions):
+            # If desc is a string, parse it as JSON
+            if isinstance(desc, str):
+                desc = json.loads(desc)
             cat = {
                 "name": desc.get("name", ""),
                 "id": desc.get("id", idx),
@@ -46,12 +49,13 @@ class CategoriesCreator(Node):
                 "params": desc.get("params", [])
             }
             categories.append(cat)
-        return {
-            "typeid": typeid,
-            "categoryid": categoryid,
-            "categories_name": categories_name,
+        config = [{
+            "typeid": 0,
+            "categoryid": "s",
+            "categories_name": "Behavior",
             "categories": categories
-        }
+        }]
+        return config
 
 def main(args=None):
     rclpy.init(args=args)
