@@ -64,14 +64,29 @@ class CategoriesCreator(Node):
 
     def _format_config(self, descriptions, categories_name, categoryid, typeid):
         categories = []
-        # descriptions is a dict mapping name -> description dict
         for idx, desc in enumerate(descriptions.values()):
+            params = []
+            for p in desc.get("params", []):
+                param_type = p.get("type", "")
+                if param_type in ("int", "integer"):
+                    min_v, max_v, step_v = 0, 100, 1
+                elif param_type in ("float", "float64"):
+                    min_v, max_v, step_v = 0.0, 10.0, 0.1
+                else:
+                    min_v, max_v, step_v = None, None, None
+                param = {
+                    "name": p.get("name", ""),
+                    "id": p.get("name", ""),
+                    "min": min_v,
+                    "max": max_v,
+                    "step": step_v
+                }
+                params.append(param)
             cat = {
                 "name": desc.get("name", ""),
-                "id": desc.get("type", idx),  # Use "type" field for id if present
+                "id": desc.get("type", idx),
                 "display_name": desc.get("display_name", desc.get("name", "")),
-                "description": desc.get("description", ""),
-                "params": desc.get("params", [])
+                "params": params
             }
             categories.append(cat)
         return [{
