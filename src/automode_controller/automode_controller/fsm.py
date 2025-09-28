@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Any
 from enum import Enum
 import logging
+logging.basicConfig(level=logging.INFO)
 
 @dataclass
 class FSMEdge:
@@ -65,45 +66,45 @@ class FSM:
 
 def create_fsm_from_config(fsm_config: str, behavior_descriptions: Any, condition_descriptions: Any) -> FSM:
     if not fsm_config or fsm_config.strip() == "simple_fsm" or fsm_config.strip() == "":
-        print("FSM DEBUG: No config provided or simple_fsm requested, cannot create FSM")
+        logging.info("FSM DEBUG: No config provided or simple_fsm requested, cannot create FSM")
         return None  # Or raise an exception
 
     try:
-        print(f"FSM DEBUG: Received behavior descriptions: {list(behavior_descriptions.keys())}")
-        print(f"FSM DEBUG: Received condition descriptions: {list(condition_descriptions.keys())}")
-        print(f"FSM DEBUG: Config string: {fsm_config}")
+        logging.info(f"FSM DEBUG: Received behavior descriptions: {list(behavior_descriptions.keys())}")
+        logging.info(f"FSM DEBUG: Received condition descriptions: {list(condition_descriptions.keys())}")
+        logging.info(f"FSM DEBUG: Config string: {fsm_config}")
 
         # Step 1: Check how many states we have
         tokens = fsm_config.strip().split()
-        print(f"FSM DEBUG: Tokens: {tokens}")
+        logging.info(f"FSM DEBUG: Tokens: {tokens}")
         
         nstates = _extract_nstates(tokens)
-        print(f"FSM DEBUG: Creating FSM with {nstates} states")
+        logging.info(f"FSM DEBUG: Creating FSM with {nstates} states")
         
         # Step 2: Separate the states
-        state_configs = _separate_states(tokens, nstates)
-        print(f"FSM DEBUG: Separated {len(state_configs)} state configurations")
+        state_configs = _separate_states(tokens, nstates, condition_descriptions)
+        logging.info(f"FSM DEBUG: Separated {len(state_configs)} state configurations")
         
         # Step 3: Clean parameter names
         cleaned_states = _clean_parameter_names(state_configs)
-        print("FSM DEBUG: Cleaned parameter names")
+        logging.info("FSM DEBUG: Cleaned parameter names")
         
         # Step 4: Validate against descriptions
         _validate_against_descriptions(cleaned_states, behavior_descriptions, condition_descriptions)
-        print("FSM DEBUG: Validation passed")
+        logging.info("FSM DEBUG: Validation passed")
         
         # Step 5: Create FSM with states and edges
         fsm = _create_fsm_from_cleaned_states(cleaned_states, behavior_descriptions, condition_descriptions)
-        print("FSM DEBUG: FSM created successfully")
+        logging.info("FSM DEBUG: FSM created successfully")
         
         return fsm
         
     except Exception as e:
-        print(f"FSM ERROR: Failed to create FSM from config: {e}")
+        logging.error(f"FSM ERROR: Failed to create FSM from config: {e}")
         import traceback
-        print(f"FSM ERROR: Traceback: {traceback.format_exc()}")
-        print("FSM DEBUG: Falling back to simple FSM")
-        return create_simple_fsm()
+        logging.error(f"FSM ERROR: Traceback: {traceback.format_exc()}")
+        logging.info("FSM DEBUG: Falling back to simple FSM")
+        return None
 
 def _extract_nstates(tokens: List[str]) -> int:
     """Step 1: Extract number of states from --nstates parameter."""
@@ -118,7 +119,7 @@ def _extract_nstates(tokens: List[str]) -> int:
         else:
             raise ValueError("--nstates value must be a number")
 
-def _separate_states(tokens: List[str], nstates: int) -> List[Dict[str, Any]]:
+def _separate_states(tokens: List[str], nstates: int, condition_descriptions: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Step 2: Separate states and their conditions."""
     state_configs = []
     
@@ -144,12 +145,12 @@ def _separate_states(tokens: List[str], nstates: int) -> List[Dict[str, Any]]:
         state_tokens = tokens[start_pos:end_pos]
         
         # Parse state configuration
-        state_config = _parse_state_tokens(state_tokens, state_num)
+        state_config = _parse_state_tokens(state_tokens, state_num, condition_descriptions)
         state_configs.append(state_config)
     
     return state_configs
 
-def _parse_state_tokens(tokens: List[str], state_num: int) -> Dict[str, Any]:
+def _parse_state_tokens(tokens: List[str], state_num: int, condition_descriptions: Dict[str, Any]) -> Dict[str, Any]:
     """Parse tokens for a single state into structured data."""
     if len(tokens) < 2:
         raise ValueError(f"State {state_num} missing type")
@@ -177,26 +178,33 @@ def _parse_state_tokens(tokens: List[str], state_num: int) -> Dict[str, Any]:
         num_conditions = int(tokens[i + 1])
         i += 2
         
-        # FIX: Parse each condition by finding its tokens explicitly
+     
         for cond_idx in range(num_conditions):
             # Find the start of this condition
             condition_start = f"--n{state_num}x{cond_idx}"
-            
-            # Find where this condition starts
             start_pos = None
             for j in range(i, len(tokens)):
                 if tokens[j] == condition_start:
                     start_pos = j
                     break
-            
             if start_pos is None:
                 raise ValueError(f"Could not find condition {cond_idx} for state {state_num}")
-            
+
+            # Find condition_type for this condition
+            condition_type = None
+            for k in range(start_pos, len(tokens)):
+                if tokens[k] == f"--c{state_num}x{cond_idx}" and k + 1 < len(tokens):
+                    condition_type = int(tokens[k + 1])
+                    break
+            if condition_type is None:
+                raise ValueError(f"Could not find condition_type for condition {cond_idx} in state {state_num}")
+
             # Parse this condition and get the new position
-            condition, new_pos = _parse_condition_tokens_fixed(tokens, start_pos, state_num, cond_idx)
+            condition, new_pos = _parse_condition_tokens_fixed(
+                tokens, start_pos, state_num, cond_idx, condition_type, condition_descriptions
+            )
             conditions.append(condition)
-            
-            print(f"FSM DEBUG: Parsed condition {cond_idx}: {condition}")
+            logging.info(f"FSM DEBUG: Parsed condition {cond_idx}: {condition}")
     
     return {
         'state_num': state_num,
@@ -205,17 +213,21 @@ def _parse_state_tokens(tokens: List[str], state_num: int) -> Dict[str, Any]:
         'conditions': conditions
     }
 
-def _parse_condition_tokens_fixed(tokens: List[str], start_idx: int, state_num: int, cond_idx: int) -> tuple:
+def _parse_condition_tokens_fixed(tokens: List[str], start_idx: int, state_num: int, cond_idx: int, condition_type: int, condition_descriptions: Dict[str, Any]) -> tuple:
     """Parse tokens for a single condition and return (condition, next_position)."""
     condition = {}
     i = start_idx
-    
-    print(f"FSM DEBUG: Parsing condition {cond_idx} starting at {start_idx}: {tokens[start_idx:start_idx+8]}")
-    
-    # Parse all tokens for this condition
+
+    # Get condition name and descriptor
+    condition_name = None
+    for name, desc in condition_descriptions.items():
+        if desc.get('type', 0) == condition_type:
+            condition_name = name
+            break
+    descriptor = condition_descriptions[condition_name].get("params", [])
+
     while i < len(tokens):
         token = tokens[i]
-        
         # Stop if we hit the next condition, next state, or end
         if i > start_idx and (
             (token.startswith(f"--n{state_num}x") and token != f"--n{state_num}x{cond_idx}") or
@@ -223,12 +235,11 @@ def _parse_condition_tokens_fixed(tokens: List[str], start_idx: int, state_num: 
             (token.startswith("--n") and "x" not in token)
         ):
             break
-        
-        # Parse this condition's tokens
+
+        # Parse target state offset and condition type as before
         if token == f"--n{state_num}x{cond_idx}":
             if i + 1 < len(tokens):
-                # FIX: This is the TARGET STATE OFFSET, not transition type!
-                condition['target_state_offset'] = int(tokens[i + 1])  # ← FIXED!
+                condition['target_state_offset'] = int(tokens[i + 1])
                 i += 2
             else:
                 break
@@ -238,22 +249,18 @@ def _parse_condition_tokens_fixed(tokens: List[str], start_idx: int, state_num: 
                 i += 2
             else:
                 break
-        elif token == f"--p{state_num}x{cond_idx}":
-            if i + 1 < len(tokens):
-                # FIX: This is probability parameter, not target state!
-                condition['probability_param'] = int(tokens[i + 1])  # ← FIXED!
-                i += 2
-            else:
-                break
-        elif token == f"--w{state_num}x{cond_idx}":
-            if i + 1 < len(tokens):
-                condition['w_param'] = int(tokens[i + 1])
-                i += 2
-            else:
-                break
         else:
-            i += 1
-    
+            # Dynamically check for expected params
+            for param_desc in descriptor:
+                param_name = param_desc["name"]
+                expected_token = f"--{param_name}{state_num}x{cond_idx}"
+                if token == expected_token and i + 1 < len(tokens):
+                    condition[f"{param_name}_param"] = tokens[i + 1]
+                    i += 2
+                    break
+            else:
+                i += 1
+
     return condition, i
 
 def _clean_parameter_names(state_configs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -300,8 +307,8 @@ def _validate_against_descriptions(cleaned_states: List[Dict[str, Any]],
         condition_type = desc.get('type', 0)  # Default to 0 if no type
         condition_type_map[condition_type] = name
     
-    print(f"FSM DEBUG: Behavior type map: {behavior_type_map}")
-    print(f"FSM DEBUG: Condition type map: {condition_type_map}")
+    logging.info(f"FSM DEBUG: Behavior type map: {behavior_type_map}")
+    logging.info(f"FSM DEBUG: Condition type map: {condition_type_map}")
     
     errors = []
     
@@ -315,7 +322,7 @@ def _validate_against_descriptions(cleaned_states: List[Dict[str, Any]],
             errors.append(f"State {state_num}: Behavior type {state_type} not found. Available types: {available_types}")
         else:
             behavior_name = behavior_type_map[state_type]
-            print(f"FSM DEBUG: State {state_num}: Using behavior '{behavior_name}' (type {state_type})")
+            logging.info(f"FSM DEBUG: State {state_num}: Using behavior '{behavior_name}' (type {state_type})")
         
         # CHANGE: Validate conditions by type instead of array index
         for cond_idx, condition in enumerate(state['conditions']):
@@ -326,7 +333,7 @@ def _validate_against_descriptions(cleaned_states: List[Dict[str, Any]],
                 errors.append(f"State {state_num}, Condition {cond_idx}: Condition type {condition_type} not found. Available types: {available_types}")
             else:
                 condition_name = condition_type_map[condition_type]
-                print(f"FSM DEBUG: State {state_num}, Condition {cond_idx}: Using condition '{condition_name}' (type {condition_type})")
+                logging.info(f"FSM DEBUG: State {state_num}, Condition {cond_idx}: Using condition '{condition_name}' (type {condition_type})")
     
     if errors:
         error_msg = "FSM Configuration Validation Errors:\n" + "\n".join(f"  ERROR: {error}" for error in errors)
@@ -352,54 +359,87 @@ def _create_fsm_from_cleaned_states(cleaned_states: List[Dict[str, Any]],
     # Create FSM with first state as initial
     fsm = FSM(f"STATE_{cleaned_states[0]['state_num']}")
     
-    # Create all states first
+    # --- DYNAMIC BEHAVIOR PARAMS ---
     for state_config in cleaned_states:
         state_num = state_config['state_num']
         state_type = state_config['state_type']
         params = state_config['params']
-        
+
         behavior_name = behavior_type_map[state_type]
-        behavior_params = [f"{key}={value}" for key, value in params.items()]
-        
+        descriptor = behavior_descriptions[behavior_name].get("params", [])
+        expected_param_names = set(param_desc["name"] for param_desc in descriptor)
+        actual_param_names = set(params.keys())
+
+        # Logging for missing and unexpected params
+        missing_params = expected_param_names - actual_param_names
+        unexpected_params = actual_param_names - expected_param_names
+        if missing_params:
+            logging.warning(f"FSM WARNING: State {state_num}, Behavior '{behavior_name}': Missing expected params: {missing_params}")
+        if unexpected_params:
+            logging.warning(f"FSM WARNING: State {state_num}, Behavior '{behavior_name}': Unexpected params: {unexpected_params}")
+
+        behavior_params = []
+        for param_desc in descriptor:
+            param_name = param_desc["name"]
+            value = params.get(param_name)
+            if value is not None:
+                behavior_params.append(f"{param_name}={value}")
+
         state = FSMState(
             name=f"STATE_{state_num}",
             behavior_name=behavior_name,
             behavior_params=behavior_params
         )
-        
         fsm.add_state(state)
-        print(f"FSM DEBUG: Created state STATE_{state_num} with behavior '{behavior_name}', params: {behavior_params}")
-    
-    # Create edges with correct target calculation
+
+    # --- DYNAMIC CONDITION PARAMS ---
     for state_config in cleaned_states:
         state_num = state_config['state_num']
-        
+
         for condition in state_config['conditions']:
             condition_type = condition['condition_type']
-            target_offset = condition['target_state_offset']  # ← From --n{state}x{condition}
-            
+            target_offset = condition['target_state_offset']
+
             condition_name = condition_type_map[condition_type]
-            
-            # FIX: Calculate target state using offset from OTHER states
+
             other_states = [s['state_num'] for s in cleaned_states if s['state_num'] != state_num]
             other_states.sort()
-            
+
             if target_offset >= len(other_states):
                 raise ValueError(f"State {state_num}: target_offset {target_offset} too large. Available other states: {other_states}")
-            
+
             target_state_num = other_states[target_offset]
-            
-            print(f"FSM DEBUG: State {state_num} offset {target_offset}: other_states={other_states}, target=STATE_{target_state_num}")
-            
-            condition_params = [f"{k.replace('_param','')}={v}" for k, v in condition.items() if k.endswith('_param')]
+
+            logging.info(f"FSM DEBUG: State {state_num} offset {target_offset}: other_states={other_states}, target=STATE_{target_state_num}")
+
+            # Build condition_params dynamically using descriptor
+            descriptor = condition_descriptions[condition_name].get("params", [])
+            expected_param_names = set(param_desc["name"] for param_desc in descriptor)
+            actual_param_names = set(k.replace("_param", "") for k in condition.keys() if k.endswith("_param"))
+
+            # Logging for missing and unexpected params
+            missing_params = expected_param_names - actual_param_names
+            unexpected_params = actual_param_names - expected_param_names
+            if missing_params:
+                logging.warning(f"FSM WARNING: State {state_num}, Condition '{condition_name}': Missing expected params: {missing_params}")
+            if unexpected_params:
+                logging.warning(f"FSM WARNING: State {state_num}, Condition '{condition_name}': Unexpected params: {unexpected_params}")
+
+            condition_params = []
+            for param_desc in descriptor:
+                param_name = param_desc["name"]
+                value = condition.get(f"{param_name}_param")
+                if value is not None:
+                    condition_params.append(f"{param_name}={value}")
+
             edge = FSMEdge(
                 condition_name=condition_name,
                 condition_params=condition_params,
                 target_state=f"STATE_{target_state_num}"
             )
-            
+
             fsm.add_edge(f"STATE_{state_num}", edge)
-            print(f"FSM DEBUG: Added edge: STATE_{state_num} --[{condition_name}]--> STATE_{target_state_num}")
-    
+            logging.info(f"FSM DEBUG: Added edge: STATE_{state_num} --[{condition_name}]--> STATE_{target_state_num} with params: {condition_params}")
+
     return fsm
 
