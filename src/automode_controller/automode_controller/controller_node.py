@@ -11,7 +11,6 @@
 from action_msgs.msg import GoalStatus
 from automode_interfaces.action import Condition
 from automode_interfaces.action import Behavior
-from .fsm import create_simple_fsm
 from .fsm import FSM
 
 
@@ -216,8 +215,8 @@ class ControllerNode(Node):
             
             # Check if we got both descriptions
             if behavior_descriptions is None or condition_descriptions is None:
-                self.get_logger().warn("Failed to get descriptions, falling back to simple FSM")
-                return create_simple_fsm()
+                self.get_logger().warn("Failed to get descriptions, no FSM is created")
+                return None
             
             # Call the FSM factory with descriptions (method from fsm file)
             from .fsm import create_fsm_from_config
@@ -225,7 +224,7 @@ class ControllerNode(Node):
 
         except Exception as e:
             self.get_logger().error(f"Error creating FSM from config: {e}")
-            return create_simple_fsm()
+            return None
             
 
 
