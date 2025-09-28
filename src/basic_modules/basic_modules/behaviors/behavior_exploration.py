@@ -72,6 +72,8 @@ class Behavior(BehaviorBase):
 
         # Only turn if obstacle is close AND roughly in front (angle near 0)
         if proximity_magnitude > self._obstacle_threshold:
+            msg.data = [0.0, 0.0]
+            self._pub.publish(msg)
             # Obstacle detected, initiate turn
             if proximity_angle > 0:
                 turn_direction = [self._turn_speed, -self._turn_speed]  # Turn left

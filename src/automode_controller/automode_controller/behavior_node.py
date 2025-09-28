@@ -232,7 +232,7 @@ class BehaviorNode(Node):
     def _run_behavior_loop(self, inst, req_name, goal_handle, result):
         # Run the continuous behavior loop
         step_count = 0
-        execution_rate = 30.0  # Hz
+        execution_rate = 20.0  # Hz
         sleep_duration = 1.0 / execution_rate
 
         try:
