@@ -17,7 +17,7 @@ class Behavior(BehaviorBase):
 
         self._forward_speed = 1.0       # Forward movement speed
         self._turn_speed = 1.0          # Turning speed (will calibrate later)
-        self._light_threshold = 0.5     # Light detection threshold
+        self._light_threshold = 0.0    # Light detection threshold
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
@@ -73,46 +73,25 @@ class Behavior(BehaviorBase):
             self._pub.publish(msg)
             return True, f"No light detected (magnitude: {light_magnitude:.3f}), stopped", False
 
-        # Calculate wheel speeds based on light direction
-        # ANTI-PHOTOTAXIS: Move AWAY from light by adding 180° to the angle
-        # light_angle: 0° = straight ahead, 90° = right, 180° = behind, 270° = left
 
-        # Flip the angle by 180° to move away from light
         escape_angle = (light_angle + 180) % 360
 
-        # Base forward speed proportional to light magnitude (stronger light = faster escape)
-        base_speed = min(self._forward_speed * light_magnitude, self._forward_speed)
-
-        # Convert escape angle to turning direction with proper wrapping
-        # We want the SHORTEST turn away from the light
+        # Use same turning logic as phototaxis (smooth differential steering)
         if escape_angle <= 180:
-            # 0° to 180°: turn right (positive)
             turn_angle = escape_angle
         else:
-            # 180° to 360°: turn left (negative) - take the shorter path
             turn_angle = escape_angle - 360
 
-        # Angle factor based on actual turn needed
-        # Small angles (escaping forward) → gentle turn
-        # Large angles (escaping behind) → sharp turn
-        angle_factor = abs(turn_angle) / 180.0  # 0.0 (straight) to 1.0 (behind)
-        turn_adjustment = self._turn_speed * angle_factor
-
-        # Apply differential steering
-        if turn_angle > 0:  # Escape direction is to the right
-            left_wheel_speed = base_speed
-            right_wheel_speed = max(base_speed - turn_adjustment, 0.0)
-        else:  # Escape direction is to the left
-            left_wheel_speed = max(base_speed - turn_adjustment, 0.0)
-            right_wheel_speed = base_speed
+        # Apply smooth differential steering (same as phototaxis)
+        left_wheel_speed = base_speed - self._turn_speed * (turn_angle / 180.0)
+        right_wheel_speed = base_speed + self._turn_speed * (turn_angle / 180.0)
 
         # Publish wheel speeds
         msg = self._Float32MultiArray()
         msg.data = [left_wheel_speed, right_wheel_speed]
         self._pub.publish(msg)
 
-        # Goal is reached when we've moved far enough from light (magnitude decreases)
-        # For anti-phototaxis, "goal" is getting away from strong light
+        # Goal is reached when we've escaped from strong light
         goal_reached = light_magnitude < 0.3
 
         return True, f"Escaping from light (mag: {light_magnitude:.3f}, light_angle: {light_angle:.1f}°, escape_angle: {escape_angle:.1f}°, turn: {turn_angle:.1f}°), wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]", goal_reached
