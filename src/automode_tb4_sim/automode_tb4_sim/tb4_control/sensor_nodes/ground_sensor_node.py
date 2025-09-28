@@ -40,7 +40,7 @@ class GroundSensor(Node):
         self.base_frame = self.BASE_FRAME  # Use the variable!
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
-        self.timer = self.create_timer(0.01, self.on_timer)
+        self.timer = self.create_timer(0.2, self.on_timer)
         self.ground_publisher = self.create_publisher(String, self.sensor_frame, qos_profile_sensor_data)
         self.namespace = self.get_namespace().strip('/')
         self.last_color = "white"
@@ -51,10 +51,9 @@ class GroundSensor(Node):
             t = self.tf_buffer.lookup_transform(
                 self.base_frame,
                 target_frame,
-                rclpy.time.Time(seconds=0),
+                rclpy.time.Time(),
             )
         except TransformException as ex:
-            self.get_logger().info(f'Could not transform {target_frame} to {self.base_frame}: {ex}')
             return
 
         x = t.transform.translation.x
