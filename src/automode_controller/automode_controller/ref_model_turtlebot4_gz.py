@@ -35,6 +35,7 @@ class TurtleBot4ReferenceNode(Node):
         self.create_subscription(Float32, 'light_sensor_front_right', self._light_fr_cb, qos_profile_sensor_data)
         self.create_subscription(Float32, 'light_sensor_back', self._light_back_cb, qos_profile_sensor_data)
         self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb, qos_profile_sensor_data)
+        self.create_subscription(String, 'neighbours_info', self._neighbours_cb, qos_profile_sensor_data)
         # self.create_subscription(String, 'random_number', self._random_number_cb, qos_profile_sensor_data)
 
 
@@ -73,7 +74,6 @@ class TurtleBot4ReferenceNode(Node):
         self.proximity_hysteresis = 2.0  # Minimum change to update
 
         # neighbour count and direction
-        self.create_subscription(String, 'neighbours_info', self._neighbours_cb, qos_profile_sensor_data)
         self.latest_neighbour_count = 0
         self.latest_attraction_angle = 0.0
 
@@ -133,8 +133,6 @@ class TurtleBot4ReferenceNode(Node):
             return self.proximity_mag_last, self.proximity_angle_last
         return 0.0, 0.0
     
-    def _ground_sensor_cb(self, msg: String):
-        self.latest_ground_sensor = msg.data
 
     def compute_light(self):
         # Example: Vector sum based on sensor positions
@@ -179,10 +177,10 @@ class TurtleBot4ReferenceNode(Node):
         # Log a single summary message including wheel speeds
         self.get_logger().info(
             f"RobotState: id={msg.robot_id}, neighbours={msg.neighbour_count}, "
-            f"attraction_angle={msg.attraction_angle:.2f}, floor_color={msg.floor_color}, "
+            f"attraction_angle={msg.attraction_angle:.2f}, "
             f"proximity(mag={msg.proximity_magnitude:.2f}, ang={msg.proximity_angle:.1f}), "
             f"light(mag={msg.light_magnitude:.2f}, ang={msg.light_angle:.1f}), "
-            f"ground={self.latest_floor_color}, "
+            f"floor_color={self.latest_floor_color}, "
             f"wheels(received=[{self.latest_wheels_speed[0]:.2f}, {self.latest_wheels_speed[1]:.2f}], "
             f"published=[{self.latest_cmd_vel[0]:.2f}, {self.latest_cmd_vel[1]:.2f}])"
         )

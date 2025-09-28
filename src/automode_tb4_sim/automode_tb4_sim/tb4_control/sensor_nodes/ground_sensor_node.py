@@ -24,7 +24,7 @@ class GroundSensor(Node):
     BASE_FRAME = 'mission'
     WHITE_X_MIN = -3
     WHITE_X_MAX = 3
-    WHITE_Y_MIN = 0
+    WHITE_Y_MIN = 1
     WHITE_Y_MAX = 3
     BLACK1_X = -1.5
     BLACK1_Y = -1.0
@@ -51,7 +51,7 @@ class GroundSensor(Node):
             t = self.tf_buffer.lookup_transform(
                 self.base_frame,
                 target_frame,
-                rclpy.time.Time()
+                rclpy.time.Time(seconds=0),
             )
         except TransformException as ex:
             self.get_logger().info(f'Could not transform {target_frame} to {self.base_frame}: {ex}')
