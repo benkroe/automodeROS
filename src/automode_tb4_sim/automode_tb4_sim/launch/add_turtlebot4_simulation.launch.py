@@ -25,12 +25,17 @@ world_arg = DeclareLaunchArgument(
 )
 world = LaunchConfiguration('world')
 
+x_arg = DeclareLaunchArgument('x', default_value='1.0')
+y_arg = DeclareLaunchArgument('y', default_value='1.0')
+x = LaunchConfiguration('x')
+y = LaunchConfiguration('y')
+
 def generate_launch_description():
         # Static transform for arena/world
     static_tf_arena = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['0', '0', '0', '0', '0', '0', 'world', LaunchConfiguration('world')],
+        arguments=['0', '0', '0', '0', '0', '0', 'world', world],
         name='static_tf_arena'
     )
 
@@ -41,8 +46,8 @@ def generate_launch_description():
         ]),
         launch_arguments={
             'namespace': turtlebot4_id,
-            'x': '1.0',
-            'y': '1.0',
+            'x': x,
+            'y': y,
             'z': '0.2',
             'world': world
         }.items()
