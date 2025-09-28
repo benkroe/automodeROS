@@ -51,7 +51,15 @@ class Condition(ConditionBase):
                 return False, f"Floor color {expected_color} not detected (current: {detected_color})"
         else:
             return False, "Probability condition not met"
+        
+    def setup_communication(self, node) -> None:
+        self._node = node   
+        self._sub = self._node.create_subscription(
+            RobotState, 'robotState', self._robot_state_cb, 10
+        )
 
+    def _robot_state_cb(self, msg) -> None:
+        self._last_robot_state = msg
     def reset(self) -> None:
         self._last_robot_state = None
         if self._node and self._sub:
