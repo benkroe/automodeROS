@@ -18,7 +18,7 @@ class Behavior(BehaviorBase):
         self._turning_time = time.time()
 
         self._obstacle_threshold = 30  # Proximity magnitude threshold for obstacle detection
-        self._forward_speed = 0.7       # Forward movement speed
+        self._forward_speed = 0.5       # Forward movement speed
         self._turn_speed = 0.6          # Turning speed (will calibrate later)
 
     @staticmethod
@@ -72,9 +72,8 @@ class Behavior(BehaviorBase):
 
         # Only turn if obstacle is close AND roughly in front (angle near 0)
         if proximity_magnitude > self._obstacle_threshold:
-            msg.data = [-1.5, -1.5]
+            msg.data = [0,0]
             self._pub.publish(msg)
-            time.sleep(0.5)
             # Obstacle detected, initiate turn
             if proximity_angle > 0:
                 turn_direction = [self._turn_speed, -self._turn_speed]  # Turn left
