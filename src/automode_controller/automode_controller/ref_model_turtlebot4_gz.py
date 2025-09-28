@@ -39,7 +39,7 @@ class TurtleBot4ReferenceNode(Node):
 
 
         # Timer to publish RobotState periodically
-        self.create_timer(0.1, self._publish_robot_state)  # 10 Hz
+        self.create_timer(0.05, self._publish_robot_state)  # 20 Hz
 
         # Example state variables (expand as needed)
         self.robot_id = 1
