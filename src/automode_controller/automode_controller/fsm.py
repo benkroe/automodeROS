@@ -62,45 +62,11 @@ class FSM:
     def get_state_names(self) -> List[str]:
         return list(self.states.keys())
 
-def create_simple_fsm() -> FSM:
-    # Simple example FSM for debugging and coding
-    # -> wants to stop on black floor but more beeing alone
-    fsm = FSM("EXPLORATION")
-    
-    
-    exploration_state = FSMState(
-        name="EXPLORATION",
-        behavior_name="exploration",
-        behavior_params=["30"]  
-    )
-    
-    stop_state = FSMState(
-        name="STOP",
-        behavior_name="stop",  
-    )
-    
-    fsm.add_state(exploration_state)
-    fsm.add_state(stop_state)
-    
-    fsm.add_edge("EXPLORATION", FSMEdge(
-        condition_name="black_floor",
-        condition_params=[],
-        target_state="STOP",
-    ))
-    
-    fsm.add_edge("STOP", FSMEdge(
-        condition_name="neighbour_count",
-        condition_params=["1"],  
-        target_state="EXPLORATION",
-    ))
-    
-    return fsm
-
 
 def create_fsm_from_config(fsm_config: str, behavior_descriptions: Any, condition_descriptions: Any) -> FSM:
     if not fsm_config or fsm_config.strip() == "simple_fsm" or fsm_config.strip() == "":
-        print("FSM DEBUG: No config provided or simple_fsm requested, using simple FSM")
-        return create_simple_fsm()
+        print("FSM DEBUG: No config provided or simple_fsm requested, cannot create FSM")
+        return None  # Or raise an exception
 
     try:
         print(f"FSM DEBUG: Received behavior descriptions: {list(behavior_descriptions.keys())}")
@@ -393,7 +359,7 @@ def _create_fsm_from_cleaned_states(cleaned_states: List[Dict[str, Any]],
         params = state_config['params']
         
         behavior_name = behavior_type_map[state_type]
-        behavior_params = [params.get(key, "") for key in params.keys()]
+        behavior_params = [f"{key}={value}" for key, value in params.items()]
         
         state = FSMState(
             name=f"STATE_{state_num}",
@@ -425,9 +391,10 @@ def _create_fsm_from_cleaned_states(cleaned_states: List[Dict[str, Any]],
             
             print(f"FSM DEBUG: State {state_num} offset {target_offset}: other_states={other_states}, target=STATE_{target_state_num}")
             
+            condition_params = [f"{k.replace('_param','')}={v}" for k, v in condition.items() if k.endswith('_param')]
             edge = FSMEdge(
                 condition_name=condition_name,
-                condition_params=[],
+                condition_params=condition_params,
                 target_state=f"STATE_{target_state_num}"
             )
             
