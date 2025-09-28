@@ -93,39 +93,10 @@ class Behavior(BehaviorBase):
         return True, "published wheel speeds", False
     
     def reset(self) -> None:
-        """Reset the behavior state and clean up resources."""
-        # Reset behavior-specific state variables
-        self._turning_time = time.time()  # Reset to current time (no turning)
+        """Reset the behavior state."""
+        self._turning_time = time.time()
         self._last_robot_state = None
         self._params = {}
-        
-        # Reset parsed robot state if it exists
-        self._last_robot_state = None
-        
-        # Clean up ROS2 resources if node exists
-        if self._node is not None:
-            try:
-                if self._pub is not None:
-                    try:
-                        self._node.destroy_publisher(self._pub)
-                    except Exception:
-                        pass
-                    self._pub = None
-                    
-                if self._sub is not None:
-                    try:
-                        self._node.destroy_subscription(self._sub)
-                    except Exception:
-                        pass
-                    self._sub = None
-            except Exception:
-                # Log any unexpected errors during cleanup
-                if self._node is not None:
-                    self._node.get_logger().warning('Error during behavior reset cleanup')
-        else:
-            # If no node, just clear the publishers/subscribers
-            self._pub = None
-            self._sub = None
-        
-        # Reset message type reference
-        self._Float32MultiArray = None  
+        self._pub = None
+        self._sub = None
+        self._Float32MultiArray = None

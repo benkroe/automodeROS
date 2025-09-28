@@ -121,21 +121,10 @@ class Behavior(BehaviorBase):
         ), False
 
     def reset(self) -> None:
-        """Reset the behavior state and clean up resources."""
+        """Reset the behavior state."""
         self._last_robot_state = None
         self._params = {}
         self._repulsion_gain = 4.0
-
-        if self._node is not None:
-            try:
-                if self._pub is not None:
-                    self._node.destroy_publisher(self._pub)
-                if self._sub is not None:
-                    self._node.destroy_subscription(self._sub)
-            except Exception:
-                if self._node is not None:
-                    self._node.get_logger().warning('Error during behavior reset cleanup')
-
         self._pub = None
         self._sub = None
         self._Float32MultiArray = None

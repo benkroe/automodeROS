@@ -97,35 +97,9 @@ class Behavior(BehaviorBase):
         return True, f"Escaping from light (mag: {light_magnitude:.3f}, light_angle: {light_angle:.1f}°, escape_angle: {escape_angle:.1f}°, turn: {turn_angle:.1f}°), wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]", goal_reached
     
     def reset(self) -> None:
-        """Reset the behavior state and clean up resources."""
-        # Reset behavior-specific state variables
+        """Reset the behavior state."""
         self._last_robot_state = None
         self._params = {}
-        
-        # Clean up ROS2 resources if node exists
-        if self._node is not None:
-            try:
-                if self._pub is not None:
-                    try:
-                        self._node.destroy_publisher(self._pub)
-                    except Exception:
-                        pass
-                    self._pub = None
-                    
-                if self._sub is not None:
-                    try:
-                        self._node.destroy_subscription(self._sub)
-                    except Exception:
-                        pass
-                    self._sub = None
-            except Exception:
-                # Log any unexpected errors during cleanup
-                if self._node is not None:
-                    self._node.get_logger().warning('Error during behavior reset cleanup')
-        else:
-            # If no node, just clear the publishers/subscribers
-            self._pub = None
-            self._sub = None
-        
-        # Reset message type reference
+        self._pub = None
+        self._sub = None
         self._Float32MultiArray = None
