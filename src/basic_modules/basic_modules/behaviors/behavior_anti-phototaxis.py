@@ -16,7 +16,7 @@ class Behavior(BehaviorBase):
         self._Float32MultiArray = None
 
         self._forward_speed = 1.0       # Forward movement speed
-        self._turn_speed = 1.0          # Turning speed (will calibrate later)
+        self._turn_speed = 5.0          # Turning speed (will calibrate later)
         self._light_threshold = 0.0    # Light detection threshold
 
     @staticmethod
