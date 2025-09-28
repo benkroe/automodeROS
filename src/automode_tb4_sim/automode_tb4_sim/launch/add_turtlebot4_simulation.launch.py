@@ -89,6 +89,8 @@ def generate_launch_description():
 
     return LaunchDescription([
         world_arg,
+        x_arg,
+        y_arg,
         static_tf_arena,
         turtlebot4_id_arg,
         turtlebot4_simulator,
