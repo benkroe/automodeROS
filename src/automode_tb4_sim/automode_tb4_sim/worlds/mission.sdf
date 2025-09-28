@@ -110,7 +110,7 @@
     <!-- Light source -->
     <model name="light_marker">
       <static>true</static>
-      <pose>0 2.5 1.5 0 0 0</pose> <!-- above white patch -->
+      <pose>0 3.5 1.5 0 0 0</pose> <!-- above white patch -->
       <link name="link">
         <visual name="visual">
           <geometry>
