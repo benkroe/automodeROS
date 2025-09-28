@@ -21,4 +21,4 @@
 
 ## 06 find and catch
 --fsm-config --nstates 1 --s0 0 --rwm0 30 
---fsm-config --nstates 2 --s0 0 --rwm0 30 --n0 1 --n0x0 0 --c0x0 4 --p0x0 1 --w0x0 1 --s1 4 --att1 1 --n1 1 --n1x0 0 --c1x0 3 --p1x0 1 --w1x0 1 
+--fsm-config --nstates 2 --s0 0 --rwm0 30 --n0 1 --n0x0 0 --c0x0 3 --p0x0 1 --w0x0 1 --s1 4 --att1 1 --n1 1 --n1x0 0 --c1x0 4 --p1x0 1 --w1x0 1 
