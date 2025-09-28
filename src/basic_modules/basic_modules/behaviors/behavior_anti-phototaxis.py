@@ -73,7 +73,7 @@ class Behavior(BehaviorBase):
             self._pub.publish(msg)
             return True, f"No light detected (magnitude: {light_magnitude:.3f}), stopped", False
 
-
+        base_speed = self._forward_speed
         escape_angle = (light_angle + 180) % 360
 
         # Use same turning logic as phototaxis (smooth differential steering)
@@ -92,7 +92,7 @@ class Behavior(BehaviorBase):
         self._pub.publish(msg)
 
         # Goal is reached when we've escaped from strong light
-        goal_reached = light_magnitude < 0.3
+        goal_reached = light_magnitude < 0.0
 
         return True, f"Escaping from light (mag: {light_magnitude:.3f}, light_angle: {light_angle:.1f}°, escape_angle: {escape_angle:.1f}°, turn: {turn_angle:.1f}°), wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]", goal_reached
     
