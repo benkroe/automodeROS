@@ -182,7 +182,7 @@ class TurtleBot4ReferenceNode(Node):
             f"attraction_angle={msg.attraction_angle:.2f}, floor_color={msg.floor_color}, "
             f"proximity(mag={msg.proximity_magnitude:.2f}, ang={msg.proximity_angle:.1f}), "
             f"light(mag={msg.light_magnitude:.2f}, ang={msg.light_angle:.1f}), "
-            f"ground={self.latest_ground_sensor}, "
+            f"ground={self.latest_floor_color}, "
             f"wheels(received=[{self.latest_wheels_speed[0]:.2f}, {self.latest_wheels_speed[1]:.2f}], "
             f"published=[{self.latest_cmd_vel[0]:.2f}, {self.latest_cmd_vel[1]:.2f}])"
         )
