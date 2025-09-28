@@ -107,7 +107,7 @@ class Behavior(BehaviorBase):
         self._pub.publish(msg)
 
         # Check if we're close to the light (goal reached)
-        goal_reached = light_magnitude > 0.8
+        goal_reached = light_magnitude > 0.9
 
         return True, f"Moving toward light (mag: {light_magnitude:.3f}, angle: {light_angle:.1f}°, turn: {turn_angle:.1f}°), wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]", goal_reached
     
