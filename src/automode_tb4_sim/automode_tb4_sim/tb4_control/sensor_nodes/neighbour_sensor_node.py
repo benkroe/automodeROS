@@ -16,7 +16,7 @@ BASE_FRAME = 'mission'
 
 class NeighboursSensor(Node):
 
-    DETECTION_RADIUS = 3  # meters
+    DETECTION_RADIUS = 1  # meters
 
     def __init__(self):
         super().__init__('neighbours_sensor_node')
@@ -72,7 +72,7 @@ class NeighboursSensor(Node):
                 dx = x - own_x
                 dy = y - own_y
                 dist = (dx ** 2 + dy ** 2) ** 0.5
-                self.get_logger().info(f"Neighbour {ns}: dx={dx:.2f}, dy={dy:.2f}, dist={dist:.2f}")
+                # self.get_logger().info(f"Neighbour {ns}: dx={dx:.2f}, dy={dy:.2f}, dist={dist:.2f}")
 
                 if dist <= self.DETECTION_RADIUS:
                     count += 1

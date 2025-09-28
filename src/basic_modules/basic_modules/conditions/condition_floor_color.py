@@ -34,6 +34,7 @@ class Condition(ConditionBase):
     def set_params(self, params: Dict[str, Any]) -> None:
         self._params.update(params)
         self._target_color_float = float(params.get('color', 2.0))
+        print(f"[DEBUG] Condition set to color value: {self._target_color_float}")
 
     def execute_reading(self) -> Tuple[bool, str]:
         if self._last_robot_state is None:
