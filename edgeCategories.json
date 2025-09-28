@@ -5,20 +5,6 @@
     "categories_name": "Condition",
     "categories": [
       {
-        "name": "black_floor",
-        "id": 0,
-        "display_name": "black_floor",
-        "params": [
-          {
-            "name": "p",
-            "id": "p",
-            "min": 0.0,
-            "max": 10.0,
-            "step": 0.1
-          }
-        ]
-      },
-      {
         "name": "fixed_probability",
         "id": 5,
         "display_name": "fixed_probability",
@@ -40,9 +26,9 @@
           {
             "name": "color",
             "id": "color",
-            "min": null,
-            "max": null,
-            "step": null
+            "min": 0.0,
+            "max": 10.0,
+            "step": 0.1
           },
           {
             "name": "p",
@@ -89,20 +75,6 @@
           {
             "name": "w",
             "id": "w",
-            "min": 0.0,
-            "max": 10.0,
-            "step": 0.1
-          }
-        ]
-      },
-      {
-        "name": "white_floor",
-        "id": 2,
-        "display_name": "white_floor",
-        "params": [
-          {
-            "name": "p",
-            "id": "p",
             "min": 0.0,
             "max": 10.0,
             "step": 0.1
