@@ -18,7 +18,7 @@ class Behavior(BehaviorBase):
         self._turning_time = time.time()
 
         self._obstacle_threshold = 30  # Proximity magnitude threshold for obstacle detection
-        self._forward_speed = 1.5       # Forward movement speed
+        self._forward_speed = 0.7       # Forward movement speed
         self._turn_speed = 0.6          # Turning speed (will calibrate later)
 
     @staticmethod
