@@ -11,7 +11,7 @@ class Condition(ConditionBase):
         self._sub = None
         self._params: Dict[str, Any] = {}
         self._last_robot_state = None
-        self._threshold = 1  # Default threshold (w parameter)
+        self._threshold = 2  # Default threshold (w parameter)
         self._probability = 1.0  # Default probability (p parameter)
 
     @staticmethod
