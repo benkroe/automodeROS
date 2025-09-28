@@ -70,7 +70,7 @@ class GroundSensor(Node):
             elif ((x - self.BLACK2_X)**2 + (y - self.BLACK2_Y)**2 <= self.BLACK2_RADIUS**2):
                 color = "black"
             else:
-                color = self.last_color
+                color = "gray"
         else:
             # White world logic
             if (self.WHITE_X <= x <= self.WHITE_X + self.WHITE_SIZE and
@@ -80,7 +80,7 @@ class GroundSensor(Node):
                   self.BLACK_Y <= y <= self.BLACK_Y + self.BLACK_SIZE):
                 color = "black"
             else:
-                color = self.last_color
+                color = "gray"
 
         self.last_color = color
         msg = String()

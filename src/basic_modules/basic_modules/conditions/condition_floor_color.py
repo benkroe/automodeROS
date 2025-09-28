@@ -11,16 +11,17 @@ class Condition(ConditionBase):
         self._sub = None
         self._params: Dict[str, Any] = {}
         self._last_robot_state = None
+        self._target_color = "black"  # Default
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
         return {
-            "name": "black_floor",
+            "name": "floor_color",
             "type": 0,
-            "description": "Triggers when black floor is detected (or not detected) with probability (p)",
+            "description": "Triggers when specified floor color is detected with probability (p). Match the string for the floor color exactly to the sensor output(case-sensitive).",
             "params": [
-                {"name": "p", "type": "float64", "required": False, "default": 1
-                }
+                {"name": "color", "type": "string", "required": True, "default": "black"},
+                {"name": "p", "type": "float64", "required": False, "default": 1}
             ]
         }
 
@@ -32,24 +33,24 @@ class Condition(ConditionBase):
 
     def set_params(self, params: Dict[str, Any]) -> None:
         self._params.update(params)
-        self._detect_black = params.get('p', True)
+        self._target_color = params.get('color', 'black')
 
     def _robot_state_cb(self, msg) -> None:
         self._last_robot_state = msg
 
     def execute_reading(self) -> Tuple[bool, str]:
-        ground_black_floor = False
         if self._last_robot_state is None:
             return False, "Waiting for robot state..."
 
         p = self._params.get('p', 1.0)
         if random.random() <= p:
-            ground_black_floor = self._last_robot_state.ground_black_floor
-
-        if ground_black_floor:
-            return True, "Black floor detected!"
+            detected_color = getattr(self._last_robot_state, "floor_color", None)
+            if detected_color == self._target_color:
+                return True, f"{self._target_color.capitalize()} floor detected!"
+            else:
+                return False, f"{self._target_color.capitalize()} floor not detected (current: {detected_color})"
         else:
-            return False, "No black floor detected yet"
+            return False, "Probability condition not met"
 
     def reset(self) -> None:
         self._last_robot_state = None

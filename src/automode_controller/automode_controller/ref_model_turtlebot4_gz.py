@@ -44,7 +44,7 @@ class TurtleBot4ReferenceNode(Node):
         # Example state variables (expand as needed)
         self.robot_id = 1
         self.neighbour_count = 0
-        self.ground_black_floor = False
+        self.floor_color = "gray"
         self.proximity_magnitude = 0.0
         self.proximity_angle = 0.0
         self.light_magnitude = 0.0
@@ -60,8 +60,7 @@ class TurtleBot4ReferenceNode(Node):
 
         self.latest_wheels_speed = [0.0, 0.0]  
         self.latest_cmd_vel = (0.0, 0.0) 
-
-        self.latest_ground_sensor = "white"
+        self.latest_floor_color = "gray"
 
         # self.latest_random_number = 4
 
@@ -80,6 +79,9 @@ class TurtleBot4ReferenceNode(Node):
 
     # def _neigbours_cb(self, msg):
     #     self.latest_random_number = msg.data
+
+    def _ground_sensor_cb(self, msg):
+        self.latest_floor_color = msg.data
 
     def _ir_cb(self, msg):
         self.latest_ir = msg.data
@@ -168,11 +170,10 @@ class TurtleBot4ReferenceNode(Node):
         msg.robot_id = self.robot_id
         msg.neighbour_count = self.latest_neighbour_count
         msg.attraction_angle = self.latest_attraction_angle
-        msg.ground_black_floor = self.ground_black_floor
+        msg.floor_color = self.latest_floor_color
         msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
         msg.light_magnitude, msg.light_angle = self.compute_light()
         # msg.random_number = self.latest_random_number
-        self.ground_black_floor = (self.latest_ground_sensor == "black")
         
 
         # # Log a single summary message including wheel speeds
