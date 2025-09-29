@@ -77,7 +77,7 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_neighbour_count = 0
         self.latest_attraction_angle = 0.0
 
-    # def _neigbours_cb(self, msg):
+    # def _random_number_cb(self, msg):
     #     self.latest_random_number = msg.data
 
     def _ground_sensor_cb(self, msg):
