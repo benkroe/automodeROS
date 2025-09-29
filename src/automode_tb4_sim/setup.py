@@ -25,7 +25,7 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='ben',
-    maintainer_email='ben@todo.todo',
+    maintainer_email='ben.kr@live.com',
     description='Simulation and sensor nodes for TurtleBot4 in Gazebo',
     license='TODO: License declaration',
     tests_require=['pytest'],

@@ -2,10 +2,10 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>automode_tb4_sim</name>
-  <version>0.0.0</version>
-  <description>Simulation and sensor nodes for TurtleBot4 in Gazebo</description>
-  <maintainer email="ben@todo.todo">ben</maintainer>
-  <license>TODO: License declaration</license>
+  <version>1.0.0</version>
+  <description>Simulation and sensor nodes for TurtleBot4 in Gazebo as well as launch files</description>
+  <maintainer email="ben.kr@live.com">ben</maintainer>
+  <license>MIT</license>
 
   <depend>rclpy</depend>
   <depend>launch</depend>

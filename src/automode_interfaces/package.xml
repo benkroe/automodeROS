@@ -2,10 +2,10 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>automode_interfaces</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>Custom interfaces for automode packages</description>
-  <maintainer email="ben@todo.todo">ben</maintainer>
-  <license>TODO: License declaration</license>
+  <maintainer email="ben.kr@live.com">ben</maintainer>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <build_depend>rosidl_default_generators</build_depend>

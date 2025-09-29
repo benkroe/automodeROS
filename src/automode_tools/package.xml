@@ -2,10 +2,10 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>automode_tools</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="ben.kroener@uni-kn.de">ben</maintainer>
-  <license>TODO: License declaration</license>
+  <version>1.0.0</version>
+  <description>Tools for the AutoMoDe framework</description>
+  <maintainer email="ben.kr@live.com">ben</maintainer>
+  <license>MIT</license>
 
   <depend>rclpy</depend>
   <depend>automode_interfaces</depend>
