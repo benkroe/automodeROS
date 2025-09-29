@@ -18,6 +18,8 @@ class Behavior(BehaviorBase):
         self._forward_speed = 1.0       # Forward movement speed
         self._turn_speed = 1.0          # Turning speed (will calibrate later)
         self._light_threshold = 0.0     # Light detection threshold
+        self._obstacle_threshold = 70  # Proximity threshold to consider obstacle too close
+        self._obstacle_avoidance_gain = 10.0  # Gain for obstacle avoidance
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
@@ -50,7 +52,7 @@ class Behavior(BehaviorBase):
 
     def execute_step(self) -> Tuple[bool, str, bool]:
         """
-        Execute phototaxis behavior - move toward light source.
+        Execute phototaxis behavior with obstacle avoidance.
         
         Returns:
             (success, message, goal_reached)
@@ -65,51 +67,63 @@ class Behavior(BehaviorBase):
 
         light_magnitude = self._last_robot_state.light_magnitude
         light_angle = self._last_robot_state.light_angle
+        proximity_magnitude = self._last_robot_state.proximity_magnitude
+        proximity_angle = self._last_robot_state.proximity_angle
 
+        # Start with base forward speed
+        left_wheel_speed = self._forward_speed
+        right_wheel_speed = self._forward_speed
 
-        # if light_magnitude < self._light_threshold:
-        #     msg = self._Float32MultiArray()
-        #     msg.data = [0.0, 0.0] 
-        #     self._pub.publish(msg)
-        #     return True, f"No light detected (magnitude: {light_magnitude:.3f}), stopped", False
-
-        # Instead, always move toward the light direction, even if magnitude is zero
-        base_speed = self._forward_speed  # Always use forward speed
-
-        # Calculate wheel speeds based on light direction
-        # light_angle: 0° = straight ahead, 90° = right, 180° = behind, 270° = left
-
-        # Base forward speed proportional to light magnitude
-        base_speed = self._forward_speed
-
-        # IMPROVED: Convert angle to turning direction with proper wrapping
-        # We want the SHORTEST turn toward the light
-        if light_angle <= 180:
-            # 0° to 180°: turn right (positive)
-            turn_angle = light_angle
+        # Apply obstacle avoidance if obstacle is detected
+        if proximity_magnitude > self._obstacle_threshold:
+            # Convert proximity angle to avoidance direction
+            # If obstacle is on the left (negative angle), turn right (reduce left wheel)
+            # If obstacle is on the right (positive angle), turn left (reduce right wheel)
+            
+            # Normalize proximity angle to [-180, 180]
+            if proximity_angle > 180:
+                proximity_angle -= 360
+            
+            avoidance_factor = self._obstacle_avoidance_gain * (proximity_magnitude - self._obstacle_threshold)
+            
+            if proximity_angle < 0:  # Obstacle on left, turn right
+                left_wheel_speed -= avoidance_factor
+                right_wheel_speed += avoidance_factor * 0.5
+            else:  # Obstacle on right, turn left
+                right_wheel_speed -= avoidance_factor
+                left_wheel_speed += avoidance_factor * 0.5
+            
+            status_msg = f"Avoiding obstacle (prox_mag: {proximity_magnitude:.3f}, prox_angle: {proximity_angle:.1f}°)"
         else:
-            # 180° to 360°: turn left (negative) - take the shorter path
-            turn_angle = light_angle - 360
+            # No immediate obstacle, apply phototaxis
+            if light_magnitude > self._light_threshold:
+                # Convert light angle to turning direction
+                if light_angle > 180:
+                    turn_angle = light_angle - 360
+                else:
+                    turn_angle = light_angle
+                
+                # Apply differential steering toward light
+                turn_factor = self._turn_speed * (turn_angle / 180.0)
+                left_wheel_speed -= turn_factor
+                right_wheel_speed += turn_factor
+                
+                status_msg = f"Moving toward light (light_mag: {light_magnitude:.3f}, light_angle: {light_angle:.1f}°)"
+            else:
+                status_msg = f"No light detected, moving forward"
 
-        # IMPROVED: Angle factor based on actual turn needed
-        # Small angles (light ahead) → gentle turn
-        # Large angles (light behind) → sharp turn
-        angle_factor = abs(turn_angle) / 180.0  # 0.0 (straight) to 1.0 (behind)
-        turn_adjustment = self._turn_speed * angle_factor
-
-        # Differential drive: left/right wheel speeds
-        left_wheel_speed = base_speed - self._turn_speed * (turn_angle / 180.0)
-        right_wheel_speed = base_speed + self._turn_speed * (turn_angle / 180.0)
+        # Ensure wheel speeds don't go negative (which would cause reverse motion)
+        left_wheel_speed = max(0.0, left_wheel_speed)
+        right_wheel_speed = max(0.0, right_wheel_speed)
 
         # Publish wheel speeds
         msg = self._Float32MultiArray()
         msg.data = [left_wheel_speed, right_wheel_speed]
         self._pub.publish(msg)
 
-        # Check if we're close to the light (goal reached)
-        goal_reached = light_magnitude > 0.9
-
-        return True, f"Moving toward light (mag: {light_magnitude:.3f}, angle: {light_angle:.1f}°, turn: {turn_angle:.1f}°), wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]", goal_reached
+        # Behavior never finishes - always returns False for goal_reached
+        return True, f"{status_msg}, wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]", False
+    
     
     def reset(self) -> None:
         """Reset the behavior state."""

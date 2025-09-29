@@ -16,8 +16,10 @@ class Behavior(BehaviorBase):
         self._Float32MultiArray = None
 
         self._forward_speed = 1.0       # Forward movement speed
-        self._turn_speed = 7.0          # Turning speed (will calibrate later)
-        self._light_threshold = 0.0    # Light detection threshold
+        self._turn_speed = 7.0          # Turning speed
+        self._light_threshold = 0.0     # Light detection threshold
+        self._obstacle_threshold = 70   # Proximity threshold to consider obstacle too close
+        self._obstacle_avoidance_gain = 10.0  # Gain for obstacle avoidance
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
@@ -50,14 +52,14 @@ class Behavior(BehaviorBase):
 
     def execute_step(self) -> Tuple[bool, str, bool]:
         """
-        Execute anti-phototaxis behavior - move away from light source.
+        Execute anti-phototaxis behavior with obstacle avoidance.
         
         Returns:
             (success, message, goal_reached)
         """
         # Check if we have robotState
         if self._last_robot_state is None:
-                return True, "No robot state data available", False
+            return True, "No robot state data available", False
 
         # Check if publisher is ready
         if self._pub is None or self._Float32MultiArray is None:
@@ -65,36 +67,65 @@ class Behavior(BehaviorBase):
 
         light_magnitude = self._last_robot_state.light_magnitude
         light_angle = self._last_robot_state.light_angle
+        proximity_magnitude = self._last_robot_state.proximity_magnitude
+        proximity_angle = self._last_robot_state.proximity_angle
 
-        # If no light detected, stop movement
-        if light_magnitude <= self._light_threshold:
-            msg = self._Float32MultiArray()
-            msg.data = [0.0, 0.0] 
-            self._pub.publish(msg)
-            return True, f"No light detected (magnitude: {light_magnitude:.3f}), stopped", False
+        # Start with base forward speed
+        left_wheel_speed = self._forward_speed
+        right_wheel_speed = self._forward_speed
 
-        base_speed = self._forward_speed
-        escape_angle = (light_angle + 180) % 360
-
-        # Use same turning logic as phototaxis (smooth differential steering)
-        if escape_angle <= 180:
-            turn_angle = escape_angle
+        # Apply obstacle avoidance if obstacle is detected
+        if proximity_magnitude > self._obstacle_threshold:
+            # Convert proximity angle to avoidance direction
+            # If obstacle is on the left (negative angle), turn right (reduce left wheel)
+            # If obstacle is on the right (positive angle), turn left (reduce right wheel)
+            
+            # Normalize proximity angle to [-180, 180]
+            if proximity_angle > 180:
+                proximity_angle -= 360
+            
+            avoidance_factor = self._obstacle_avoidance_gain * (proximity_magnitude - self._obstacle_threshold)
+            
+            if proximity_angle < 0:  # Obstacle on left, turn right
+                left_wheel_speed -= avoidance_factor
+                right_wheel_speed += avoidance_factor * 0.5
+            else:  # Obstacle on right, turn left
+                right_wheel_speed -= avoidance_factor
+                left_wheel_speed += avoidance_factor * 0.5
+            
+            status_msg = f"Avoiding obstacle (prox_mag: {proximity_magnitude:.3f}, prox_angle: {proximity_angle:.1f}°)"
         else:
-            turn_angle = escape_angle - 360
+            # No immediate obstacle, apply anti-phototaxis
+            if light_magnitude > self._light_threshold:
+                # Calculate escape angle (opposite direction from light)
+                escape_angle = (light_angle + 180) % 360
 
-        # Apply smooth differential steering (same as phototaxis)
-        left_wheel_speed = base_speed - self._turn_speed * (turn_angle / 180.0)
-        right_wheel_speed = base_speed + self._turn_speed * (turn_angle / 180.0)
+                # Convert escape angle to turning direction
+                if escape_angle > 180:
+                    turn_angle = escape_angle - 360
+                else:
+                    turn_angle = escape_angle
+                
+                # Apply differential steering away from light
+                turn_factor = self._turn_speed * (turn_angle / 180.0)
+                left_wheel_speed -= turn_factor
+                right_wheel_speed += turn_factor
+                
+                status_msg = f"Escaping from light (light_mag: {light_magnitude:.3f}, light_angle: {light_angle:.1f}°, escape_angle: {escape_angle:.1f}°)"
+            else:
+                status_msg = f"No light detected, moving forward"
+
+        # Ensure wheel speeds don't go negative (which would cause reverse motion)
+        left_wheel_speed = max(0.0, left_wheel_speed)
+        right_wheel_speed = max(0.0, right_wheel_speed)
 
         # Publish wheel speeds
         msg = self._Float32MultiArray()
         msg.data = [left_wheel_speed, right_wheel_speed]
         self._pub.publish(msg)
 
-        # Goal is reached when we've escaped from strong light
-        goal_reached = light_magnitude < 0.0
-
-        return True, f"Escaping from light (mag: {light_magnitude:.3f}, light_angle: {light_angle:.1f}°, escape_angle: {escape_angle:.1f}°, turn: {turn_angle:.1f}°), wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]", goal_reached
+        # Behavior never finishes - always returns False for goal_reached
+        return True, f"{status_msg}, wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]", False
     
     def reset(self) -> None:
         """Reset the behavior state."""
