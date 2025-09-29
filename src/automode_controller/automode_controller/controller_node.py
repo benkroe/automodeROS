@@ -117,7 +117,7 @@ class ControllerNode(Node):
         try: 
             goal_handle = future.result()
             if goal_handle.accepted:
-                self.get_logger().info('Behavior goal accepted :)')
+                self.get_logger().info('Behavior goal accepted ')
                 self._active_behavior_goal = goal_handle
 
         except Exception as e:
@@ -128,7 +128,7 @@ class ControllerNode(Node):
         try:
             goal_handle = future.result()
             if goal_handle.accepted:
-                self.get_logger().info(f'Condition goal {edge.condition_name} accepted :)')
+                self.get_logger().info(f'Condition goal {edge.condition_name} accepted ')
                 self._active_condition_goals[edge.condition_name] = goal_handle
 
 

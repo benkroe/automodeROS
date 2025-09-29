@@ -76,56 +76,6 @@ def launch_setup(context, *args, **kwargs):
                 ],
                 parameters=[{'use_sim_time': True}]
             ),
-
-            # CLIFF SENSORS -------------------------------------------------------------
-
-            Node(
-                package='tf2_ros',
-                name='static_tf_cliffSensorSideL',
-                executable='static_transform_publisher',
-                arguments=[
-                    '--x', '0.06', '--y', '0.145', '--z', '0',
-                    '--yaw', '0', '--pitch', '0', '--roll', '0',
-                    '--frame-id', f'{tb_id}/turtlebot4', '--child-frame-id', f'{tb_id}/cliff_sensor_side_left'
-                ],
-                parameters=[{'use_sim_time': True}]
-            ),
-
-            Node(
-                package='tf2_ros',
-                name='static_tf_cliffSensorSideR',
-                executable='static_transform_publisher',
-                arguments=[
-                    '--x', '0.06', '--y', '-0.145', '--z', '0',
-                    '--yaw', '0', '--pitch', '0', '--roll', '0',
-                    '--frame-id', f'{tb_id}/turtlebot4', '--child-frame-id', f'{tb_id}/cliff_sensor_side_right'
-                ],
-                parameters=[{'use_sim_time': True}]
-            ),
-
-            Node(
-                package='tf2_ros',
-                name='static_tf_cliffSensorFrontL',
-                executable='static_transform_publisher',
-                arguments=[
-                    '--x', '0.16', '--y', '0.045', '--z', '0',
-                    '--yaw', '0', '--pitch', '0', '--roll', '0',
-                    '--frame-id', f'{tb_id}/turtlebot4', '--child-frame-id', f'{tb_id}/cliff_sensor_front_left'
-                ],
-                parameters=[{'use_sim_time': True}]
-            ),
-
-            Node(
-                package='tf2_ros',
-                name='static_tf_cliffSensorFrontR',
-                executable='static_transform_publisher',
-                arguments=[
-                    '--x', '0.16', '--y', '-0.045', '--z', '0',
-                    '--yaw', '0', '--pitch', '0', '--roll', '0',
-                    '--frame-id', f'{tb_id}/turtlebot4', '--child-frame-id', f'{tb_id}/cliff_sensor_front_right'
-                ],
-                parameters=[{'use_sim_time': True}]
-            ),
         ])
     ]
 

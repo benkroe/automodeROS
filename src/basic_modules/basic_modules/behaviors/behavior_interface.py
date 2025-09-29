@@ -7,26 +7,37 @@ class BehaviorBase(ABC):
     @staticmethod
     @abstractmethod
     def get_description() -> Dict[str, Any]:
-        """Return metadata: name, params, description"""
-        """It needs:
-          name: String
-          type: String --> is used later in the config
-          description: String
-          params: [param: {name: String, type: Any, required: Boolean, default: Any}]
-          """
+        """Return metadata: name, params, description
+        
+        Returns:
+            Dict containing:
+                name: String - behavior name
+                type: int - behavior type identifier  
+                description: String - human readable description
+                params: List[Dict] - parameter definitions with name, type, required, default
+        """
+        pass
 
     @abstractmethod
     def setup_communication(self, node) -> None:
-        """Attach pubs/subs to provided rclpy.Node"""
+        """Attach publishers/subscribers to provided rclpy.Node"""
+        pass
 
     @abstractmethod
     def set_params(self, params: Dict[str, Any]) -> None:
-        """Configure behavior instance"""
+        """Configure behavior instance with given parameters"""
+        pass
 
     @abstractmethod
-    def execute_step(self) -> Tuple[bool, str]:
-        """Publish/act for one controller tick; return (success, message)"""
+    def execute_step(self) -> Tuple[bool, str, bool]:
+        """Execute one controller tick
+        
+        Returns:
+            Tuple[bool, str, bool]: (success, message, goal_reached)
+        """
+        pass
 
+    @abstractmethod
     def reset(self) -> None:
-        """Optional: tear down publishers/subscriptions"""
-        return
+        """Reset behavior state and clean up resources"""
+        pass
