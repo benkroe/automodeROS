@@ -19,7 +19,7 @@ class Behavior(BehaviorBase):
         self._turn_speed = 1.0          # Turning speed (will calibrate later)
         self._light_threshold = 0.0     # Light detection threshold
         self._obstacle_threshold = 70  # Proximity threshold to consider obstacle too close
-        self._obstacle_avoidance_gain = 10.0  # Gain for obstacle avoidance
+        self._obstacle_avoidance_gain = 100.0  # Gain for obstacle avoidance
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
