@@ -79,12 +79,12 @@ class Behavior(BehaviorBase):
             
             # Turn away from obstacle direction
             if proximity_angle < 0:  # Obstacle on left, turn right
-                left_wheel_speed = 0.0
+                left_wheel_speed = -self._avoidance_turn_speed
                 right_wheel_speed = self._avoidance_turn_speed
             else:  # Obstacle on right, turn left
                 left_wheel_speed = self._avoidance_turn_speed
-                right_wheel_speed = 0.0
-            
+                right_wheel_speed = -self._avoidance_turn_speed
+
             status_msg = f"AVOIDING OBSTACLE (prox_mag: {proximity_magnitude:.3f}, prox_angle: {proximity_angle:.1f}°)"
         else:
             # No obstacle, apply normal anti-phototaxis behavior
