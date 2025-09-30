@@ -16,7 +16,7 @@ BASE_FRAME = 'mission'
 
 class NeighboursSensor(Node):
 
-    DETECTION_RADIUS = 2.5  # meters
+    DETECTION_RADIUS = 0.7  # meters
 
     def __init__(self):
         super().__init__('neighbours_sensor_node')
