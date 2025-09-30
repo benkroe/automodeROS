@@ -19,7 +19,7 @@ class Behavior(BehaviorBase):
         self._turn_speed = 1.0          # Turning speed
         self._light_threshold = 0.0     # Light detection threshold
         self._obstacle_threshold = 70   # Proximity threshold to consider obstacle too close
-        self._avoidance_turn_speed = 2.0  # Turn speed when avoiding obstacles
+        self._avoidance_turn_speed = 0.6  # Turn speed when avoiding obstacles
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
@@ -70,21 +70,23 @@ class Behavior(BehaviorBase):
         proximity_magnitude = self._last_robot_state.proximity_magnitude
         proximity_angle = self._last_robot_state.proximity_angle
 
-        # OBSTACLE AVOIDANCE TAKES COMPLETE PRIORITY
+        msg = self._Float32MultiArray()
+
+        # OBSTACLE AVOIDANCE: Turn until obstacle is no longer in front
         if proximity_magnitude > self._obstacle_threshold:
-            # Forget about the light, only focus on avoiding obstacle
-            # Normalize proximity angle to [-180, 180]
-            if proximity_angle > 180:
-                proximity_angle -= 360
-            
-            # Turn away from obstacle direction
-            if proximity_angle < 0:  # Obstacle on left, turn right
-                left_wheel_speed = -self._avoidance_turn_speed
-                right_wheel_speed = self._avoidance_turn_speed
-            else:  # Obstacle on right, turn left
+            # Obstacle detected, turn away from it
+            if proximity_angle > 0:
+                # Obstacle on right, turn left
                 left_wheel_speed = self._avoidance_turn_speed
                 right_wheel_speed = -self._avoidance_turn_speed
+            else:
+                # Obstacle on left, turn right
+                left_wheel_speed = -self._avoidance_turn_speed
+                right_wheel_speed = self._avoidance_turn_speed
 
+            msg.data = [left_wheel_speed, right_wheel_speed]
+            self._pub.publish(msg)
+            
             status_msg = f"AVOIDING OBSTACLE (prox_mag: {proximity_magnitude:.3f}, prox_angle: {proximity_angle:.1f}°)"
         else:
             # No obstacle, apply normal phototaxis behavior
@@ -107,14 +109,12 @@ class Behavior(BehaviorBase):
             else:
                 status_msg = f"No light detected, moving forward"
 
-        # Ensure wheel speeds don't go negative
-        left_wheel_speed = max(0.0, left_wheel_speed)
-        right_wheel_speed = max(0.0, right_wheel_speed)
+            # Ensure wheel speeds don't go negative
+            left_wheel_speed = max(0.0, left_wheel_speed)
+            right_wheel_speed = max(0.0, right_wheel_speed)
 
-        # Publish wheel speeds
-        msg = self._Float32MultiArray()
-        msg.data = [left_wheel_speed, right_wheel_speed]
-        self._pub.publish(msg)
+            msg.data = [left_wheel_speed, right_wheel_speed]
+            self._pub.publish(msg)
 
         # Behavior never finishes - always returns False for goal_reached
         return True, f"{status_msg}, wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]", False
