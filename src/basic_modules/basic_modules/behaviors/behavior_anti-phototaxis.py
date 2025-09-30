@@ -19,7 +19,7 @@ class Behavior(BehaviorBase):
         self._turn_speed = 7.0          # Turning speed
         self._light_threshold = 0.0     # Light detection threshold
         self._obstacle_threshold = 70   # Proximity threshold to consider obstacle too close
-        self._obstacle_avoidance_gain = 100.0  # Gain for obstacle avoidance
+        self._avoidance_turn_speed = 2.0  # Turn speed when avoiding obstacles
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
@@ -70,32 +70,27 @@ class Behavior(BehaviorBase):
         proximity_magnitude = self._last_robot_state.proximity_magnitude
         proximity_angle = self._last_robot_state.proximity_angle
 
-        # Start with base forward speed
-        left_wheel_speed = self._forward_speed
-        right_wheel_speed = self._forward_speed
-
-        # Apply obstacle avoidance if obstacle is detected
+        # OBSTACLE AVOIDANCE TAKES COMPLETE PRIORITY
         if proximity_magnitude > self._obstacle_threshold:
-            # Convert proximity angle to avoidance direction
-            # If obstacle is on the left (negative angle), turn right (reduce left wheel)
-            # If obstacle is on the right (positive angle), turn left (reduce right wheel)
-            
+            # Forget about the light, only focus on avoiding obstacle
             # Normalize proximity angle to [-180, 180]
             if proximity_angle > 180:
                 proximity_angle -= 360
             
-            avoidance_factor = self._obstacle_avoidance_gain * (proximity_magnitude - self._obstacle_threshold)
-            
+            # Turn away from obstacle direction
             if proximity_angle < 0:  # Obstacle on left, turn right
-                left_wheel_speed -= avoidance_factor
-                right_wheel_speed += avoidance_factor * 0.5
+                left_wheel_speed = 0.0
+                right_wheel_speed = self._avoidance_turn_speed
             else:  # Obstacle on right, turn left
-                right_wheel_speed -= avoidance_factor
-                left_wheel_speed += avoidance_factor * 0.5
+                left_wheel_speed = self._avoidance_turn_speed
+                right_wheel_speed = 0.0
             
-            status_msg = f"Avoiding obstacle (prox_mag: {proximity_magnitude:.3f}, prox_angle: {proximity_angle:.1f}°)"
+            status_msg = f"AVOIDING OBSTACLE (prox_mag: {proximity_magnitude:.3f}, prox_angle: {proximity_angle:.1f}°)"
         else:
-            # No immediate obstacle, apply anti-phototaxis
+            # No obstacle, apply normal anti-phototaxis behavior
+            left_wheel_speed = self._forward_speed
+            right_wheel_speed = self._forward_speed
+            
             if light_magnitude > self._light_threshold:
                 # Calculate escape angle (opposite direction from light)
                 escape_angle = (light_angle + 180) % 360
@@ -115,7 +110,7 @@ class Behavior(BehaviorBase):
             else:
                 status_msg = f"No light detected, moving forward"
 
-        # Ensure wheel speeds don't go negative (which would cause reverse motion)
+        # Ensure wheel speeds don't go negative
         left_wheel_speed = max(0.0, left_wheel_speed)
         right_wheel_speed = max(0.0, right_wheel_speed)
 
