@@ -18,7 +18,7 @@ class Behavior(BehaviorBase):
         self._forward_speed = 1.0       # Forward movement speed
         self._turn_speed = 1.0          # Turning speed
         self._light_threshold = 0.0     # Light detection threshold
-        self._obstacle_threshold = 70   # Proximity threshold to consider obstacle too close
+        self._obstacle_threshold = 90  # Proximity threshold to consider obstacle too close
         self._avoidance_turn_speed = 0.6  # Turn speed when avoiding obstacles
 
     @staticmethod
