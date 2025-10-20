@@ -9,6 +9,9 @@ import time
 from std_msgs.msg import Float32, Float32MultiArray, String
 from sensor_msgs.msg import Range
 from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
+from sensor_msgs.msg import LaserScan
+from tf2_msgs.msg import TFMessage
 from automode_interfaces.msg import RobotState
 
 TYPE_MAP = {
@@ -124,6 +127,20 @@ class EpuckTopicInspector(Node):
                     'floor_color': getattr(msg, 'floor_color', None),
                     'stamp': getattr(msg, 'stamp', None),
                 }
+            elif isinstance(msg, Odometry):
+                val = {
+                    'pos': (msg.pose.pose.position.x, msg.pose.pose.position.y),
+                    'orient': msg.pose.pose.orientation.z,
+                    'vel': (msg.twist.twist.linear.x, msg.twist.twist.angular.z)
+                }
+            elif isinstance(msg, LaserScan):
+                val = {
+                    'range_min': min(r for r in msg.ranges if r > 0),
+                    'range_max': max(msg.ranges),
+                    'samples': len(msg.ranges)
+                }
+            elif isinstance(msg, TFMessage):
+                val = f"{len(msg.transforms)} transforms"
             elif isinstance(msg, Float32):
                 val = float(msg.data)
             elif isinstance(msg, Float32MultiArray):
