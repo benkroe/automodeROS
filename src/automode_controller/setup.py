@@ -28,7 +28,7 @@ setup(
             'behavior_node = automode_controller.behavior_node:main',
             'condition_node = automode_controller.condition_node:main',
             'controller_node = automode_controller.controller_node:main',
-            'ref_model_epuck = automode_controller.ref_model_epuck:main',
+            'ref_model_epuck = automode_controller.ref_model_epuck_wb:main',
         ],
     },
 )
