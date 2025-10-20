@@ -37,13 +37,6 @@ class EPuckReferenceNode(Node):
             self.create_subscription(Range, f'ps{i}', self._make_ps_range_cb(i), qos_profile_sensor_data)
             self.create_subscription(Illuminance, f'ls{i}', self._make_ls_illuminance_cb(i), qos_profile_sensor_data)
 
-        # Neighbour/attraction info (receiver) - prefer namespaced topic in your sim
-        # subscribe both to '/e_puck/receiver/data' and fallback un-namespaced 'receiver/data'
-        try:
-            self.create_subscription(String, '/e_puck/receiver/data', self._receiver_cb, qos_profile_sensor_data)
-        except Exception:
-            pass
-        self.create_subscription(String, 'receiver/data', self._receiver_cb, qos_profile_sensor_data)
 
         # internal state
         self.robot_id = 1
@@ -51,13 +44,8 @@ class EPuckReferenceNode(Node):
         self.latest_cmd_vel = (0.0, 0.0)
         self.latest_floor_color = "gray"
 
-        # receiver / attraction
-        self._latest_neighbour_count = 0
-        self._latest_attraction_angle = 0.0  # degrees from message; will publish radians
-
         # publish RobotState at 20 Hz
         self.create_timer(0.05, self._publish_robot_state)
-
         self.get_logger().info('EPuck reference node started')
 
     def _make_ls_illuminance_cb(self, idx: int):
