@@ -131,7 +131,7 @@ class EPuckReferenceNode(Node):
         """
         Compute proximity magnitude and average angle from ps sensors.
         Angles assume index 0 is front and increase clockwise.
-        Returns (magnitude, angle_degrees [0..360)).
+        Returns (magnitude, angle_degrees converted to [-180..180)).
         """
         if any(v is None for v in self._ps_values):
             return 0.0, 0.0
@@ -148,10 +148,13 @@ class EPuckReferenceNode(Node):
 
         # Find maximum sensor value for magnitude
         max_weight = max(weights)
+        
         # Calculate weighted direction
         x = sum(w * math.cos(math.radians(a)) for w, a in zip(weights, angles))
         y = sum(w * math.sin(math.radians(a)) for w, a in zip(weights, angles))
-        avg_ang = (math.degrees(math.atan2(y, x))) % 360
+        
+        # Convert to [-180, 180) range
+        avg_ang = math.degrees(math.atan2(y, x))
         
         self._prox_mag_hist.append(max_weight)
         self._prox_ang_hist.append(avg_ang)
@@ -161,15 +164,20 @@ class EPuckReferenceNode(Node):
             self._prox_mag_hist.pop(0)
             self._prox_ang_hist.pop(0)
 
+        # Smooth the values
         mag_smoothed = sum(self._prox_mag_hist) / max(1, len(self._prox_mag_hist))
+        
+        # Angle smoothing using vector components
         sin_sum = sum(math.sin(math.radians(a)) for a in self._prox_ang_hist)
         cos_sum = sum(math.cos(math.radians(a)) for a in self._prox_ang_hist)
+        
         if sin_sum == 0 and cos_sum == 0:
             ang_smoothed = 0.0
         else:
-            ang_smoothed = (math.degrees(math.atan2(sin_sum, cos_sum))) % 360
+            # Keep angle in [-180, 180) range
+            ang_smoothed = math.degrees(math.atan2(sin_sum, cos_sum))
 
-        # apply simple hysteresis to avoid jitter
+        # Apply hysteresis
         if abs(mag_smoothed - self._prox_mag_last) > self._prox_hysteresis:
             self._prox_mag_last = mag_smoothed
         if abs(ang_smoothed - self._prox_ang_last) > self._prox_hysteresis:
@@ -237,9 +245,9 @@ class EPuckReferenceNode(Node):
             pass
 
         msg.neighbour_count = self._latest_neighbour_count
-        # convert attraction angle from degrees -> radians for behaviours
+        # Keep attraction angle in degrees (don't convert to radians)
         try:
-            msg.attraction_angle = math.radians(self._latest_attraction_angle)
+            msg.attraction_angle = self._latest_attraction_angle
         except Exception:
             msg.attraction_angle = 0.0
 
@@ -248,21 +256,22 @@ class EPuckReferenceNode(Node):
         prox_mag, prox_ang_deg = self.compute_proximity()
         light_mag, light_ang_deg = self.compute_light()
 
+        # Keep all angles in degrees
         msg.proximity_magnitude = prox_mag
-        msg.proximity_angle = math.radians(prox_ang_deg) if prox_ang_deg is not None else 0.0
+        msg.proximity_angle = prox_ang_deg if prox_ang_deg is not None else 0.0
         msg.light_magnitude = light_mag
-        msg.light_angle = math.radians(light_ang_deg) if light_ang_deg is not None else 0.0
+        msg.light_angle = light_ang_deg if light_ang_deg is not None else 0.0
 
         self._robot_state_pub.publish(msg)
 
-                # Add debug output for robot state
+        # Debug output now shows actual degrees being published
         self.get_logger().debug(
             f"\n=== Robot State ===\n"
             f"Robot ID: {msg.robot_id}\n"
             f"Time: {msg.stamp.sec}.{msg.stamp.nanosec:09d}\n"
-            f"Proximity: mag={msg.proximity_magnitude:.3f}, angle={math.degrees(msg.proximity_angle):.1f}°\n"
-            f"Light: mag={msg.light_magnitude:.3f}, angle={math.degrees(msg.light_angle):.1f}°\n"
-            f"Neighbors: count={msg.neighbour_count}, attraction={math.degrees(msg.attraction_angle):.1f}°\n"
+            f"Proximity: mag={msg.proximity_magnitude:.3f}, angle={msg.proximity_angle:.1f}°\n"
+            f"Light: mag={msg.light_magnitude:.3f}, angle={msg.light_angle:.1f}°\n"
+            f"Neighbors: count={msg.neighbour_count}, attraction={msg.attraction_angle:.1f}°\n"
             f"Floor: {msg.floor_color}\n"
             f"Wheels: L={self.latest_wheels_speed[0]:.3f}, R={self.latest_wheels_speed[1]:.3f}\n"
             f"Cmd_vel: lin={self.latest_cmd_vel[0]:.3f}, ang={self.latest_cmd_vel[1]:.3f}\n"

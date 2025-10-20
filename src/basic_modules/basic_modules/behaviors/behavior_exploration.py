@@ -71,7 +71,7 @@ class Behavior(BehaviorBase):
         msg = self._Float32MultiArray()
 
         # Only turn if obstacle is close AND roughly in front (angle near 0)
-        if proximity_magnitude > self._obstacle_threshold:
+        if proximity_magnitude > self._obstacle_threshold and abs(proximity_angle) < 90:
             msg.data = [-1.0,-1.0]
             time.sleep(0.3)
             self._pub.publish(msg)
