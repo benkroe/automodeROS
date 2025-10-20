@@ -15,6 +15,9 @@ from tf2_msgs.msg import TFMessage
 from automode_interfaces.msg import RobotState
 from rclpy.qos import QoSReliabilityPolicy, QoSHistoryPolicy, QoSDurabilityPolicy
 from webots_ros2_msgs.msg import StringStamped, FloatStamped
+from std_msgs.msg import Int32
+from sensor_msgs.msg import Illuminance
+from geometry_msgs.msg import Vector3Stamped
 
 
 TYPE_MAP = {
@@ -98,7 +101,6 @@ class EpuckTopicInspector(Node):
                     if not found and types:
                         self.get_logger().warning(f"Topic {tname} has no supported types in {types}")
                         found = True
-                        break
             if not found:
                 self.last[topic] = {'present': False, 'type': None, 'value': None, 'ts': None}
 
@@ -133,6 +135,8 @@ class EpuckTopicInspector(Node):
             self.last[topic_name] = {'present': False, 'type': str(msg_cls), 'value': None, 'ts': None}
 
     def _generic_cb(self, topic: str, msg):
+        self.get_logger().debug(f"Callback received for {topic}: {type(msg).__name__}")
+
         try:
             if isinstance(msg, RobotState):
                 val = {
