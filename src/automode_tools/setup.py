@@ -24,6 +24,7 @@ setup(
             'condition_test_node = automode_tools.condition_test_node:main',
             'robotState_test_pub = automode_tools.robotState_test_pub:main',
             'categories_creator = automode_tools.categories_creator:main',
+            'epuck_topic_inspector = automode_tools.epuck_topic_inspector:main',
         ],
     },
 )

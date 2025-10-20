@@ -6,6 +6,7 @@ from rclpy.qos import qos_profile_sensor_data
 
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float32, Float32MultiArray, String
+from sensor_msgs.msg import Range
 from automode_interfaces.msg import RobotState
 
 import math
@@ -34,18 +35,18 @@ class EPuckReferenceNode(Node):
 
         # Dynamically create callbacks for ps0..ps7 and ls0..ls7
         for i in range(8):
+            # some sims publish sensor_msgs/Range for proximity, others Float32
+            self.create_subscription(Range, f'ps{i}', self._make_ps_range_cb(i), qos_profile_sensor_data)
             self.create_subscription(Float32, f'ps{i}', self._make_ps_cb(i), qos_profile_sensor_data)
             self.create_subscription(Float32, f'ls{i}', self._make_ls_cb(i), qos_profile_sensor_data)
 
-        # Optional neighbour/attraction info (receiver)
-        self._latest_neighbour_count = 0
-        self._latest_attraction_angle = 0.0
-        # try both local and namespaced receiver topics
-        self.create_subscription(String, 'receiver/data', self._receiver_cb, qos_profile_sensor_data)
+        # Neighbour/attraction info (receiver) - prefer namespaced topic in your sim
+        # subscribe both to '/e_puck/receiver/data' and fallback un-namespaced 'receiver/data'
         try:
             self.create_subscription(String, '/e_puck/receiver/data', self._receiver_cb, qos_profile_sensor_data)
         except Exception:
             pass
+        self.create_subscription(String, 'receiver/data', self._receiver_cb, qos_profile_sensor_data)
 
         # internal state
         self.robot_id = 1
@@ -61,6 +62,10 @@ class EPuckReferenceNode(Node):
         self._prox_ang_last = 0.0
         self._prox_hysteresis = PROXIMITY_HYSTERESIS
 
+        # receiver / attraction
+        self._latest_neighbour_count = 0
+        self._latest_attraction_angle = 0.0  # degrees from message; will publish radians
+
         # publish RobotState at 20 Hz
         self.create_timer(0.05, self._publish_robot_state)
 
@@ -71,7 +76,17 @@ class EPuckReferenceNode(Node):
             try:
                 self._ps_values[idx] = float(msg.data)
             except Exception:
-                self.get_logger().warning(f"Failed to read ps{idx}")
+                self.get_logger().warning(f"Failed to read ps{idx} (Float32)")
+        return cb
+
+    def _make_ps_range_cb(self, idx: int):
+        def cb(msg: Range):
+            try:
+                # Range.range is distance in meters; some behaviour thresholds expect scaled values.
+                # We store the raw range value; adjust in behaviours or ref model if needed.
+                self._ps_values[idx] = float(msg.range)
+            except Exception:
+                self.get_logger().warning(f"Failed to read ps{idx} (Range)")
         return cb
 
     def _make_ls_cb(self, idx: int):
@@ -174,9 +189,7 @@ class EPuckReferenceNode(Node):
 
         # convert differential wheel speeds to Twist (linear.x, angular.z)
         twist = Twist()
-        # linear velocity approx (left + right) / 2
         twist.linear.x = (left + right) / 2.0
-        # angular velocity approx (right - left) / WHEEL_BASE
         if abs(WHEEL_BASE) < 1e-6:
             twist.angular.z = 0.0
         else:
@@ -198,11 +211,21 @@ class EPuckReferenceNode(Node):
             pass
 
         msg.neighbour_count = self._latest_neighbour_count
-        msg.attraction_angle = self._latest_attraction_angle
+        # convert attraction angle from degrees -> radians for behaviours
+        try:
+            msg.attraction_angle = math.radians(self._latest_attraction_angle)
+        except Exception:
+            msg.attraction_angle = 0.0
+
         msg.floor_color = self.latest_floor_color
 
-        msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
-        msg.light_magnitude, msg.light_angle = self.compute_light()
+        prox_mag, prox_ang_deg = self.compute_proximity()
+        light_mag, light_ang_deg = self.compute_light()
+
+        msg.proximity_magnitude = prox_mag
+        msg.proximity_angle = math.radians(prox_ang_deg) if prox_ang_deg is not None else 0.0
+        msg.light_magnitude = light_mag
+        msg.light_angle = math.radians(light_ang_deg) if light_ang_deg is not None else 0.0
 
         self._robot_state_pub.publish(msg)
 
