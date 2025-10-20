@@ -7,7 +7,7 @@ from launch.event_handlers import OnProcessStart
 def generate_launch_description():
     namespace_arg = DeclareLaunchArgument(
         'robot_namespace',
-        default_value='e_puck',
+        default_value='',
         description='Namespace for robot nodes'
     )
     module_package_arg = DeclareLaunchArgument(
