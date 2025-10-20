@@ -87,7 +87,7 @@ class Behavior(BehaviorBase):
 
             self._last_turn_direction = turn_direction
             rwm = int(self._params.get("rwm", 100))
-            turn_duration = (random.uniform(0, rwm))/30
+            turn_duration = (random.uniform(0, rwm)) / 5
             self._turning_time = current_ros_time + turn_duration
             
             msg.data = turn_direction
