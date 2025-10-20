@@ -79,29 +79,26 @@ class EPuckReferenceNode(Node):
             except Exception as e:
                 self.get_logger().warning(f"Failed to read ps{idx} (Float32): {str(e)}")
         return cb
-
     def _make_ps_range_cb(self, idx: int):
         def cb(msg: Range):
             try:
-                # Range.range is distance in meters
-                # Convert to proximity value (closer = higher value)
-                # Allow for some margin above max_range (10%)
-                effective_max = msg.max_range * 1.1
-                
+                # Convert range to proximity value with stronger response
+                # Use exponential scaling for more aggressive obstacle detection
                 if msg.range <= msg.min_range:
-                    proximity_value = 1.0  # closest = highest value
-                elif msg.range >= effective_max:
-                    proximity_value = 0.0  # too far = no detection
+                    proximity_value = 1.0
+                elif msg.range >= msg.max_range:
+                    proximity_value = 0.0
                 else:
-                    # Invert and normalize: closer objects = higher value
-                    proximity_value = 1.0 - (msg.range / effective_max)
+                    # Exponential scaling to amplify closer readings
+                    normalized_range = msg.range / msg.max_range
+                    proximity_value = math.exp(-2.0 * normalized_range)
                 
                 self._ps_values[idx] = proximity_value
                 
                 # Debug output
                 self.get_logger().debug(
                     f'PS{idx}: range={msg.range:.3f}m, max={msg.max_range:.3f}m, ' +
-                    f'eff_max={effective_max:.3f}m, converted={proximity_value:.3f}'
+                    f'converted={proximity_value:.3f}'
                 )
             except Exception as e:
                 self.get_logger().warning(f"Failed to read ps{idx} (Range): {str(e)}")
