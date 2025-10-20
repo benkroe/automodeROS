@@ -71,12 +71,21 @@ class EPuckReferenceNode(Node):
 
         self.get_logger().info('EPuck reference node started')
 
+    def _make_ps_cb(self, idx: int):
+        def cb(msg: Float32):
+            try:
+                self._ps_values[idx] = float(msg.data)
+                # Debug output
+                self.get_logger().debug(f'PS{idx}: value={msg.data:.3f} (Float32)')
+            except Exception as e:
+                self.get_logger().warning(f"Failed to read ps{idx} (Float32): {str(e)}")
+        return cb
+
     def _make_ps_range_cb(self, idx: int):
         def cb(msg: Range):
             try:
                 # Range.range is distance in meters
                 # Convert to proximity value (closer = higher value)
-                # Normalize to 0-1 range based on max_range
                 if msg.range >= msg.max_range or msg.range <= msg.min_range:
                     proximity_value = 0.0
                 else:
@@ -92,16 +101,6 @@ class EPuckReferenceNode(Node):
                 )
             except Exception as e:
                 self.get_logger().warning(f"Failed to read ps{idx} (Range): {str(e)}")
-        return cb
-
-    def _make_ps_range_cb(self, idx: int):
-        def cb(msg: Range):
-            try:
-                # Range.range is distance in meters; some behaviour thresholds expect scaled values.
-                # We store the raw range value; adjust in behaviours or ref model if needed.
-                self._ps_values[idx] = float(msg.range)
-            except Exception:
-                self.get_logger().warning(f"Failed to read ps{idx} (Range)")
         return cb
 
     def _make_ls_cb(self, idx: int):
