@@ -24,12 +24,17 @@ TYPE_MAP = {
     'std_msgs/msg/Float32': Float32,
     'std_msgs/msg/Float32MultiArray': Float32MultiArray,
     'std_msgs/msg/String': String,
+    'std_msgs/msg/Int32': Int32,
     'sensor_msgs/msg/Range': Range,
-    'geometry_msgs/msg/Twist': Twist,
-    'automode_interfaces/msg/RobotState': RobotState,
-    'nav_msgs/msg/Odometry': Odometry,
+    'sensor_msgs/msg/Illuminance': Illuminance,
     'sensor_msgs/msg/LaserScan': LaserScan,
+    'geometry_msgs/msg/Twist': Twist,
+    'geometry_msgs/msg/Vector3Stamped': Vector3Stamped,
+    'nav_msgs/msg/Odometry': Odometry,
     'tf2_msgs/msg/TFMessage': TFMessage,
+    'automode_interfaces/msg/RobotState': RobotState,
+    'webots_ros2_msgs/msg/StringStamped': StringStamped,
+    'webots_ros2_msgs/msg/FloatStamped': FloatStamped,
 }
 
 REF_TOPICS = [
@@ -105,34 +110,45 @@ class EpuckTopicInspector(Node):
                 self.last[topic] = {'present': False, 'type': None, 'value': None, 'ts': None}
 
     def _subscribe_safe(self, topic_name: str, msg_cls):
-        # Special handling for proximity sensors
-        if (topic_name.startswith('/ps') or topic_name.startswith('ps')) and msg_cls == Range:
+        # Use reliable QoS for all sensor messages
+        if msg_cls in (Range, Illuminance, LaserScan):
             qos = QoSProfile(
                 reliability=QoSReliabilityPolicy.RELIABLE,
                 durability=QoSDurabilityPolicy.VOLATILE,
                 history=QoSHistoryPolicy.KEEP_LAST,
-                depth=1  # Match default ROS2 topic echo behavior
+                depth=1
             )
-            self.get_logger().info(f"Using proximity sensor QoS for {topic_name}")
+            self.get_logger().debug(f"Using RELIABLE QoS for sensor topic {topic_name}")
         else:
-            qos = qos_profile_sensor_data if msg_cls in (Float32, String) else QoSProfile(depth=10)
+            qos = QoSProfile(
+                reliability=QoSReliabilityPolicy.RELIABLE,
+                durability=QoSDurabilityPolicy.VOLATILE,
+                history=QoSHistoryPolicy.KEEP_LAST,
+                depth=10
+            )
+            self.get_logger().debug(f"Using default RELIABLE QoS for {topic_name}")
 
         try:
-            # Store subscription to prevent garbage collection
-            sub = self.create_subscription(msg_cls, topic_name, 
-                                        lambda msg, t=topic_name: self._generic_cb(t, msg), 
-                                        qos)
+            # Create callback with explicit error handling
+            def cb(msg):
+                try:
+                    self._generic_cb(topic_name, msg)
+                except Exception as e:
+                    self.get_logger().error(f"Callback error for {topic_name}: {e}")
+            
+            sub = self.create_subscription(msg_cls, topic_name, cb, qos)
             self.get_logger().info(f"Subscribed to {topic_name} as {msg_cls.__name__}")
+            
+            # Store subscription with explicit type info
             self.last[topic_name] = {
-                'present': True, 
-                'type': msg_cls.__name__, 
-                'value': None, 
+                'present': True,
+                'type': f"{msg_cls.__module__}/{msg_cls.__name__}",
+                'value': None,
                 'ts': None,
-                'sub': sub  # Keep reference
+                'sub': sub
             }
         except Exception as e:
-            self.get_logger().error(f"Failed to subscribe to {topic_name} ({msg_cls}): {e}")
-            self.last[topic_name] = {'present': False, 'type': str(msg_cls), 'value': None, 'ts': None}
+            self.get_logger().error(f"Failed to subscribe to {topic_name}: {e}")
 
     def _generic_cb(self, topic: str, msg):
         self.get_logger().debug(f"Callback received for {topic}: {type(msg).__name__}")
