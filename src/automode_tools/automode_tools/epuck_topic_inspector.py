@@ -81,6 +81,7 @@ class EpuckTopicInspector(Node):
         super().__init__('epuck_topic_inspector')
         self.get_logger().info('epuck_topic_inspector starting')
 
+        self.subscriptions = []  # Keep track of all subscriptions
         self.last: Dict[str, Dict[str, Any]] = {}
         self.create_timer(0.5, self._print_status)
         self._create_subscriptions_for_ref_topics()
@@ -129,7 +130,6 @@ class EpuckTopicInspector(Node):
             self.get_logger().debug(f"Using default RELIABLE QoS for {topic_name}")
 
         try:
-            # Create callback with explicit error handling
             def cb(msg):
                 try:
                     self._generic_cb(topic_name, msg)
@@ -137,9 +137,9 @@ class EpuckTopicInspector(Node):
                     self.get_logger().error(f"Callback error for {topic_name}: {e}")
             
             sub = self.create_subscription(msg_cls, topic_name, cb, qos)
+            self.subscriptions.append(sub)  # Keep subscription in list
             self.get_logger().info(f"Subscribed to {topic_name} as {msg_cls.__name__}")
             
-            # Store subscription with explicit type info
             self.last[topic_name] = {
                 'present': True,
                 'type': f"{msg_cls.__module__}/{msg_cls.__name__}",
@@ -147,8 +147,10 @@ class EpuckTopicInspector(Node):
                 'ts': None,
                 'sub': sub
             }
+            return sub
         except Exception as e:
             self.get_logger().error(f"Failed to subscribe to {topic_name}: {e}")
+            return None
 
     def _generic_cb(self, topic: str, msg):
         self.get_logger().debug(f"Callback received for {topic}: {type(msg).__name__}")
