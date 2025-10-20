@@ -130,52 +130,64 @@ class EPuckReferenceNode(Node):
     def compute_proximity(self):
         """
         Compute proximity magnitude and average angle from ps sensors.
-        Angles assume index 0 is front and increase clockwise.
-        Returns (magnitude, angle_degrees converted to [-180..180)).
+        PS7(-15°) and PS0(+15°) are in front
+        PS1(+45°), PS2(+90°) on right
+        PS3(+165°), PS4(-165°) in back
+        PS5(-90°), PS6(-45°) on left
+        Returns (magnitude, angle_degrees in [-180..180)).
         """
         if any(v is None for v in self._ps_values):
             return 0.0, 0.0
 
-        # sensor angles in degrees for indexes 0..7 (front = 0, clockwise positive)
-        angles = [0, 45, 90, 135, 180, -135, -90, -45]  # CORRECTED
+        # Sensor angles in degrees, matching physical layout
+        angles = [15,    # PS0 (front-right)
+                45,     # PS1 (right-front)
+                90,     # PS2 (right)
+                165,    # PS3 (back-right)
+                -165,   # PS4 (back-left)
+                -90,    # PS5 (left)
+                -45,    # PS6 (left-front)
+                -15]    # PS7 (front-left)
+        
         weights = [max(0.0, v) for v in self._ps_values]
-        total = sum(weights)
-
-        if total <= 0.0:
+        
+        # Find maximum sensor value
+        max_weight = max(weights)
+        if max_weight <= 0.0:
             self._prox_mag_hist.append(0.0)
             self._prox_ang_hist.append(0.0)
             return 0.0, 0.0
 
-        # Find maximum sensor value for magnitude
-        max_weight = max(weights)
+        # Calculate weighted direction using only significant readings
+        # (readings above 50% of max to reduce noise)
+        significant_pairs = [(w, a) for w, a in zip(weights, angles) 
+                            if w > 0.5 * max_weight]
         
-        # Calculate weighted direction
-        x = sum(w * math.cos(math.radians(a)) for w, a in zip(weights, angles))
-        y = sum(w * math.sin(math.radians(a)) for w, a in zip(weights, angles))
+        if not significant_pairs:
+            return 0.0, 0.0
         
-        # Convert to [-180, 180) range
+        # Calculate weighted average angle from significant readings
+        total_weight = sum(w for w, _ in significant_pairs)
+        x = sum(w * math.cos(math.radians(a)) for w, a in significant_pairs)
+        y = sum(w * math.sin(math.radians(a)) for w, a in significant_pairs)
+        
+        # Calculate angle (-180 to +180 degrees)
         avg_ang = math.degrees(math.atan2(y, x))
         
+        # Add to history for smoothing
         self._prox_mag_hist.append(max_weight)
         self._prox_ang_hist.append(avg_ang)
 
-        # keep smoothing window
+        # Keep smoothing window
         if len(self._prox_mag_hist) > self._prox_smooth_window:
             self._prox_mag_hist.pop(0)
             self._prox_ang_hist.pop(0)
 
-        # Smooth the values
-        mag_smoothed = sum(self._prox_mag_hist) / max(1, len(self._prox_mag_hist))
+        # Simple moving average for magnitude
+        mag_smoothed = sum(self._prox_mag_hist) / len(self._prox_mag_hist)
         
-        # Angle smoothing using vector components
-        sin_sum = sum(math.sin(math.radians(a)) for a in self._prox_ang_hist)
-        cos_sum = sum(math.cos(math.radians(a)) for a in self._prox_ang_hist)
-        
-        if sin_sum == 0 and cos_sum == 0:
-            ang_smoothed = 0.0
-        else:
-            # Keep angle in [-180, 180) range
-            ang_smoothed = math.degrees(math.atan2(sin_sum, cos_sum))
+        # Use latest angle (smoothing can cause issues with discontinuous angles)
+        ang_smoothed = avg_ang
 
         # Apply hysteresis
         if abs(mag_smoothed - self._prox_mag_last) > self._prox_hysteresis:
