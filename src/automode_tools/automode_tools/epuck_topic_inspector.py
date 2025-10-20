@@ -78,13 +78,18 @@ REF_TOPICS = [
 
 class EpuckTopicInspector(Node):
     def __init__(self):
+        # Call parent class constructor first
         super().__init__('epuck_topic_inspector')
+        
+        # Initialize instance attributes
+        self._subscriptions = []  # Use underscore for "private" attribute
+        self._last = {}  # Change to underscore for consistency
+        
+        # Start node
         self.get_logger().info('epuck_topic_inspector starting')
-
-        self.subscriptions = []  # Keep track of all subscriptions
-        self.last: Dict[str, Dict[str, Any]] = {}
         self.create_timer(0.5, self._print_status)
         self._create_subscriptions_for_ref_topics()
+
 
     def _create_subscriptions_for_ref_topics(self):
         topics_and_types = dict(self.get_topic_names_and_types())
@@ -130,17 +135,11 @@ class EpuckTopicInspector(Node):
             self.get_logger().debug(f"Using default RELIABLE QoS for {topic_name}")
 
         try:
-            def cb(msg):
-                try:
-                    self._generic_cb(topic_name, msg)
-                except Exception as e:
-                    self.get_logger().error(f"Callback error for {topic_name}: {e}")
-            
             sub = self.create_subscription(msg_cls, topic_name, cb, qos)
-            self.subscriptions.append(sub)  # Keep subscription in list
+            self._subscriptions.append(sub)  # Updated reference
             self.get_logger().info(f"Subscribed to {topic_name} as {msg_cls.__name__}")
             
-            self.last[topic_name] = {
+            self._last[topic_name] = {  # Updated reference
                 'present': True,
                 'type': f"{msg_cls.__module__}/{msg_cls.__name__}",
                 'value': None,
