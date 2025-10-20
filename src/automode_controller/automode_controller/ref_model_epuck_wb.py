@@ -203,10 +203,10 @@ class EPuckReferenceNode(Node):
         except Exception:
             pass
 
-        msg.neighbour_count = self._latest_neighbour_count
+        msg.neighbour_count = 0 # change later when received
         # Keep attraction angle in degrees (don't convert to radians)
         try:
-            msg.attraction_angle = self._latest_attraction_angle
+            msg.attraction_angle = 0.0 # change later when received
         except Exception:
             msg.attraction_angle = 0.0
 
