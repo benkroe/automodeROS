@@ -5,10 +5,9 @@ from launch.substitutions import LaunchConfiguration
 from launch.event_handlers import OnProcessStart
 
 def generate_launch_description():
-    # Declare launch arguments
     namespace_arg = DeclareLaunchArgument(
         'robot_namespace',
-        default_value='tb1',
+        default_value='e_puck',
         description='Namespace for robot nodes'
     )
     module_package_arg = DeclareLaunchArgument(
@@ -19,7 +18,7 @@ def generate_launch_description():
     fsm_config_arg = DeclareLaunchArgument(
         'fsm_config',
         default_value='--fsm-config --nstates 1 --s0 0 --rwm0 50 ',
-        description='Path to FSM config file'
+        description='Path to FSM config or inline FSM args'
     )
 
     namespace = LaunchConfiguration('robot_namespace')
@@ -52,7 +51,7 @@ def generate_launch_description():
 
     ref_model_node = Node(
         package='automode_controller',
-        executable='ref_model_epuck',
+        executable='ref_model_epuck_wb',
         name='epuck_reference_node',
         namespace=namespace,
         parameters=[{'use_sim_time': True}],
@@ -71,7 +70,6 @@ def generate_launch_description():
         output='log',
     )
 
-    # Start controller after both condition and behavior nodes are started
     controller_startup_event = RegisterEventHandler(
         OnProcessStart(
             target_action=condition_node,
