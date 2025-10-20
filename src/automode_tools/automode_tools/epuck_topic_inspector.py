@@ -76,6 +76,8 @@ class EpuckTopicInspector(Node):
         self._subscriptions = []
         self._last = {}
         self.get_logger().info('epuck_topic_inspector starting')
+        # Allow time for topic discovery
+        time.sleep(1.0)
         self.create_timer(0.5, self._print_status)
         self._create_subscriptions_for_ref_topics()
 
@@ -97,29 +99,17 @@ class EpuckTopicInspector(Node):
                             msg_cls = TYPE_MAP[typ]
                             self._subscribe_safe(tname, msg_cls)
                             found = True
-                    if not found and types:
-                        self.get_logger().warning(f"Topic {tname} has no supported types in {types}")
-                        found = True
             if not found:
                 self._last[topic] = {'present': False, 'type': None, 'value': None, 'ts': None}
 
     def _subscribe_safe(self, topic_name: str, msg_cls):
-        if msg_cls in (Range, Illuminance, LaserScan):
-            qos = QoSProfile(
-                reliability=QoSReliabilityPolicy.RELIABLE,
-                durability=QoSDurabilityPolicy.VOLATILE,
-                history=QoSHistoryPolicy.KEEP_LAST,
-                depth=1
-            )
-            self.get_logger().debug(f"Using RELIABLE QoS for sensor topic {topic_name}")
-        else:
-            qos = QoSProfile(
-                reliability=QoSReliabilityPolicy.RELIABLE,
-                durability=QoSDurabilityPolicy.VOLATILE,
-                history=QoSHistoryPolicy.KEEP_LAST,
-                depth=10
-            )
-            self.get_logger().debug(f"Using default RELIABLE QoS for {topic_name}")
+        # Use reliable QoS for all messages
+        qos = QoSProfile(
+            reliability=QoSReliabilityPolicy.RELIABLE,
+            durability=QoSDurabilityPolicy.VOLATILE,
+            history=QoSHistoryPolicy.KEEP_LAST,
+            depth=10
+        )
 
         try:
             def callback(msg):
@@ -130,11 +120,11 @@ class EpuckTopicInspector(Node):
 
             sub = self.create_subscription(msg_cls, topic_name, callback, qos)
             self._subscriptions.append(sub)
-            self.get_logger().info(f"Subscribed to {topic_name} as {msg_cls.__name__}")
+            self.get_logger().debug(f"Created subscription for {topic_name} ({msg_cls.__name__})")
             
             self._last[topic_name] = {
                 'present': True,
-                'type': f"{msg_cls.__module__}/{msg_cls.__name__}",
+                'type': msg_cls.__name__,
                 'value': None,
                 'ts': None,
                 'sub': sub
@@ -145,78 +135,66 @@ class EpuckTopicInspector(Node):
             return None
 
     def _generic_cb(self, topic: str, msg):
-        self.get_logger().debug(f"Callback received for {topic}: {type(msg).__name__}")
         try:
             if isinstance(msg, RobotState):
                 val = {
-                    'robot_id': getattr(msg, 'robot_id', None),
-                    'proximity_magnitude': getattr(msg, 'proximity_magnitude', None),
-                    'proximity_angle': getattr(msg, 'proximity_angle', None),
-                    'light_magnitude': getattr(msg, 'light_magnitude', None),
-                    'light_angle': getattr(msg, 'light_angle', None),
-                    'neighbour_count': getattr(msg, 'neighbour_count', None),
-                    'attraction_angle': getattr(msg, 'attraction_angle', None),
-                    'floor_color': getattr(msg, 'floor_color', None),
-                    'stamp': getattr(msg, 'stamp', None),
+                    'robot_id': msg.robot_id,
+                    'proximity_magnitude': msg.proximity_magnitude,
+                    'proximity_angle': msg.proximity_angle,
+                    'light_magnitude': msg.light_magnitude,
+                    'light_angle': msg.light_angle,
+                    'neighbour_count': msg.neighbour_count,
+                    'attraction_angle': msg.attraction_angle,
+                    'floor_color': msg.floor_color,
+                    'stamp': msg.stamp
                 }
             elif isinstance(msg, Range):
-                val = {
-                    'range': float(msg.range),
-                    'min_range': float(msg.min_range),
-                    'max_range': float(msg.max_range),
-                    'fov': float(msg.field_of_view)
-                }
-                self.get_logger().debug(f"Range on {topic}: {val['range']}m")
+                val = float(msg.range)  # Only store the range value
+                self.get_logger().debug(f"Range on {topic}: {val}m")
             elif isinstance(msg, Odometry):
                 val = {
                     'pos': (msg.pose.pose.position.x, msg.pose.pose.position.y),
                     'orient': msg.pose.pose.orientation.z,
-                    'vel': (msg.twist.twist.linear.x, msg.twist.twist.angular.z)
                 }
             elif isinstance(msg, LaserScan):
-                val = {
-                    'range_min': min(r for r in msg.ranges if r > 0),
-                    'range_max': max(msg.ranges),
-                    'samples': len(msg.ranges)
-                }
+                val = min(r for r in msg.ranges if r > 0)  # Only store closest valid range
             elif isinstance(msg, Int32):
                 val = int(msg.data)
             elif isinstance(msg, Illuminance):
                 val = float(msg.illuminance)
             elif isinstance(msg, Vector3Stamped):
-                val = {'x': msg.vector.x, 'y': msg.vector.y, 'z': msg.vector.z}
+                val = (msg.vector.x, msg.vector.y, msg.vector.z)
             elif isinstance(msg, StringStamped):
                 val = msg.data
             elif isinstance(msg, FloatStamped):
                 val = float(msg.data)
             elif isinstance(msg, TFMessage):
-                val = f"{len(msg.transforms)} transforms"
+                val = len(msg.transforms)
             elif isinstance(msg, Float32):
                 val = float(msg.data)
             elif isinstance(msg, Float32MultiArray):
                 val = list(msg.data) if msg.data is not None else []
             elif isinstance(msg, Twist):
-                val = {'linear_x': msg.linear.x, 'angular_z': msg.angular.z}
+                val = (msg.linear.x, msg.angular.z)
             elif isinstance(msg, String):
-                if any(x in topic for x in ['/behaviors/list', '/conditions/list']):
-                    val = '<behavior/condition list>'
-                else:
-                    val = msg.data
+                val = msg.data
             else:
-                val = repr(msg)[:200]
+                val = str(msg)[:100]  # Truncate long messages
+
+            # Update topic info while preserving subscription
+            existing = self._last.get(topic, {})
+            self._last[topic] = {
+                'present': True,
+                'type': type(msg).__name__,
+                'value': val,
+                'ts': time.time(),
+                'sub': existing.get('sub')
+            }
+            self.get_logger().debug(f"Updated {topic} with value: {val}")
+            
         except Exception as e:
-            val = f"<parse_error: {e}>"
-            self.get_logger().error(f"Error parsing message on {topic}: {e}")
-
-        existing = self._last.get(topic, {})
-        self._last[topic] = {
-            'present': True,
-            'type': type(msg).__name__,
-            'value': val,
-            'ts': time.time(),
-            'sub': existing.get('sub')
-        }
-
+            self.get_logger().error(f"Error processing {topic}: {e}")
+            
     def _print_status(self):
         current = dict(self.get_topic_names_and_types())
         for key in list(self._last.keys()):
@@ -233,6 +211,8 @@ class EpuckTopicInspector(Node):
         out_lines.append('--- epuck_topic_inspector status ---')
         ts = time.strftime('%H:%M:%S', time.localtime())
         out_lines.append(f'time: {ts}')
+        
+        # Print robot state if available
         rs_key = 'robotState'
         if rs_key in self._last and self._last[rs_key]['present'] and self._last[rs_key]['value'] is not None:
             out_lines.append('robotState:')
@@ -241,6 +221,7 @@ class EpuckTopicInspector(Node):
         else:
             out_lines.append('robotState: (no data)')
 
+        # Print all tracked topics
         out_lines.append('tracked topics:')
         for t in sorted(self._last.keys()):
             info = self._last[t]
@@ -249,6 +230,7 @@ class EpuckTopicInspector(Node):
             val = info.get('value')
             age = '--' if info.get('ts') is None else f"{(time.time()-info['ts']):.2f}s"
             out_lines.append(f' - {t:25s} present={str(present):5s} type={str(typ):25s} age={age} val={val}')
+        
         self.get_logger().info('\n'.join(out_lines))
 
 def main(args=None):
