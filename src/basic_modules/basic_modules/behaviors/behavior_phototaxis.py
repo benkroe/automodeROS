@@ -77,12 +77,12 @@ class Behavior(BehaviorBase):
             # Obstacle detected, turn away from it
             if proximity_angle > 0:
                 # Obstacle on right, turn left
-                left_wheel_speed = self._avoidance_turn_speed
-                right_wheel_speed = -self._avoidance_turn_speed
-            else:
-                # Obstacle on left, turn right
                 left_wheel_speed = -self._avoidance_turn_speed
                 right_wheel_speed = self._avoidance_turn_speed
+            else:
+                # Obstacle on left, turn right
+                left_wheel_speed = self._avoidance_turn_speed
+                right_wheel_speed = -self._avoidance_turn_speed
 
             msg.data = [left_wheel_speed, right_wheel_speed]
             self._pub.publish(msg)

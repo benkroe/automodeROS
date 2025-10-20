@@ -184,10 +184,6 @@ class EPuckReferenceNode(Node):
         total_weight = sum(v for v, _ in significant_pairs)
         x = sum(v * math.cos(math.radians(a)) for v, a in significant_pairs)
         y = sum(v * math.sin(math.radians(a)) for v, a in significant_pairs)
-        
-        # Calculate magnitude and angle (-180 to +180 degrees)
-        mag = max_value  # Use maximum sensor reading as magnitude
-        avg_ang = math.degrees(math.atan2(y, x))
 
         # Calculate magnitude and angle (0 to 360 degrees)
         mag = max_value
