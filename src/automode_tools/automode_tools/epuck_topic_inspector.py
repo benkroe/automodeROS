@@ -102,21 +102,31 @@ class EpuckTopicInspector(Node):
                 self.last[topic] = {'present': False, 'type': None, 'value': None, 'ts': None}
 
     def _subscribe_safe(self, topic_name: str, msg_cls):
-        # Use reliable QoS for Range messages
-        if msg_cls == Range:
+        # Special handling for proximity sensors
+        if (topic_name.startswith('/ps') or topic_name.startswith('ps')) and msg_cls == Range:
             qos = QoSProfile(
                 reliability=QoSReliabilityPolicy.RELIABLE,
                 durability=QoSDurabilityPolicy.VOLATILE,
                 history=QoSHistoryPolicy.KEEP_LAST,
-                depth=10
+                depth=1  # Match default ROS2 topic echo behavior
             )
+            self.get_logger().info(f"Using proximity sensor QoS for {topic_name}")
         else:
             qos = qos_profile_sensor_data if msg_cls in (Float32, String) else QoSProfile(depth=10)
-        
+
         try:
-            self.create_subscription(msg_cls, topic_name, lambda msg, t=topic_name: self._generic_cb(t, msg), qos)
-            self.get_logger().info(f"Subscribed to {topic_name} as {msg_cls.__name__} with QoS {qos}")
-            self.last[topic_name] = {'present': True, 'type': msg_cls.__name__, 'value': None, 'ts': None}
+            # Store subscription to prevent garbage collection
+            sub = self.create_subscription(msg_cls, topic_name, 
+                                        lambda msg, t=topic_name: self._generic_cb(t, msg), 
+                                        qos)
+            self.get_logger().info(f"Subscribed to {topic_name} as {msg_cls.__name__}")
+            self.last[topic_name] = {
+                'present': True, 
+                'type': msg_cls.__name__, 
+                'value': None, 
+                'ts': None,
+                'sub': sub  # Keep reference
+            }
         except Exception as e:
             self.get_logger().error(f"Failed to subscribe to {topic_name} ({msg_cls}): {e}")
             self.last[topic_name] = {'present': False, 'type': str(msg_cls), 'value': None, 'ts': None}
@@ -154,7 +164,14 @@ class EpuckTopicInspector(Node):
             elif isinstance(msg, Float32MultiArray):
                 val = list(msg.data) if msg.data is not None else []
             elif isinstance(msg, Range):
-                val = float(msg.range)
+                # Add more Range message details
+                val = {
+                    'range': float(msg.range),
+                    'min_range': float(msg.min_range),
+                    'max_range': float(msg.max_range),
+                    'fov': float(msg.field_of_view)
+                }
+                self.get_logger().debug(f"Received Range on {topic}: {val['range']}m")
             elif isinstance(msg, Twist):
                 val = {'linear_x': msg.linear.x, 'angular_z': msg.angular.z}
             elif isinstance(msg, String):
