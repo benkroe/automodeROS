@@ -13,6 +13,8 @@ from nav_msgs.msg import Odometry
 from sensor_msgs.msg import LaserScan
 from tf2_msgs.msg import TFMessage
 from automode_interfaces.msg import RobotState
+from rclpy.qos import QoSReliabilityPolicy, QoSHistoryPolicy, QoSDurabilityPolicy
+
 
 TYPE_MAP = {
     'std_msgs/msg/Float32': Float32,
@@ -100,13 +102,23 @@ class EpuckTopicInspector(Node):
                 self.last[topic] = {'present': False, 'type': None, 'value': None, 'ts': None}
 
     def _subscribe_safe(self, topic_name: str, msg_cls):
-        qos = qos_profile_sensor_data if msg_cls in (Float32, Range, String) else QoSProfile(depth=10)
+        # Use reliable QoS for Range messages
+        if msg_cls == Range:
+            qos = QoSProfile(
+                reliability=QoSReliabilityPolicy.RELIABLE,
+                durability=QoSDurabilityPolicy.VOLATILE,
+                history=QoSHistoryPolicy.KEEP_LAST,
+                depth=10
+            )
+        else:
+            qos = qos_profile_sensor_data if msg_cls in (Float32, String) else QoSProfile(depth=10)
+        
         try:
             self.create_subscription(msg_cls, topic_name, lambda msg, t=topic_name: self._generic_cb(t, msg), qos)
-            self.get_logger().info(f"Subscribed to {topic_name} as {msg_cls.__name__}")
+            self.get_logger().info(f"Subscribed to {topic_name} as {msg_cls.__name__} with QoS {qos}")
             self.last[topic_name] = {'present': True, 'type': msg_cls.__name__, 'value': None, 'ts': None}
         except Exception as e:
-            self.get_logger().warning(f"Failed to subscribe to {topic_name} ({msg_cls}): {e}")
+            self.get_logger().error(f"Failed to subscribe to {topic_name} ({msg_cls}): {e}")
             self.last[topic_name] = {'present': False, 'type': str(msg_cls), 'value': None, 'ts': None}
 
     def _generic_cb(self, topic: str, msg):
