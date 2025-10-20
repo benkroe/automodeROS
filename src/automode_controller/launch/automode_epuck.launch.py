@@ -51,7 +51,7 @@ def generate_launch_description():
 
     ref_model_node = Node(
         package='automode_controller',
-        executable='ref_model_epuck_wb',
+        executable='ref_model_epuck',
         name='epuck_reference_node',
         namespace=namespace,
         parameters=[{'use_sim_time': True}],
