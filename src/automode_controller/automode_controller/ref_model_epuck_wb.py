@@ -37,7 +37,6 @@ class EPuckReferenceNode(Node):
         for i in range(8):
             # some sims publish sensor_msgs/Range for proximity, others Float32
             self.create_subscription(Range, f'ps{i}', self._make_ps_range_cb(i), qos_profile_sensor_data)
-            self.create_subscription(Float32, f'ps{i}', self._make_ps_cb(i), qos_profile_sensor_data)
             self.create_subscription(Float32, f'ls{i}', self._make_ls_cb(i), qos_profile_sensor_data)
 
         # Neighbour/attraction info (receiver) - prefer namespaced topic in your sim
