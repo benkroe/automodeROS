@@ -102,8 +102,8 @@ class Behavior(BehaviorBase):
                 
                 # Apply differential steering toward light
                 turn_factor = self._turn_speed * (turn_angle / 180.0)
-                left_wheel_speed += turn_factor *10
-                right_wheel_speed -= turn_factor *10
+                left_wheel_speed += turn_factor *4
+                right_wheel_speed -= turn_factor *4
                 
                 status_msg = f"Moving toward light (light_mag: {light_magnitude:.3f}, light_angle: {light_angle:.1f}°)"
             else:
