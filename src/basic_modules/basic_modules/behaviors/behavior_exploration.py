@@ -15,7 +15,7 @@ class Behavior(BehaviorBase):
         self._params: Dict[str, Any] = {}
         self._last_robot_state: Optional[RobotState] = None
         self._Float32MultiArray = None
-        self._turning_time = time.time()
+        self._turning_time = 0.0 
 
         self._obstacle_threshold = 5  # Proximity magnitude threshold for obstacle detection
         self._forward_speed = 0.5       # Forward movement speed
@@ -54,7 +54,12 @@ class Behavior(BehaviorBase):
 
     def execute_step(self) -> Tuple[bool, str, bool]:
         # If currently turning, keep publishing turn speeds
-        if self._turning_time > time.time():
+        # Get current ROS time
+        current_time = self._node.get_clock().now().seconds_nanoseconds()
+        current_ros_time = current_time[0] + current_time[1] / 1e9
+
+        # Check if still turning
+        if current_ros_time < self._turning_time:
             msg = self._Float32MultiArray()
             if hasattr(self, "_last_turn_direction"):
                 msg.data = self._last_turn_direction
@@ -82,7 +87,9 @@ class Behavior(BehaviorBase):
 
             self._last_turn_direction = turn_direction
             rwm = int(self._params.get("rwm", 100))
-            self._turning_time = time.time() + (random.uniform(0, rwm))/30
+            turn_duration = (random.uniform(0, rwm))/30
+            self._turning_time = current_ros_time + turn_duration
+            
             msg.data = turn_direction
             self._pub.publish(msg)
         else:
@@ -93,7 +100,11 @@ class Behavior(BehaviorBase):
     
     def reset(self) -> None:
         """Reset the behavior state."""
-        self._turning_time = time.time()
+        if self._node:
+            current_time = self._node.get_clock().now().seconds_nanoseconds()
+            self._turning_time = current_time[0] + current_time[1] / 1e9
+        else:
+            self._turning_time = 0.0
         self._last_robot_state = None
         self._params = {}
         self._pub = None
