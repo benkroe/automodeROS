@@ -136,8 +136,8 @@ class EPuckReferenceNode(Node):
         if any(v is None for v in self._ps_values):
             return 0.0, 0.0
 
-        # sensor angles in degrees for indexes 0..7 (front = 0)
-        angles = [0, -45, -90, -135, 180, 135, 90, 45]
+        # sensor angles in degrees for indexes 0..7 (front = 0, clockwise positive)
+        angles = [0, 45, 90, 135, 180, -135, -90, -45]  # CORRECTED
         weights = [max(0.0, v) for v in self._ps_values]
         total = sum(weights)
 
