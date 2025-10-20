@@ -198,7 +198,6 @@ class EPuckReferenceNode(Node):
         return mag, ang
 
     def _wheels_speed_cb(self, msg: Float32MultiArray):
-        # Expect [left, right] as Float32 values
         if not msg.data or len(msg.data) < 2:
             self.get_logger().warning("wheels_speed must contain two values [left, right]")
             return
@@ -208,20 +207,16 @@ class EPuckReferenceNode(Node):
             left = float(msg.data[0])
             right = float(msg.data[1])
             
-            # Validate the values are within reasonable bounds
-            if not (-100.0 <= left <= 100.0) or not (-100.0 <= right <= 100.0):
-                self.get_logger().warning(f"Invalid wheel speeds: [{left}, {right}]")
-                return
-
+            # Store original wheel speeds
             self.latest_wheels_speed = [left, right]
 
+            # Scale wheel speeds from behavior range (-1 to 1) to Twist range
+            scale = 0.1  # Max linear velocity in m/s
+            
             # convert differential wheel speeds to Twist (linear.x, angular.z)
             twist = Twist()
-            twist.linear.x = float((left + right) / 2.0)
-            if abs(WHEEL_BASE) < 1e-6:
-                twist.angular.z = 0.0
-            else:
-                twist.angular.z = float((right - left) / WHEEL_BASE)
+            twist.linear.x = scale * float((left + right) / 2.0)
+            twist.angular.z = scale * float((right - left) / WHEEL_BASE)
 
             self.latest_cmd_vel = (twist.linear.x, twist.angular.z)
             self._cmd_vel_pub.publish(twist)
