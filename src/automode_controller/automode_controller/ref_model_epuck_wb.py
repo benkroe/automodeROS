@@ -71,12 +71,27 @@ class EPuckReferenceNode(Node):
 
         self.get_logger().info('EPuck reference node started')
 
-    def _make_ps_cb(self, idx: int):
-        def cb(msg: Float32):
+    def _make_ps_range_cb(self, idx: int):
+        def cb(msg: Range):
             try:
-                self._ps_values[idx] = float(msg.data)
-            except Exception:
-                self.get_logger().warning(f"Failed to read ps{idx} (Float32)")
+                # Range.range is distance in meters
+                # Convert to proximity value (closer = higher value)
+                # Normalize to 0-1 range based on max_range
+                if msg.range >= msg.max_range or msg.range <= msg.min_range:
+                    proximity_value = 0.0
+                else:
+                    # Invert and normalize: closer objects = higher value
+                    proximity_value = 1.0 - (msg.range / msg.max_range)
+                
+                self._ps_values[idx] = proximity_value
+                
+                # Debug output
+                self.get_logger().debug(
+                    f'PS{idx}: range={msg.range:.3f}m, max={msg.max_range:.3f}m, ' +
+                    f'converted={proximity_value:.3f}'
+                )
+            except Exception as e:
+                self.get_logger().warning(f"Failed to read ps{idx} (Range): {str(e)}")
         return cb
 
     def _make_ps_range_cb(self, idx: int):
