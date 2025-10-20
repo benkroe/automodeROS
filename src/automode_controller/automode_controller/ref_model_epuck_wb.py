@@ -85,18 +85,23 @@ class EPuckReferenceNode(Node):
             try:
                 # Range.range is distance in meters
                 # Convert to proximity value (closer = higher value)
-                if msg.range >= msg.max_range or msg.range <= msg.min_range:
-                    proximity_value = 0.0
+                # Allow for some margin above max_range (10%)
+                effective_max = msg.max_range * 1.1
+                
+                if msg.range <= msg.min_range:
+                    proximity_value = 1.0  # closest = highest value
+                elif msg.range >= effective_max:
+                    proximity_value = 0.0  # too far = no detection
                 else:
                     # Invert and normalize: closer objects = higher value
-                    proximity_value = 1.0 - (msg.range / msg.max_range)
+                    proximity_value = 1.0 - (msg.range / effective_max)
                 
                 self._ps_values[idx] = proximity_value
                 
                 # Debug output
                 self.get_logger().debug(
                     f'PS{idx}: range={msg.range:.3f}m, max={msg.max_range:.3f}m, ' +
-                    f'converted={proximity_value:.3f}'
+                    f'eff_max={effective_max:.3f}m, converted={proximity_value:.3f}'
                 )
             except Exception as e:
                 self.get_logger().warning(f"Failed to read ps{idx} (Range): {str(e)}")
@@ -241,6 +246,20 @@ class EPuckReferenceNode(Node):
         msg.light_angle = math.radians(light_ang_deg) if light_ang_deg is not None else 0.0
 
         self._robot_state_pub.publish(msg)
+
+                # Add debug output for robot state
+        self.get_logger().debug(
+            f"\n=== Robot State ===\n"
+            f"Robot ID: {msg.robot_id}\n"
+            f"Time: {msg.stamp.sec}.{msg.stamp.nanosec:09d}\n"
+            f"Proximity: mag={msg.proximity_magnitude:.3f}, angle={math.degrees(msg.proximity_angle):.1f}°\n"
+            f"Light: mag={msg.light_magnitude:.3f}, angle={math.degrees(msg.light_angle):.1f}°\n"
+            f"Neighbors: count={msg.neighbour_count}, attraction={math.degrees(msg.attraction_angle):.1f}°\n"
+            f"Floor: {msg.floor_color}\n"
+            f"Wheels: L={self.latest_wheels_speed[0]:.3f}, R={self.latest_wheels_speed[1]:.3f}\n"
+            f"Cmd_vel: lin={self.latest_cmd_vel[0]:.3f}, ang={self.latest_cmd_vel[1]:.3f}\n"
+            f"==================="
+        )
 
     def destroy_node(self):
         super().destroy_node()
