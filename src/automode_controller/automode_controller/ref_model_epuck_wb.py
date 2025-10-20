@@ -189,6 +189,10 @@ class EPuckReferenceNode(Node):
         mag = max_value  # Use maximum sensor reading as magnitude
         avg_ang = math.degrees(math.atan2(y, x))
 
+        # Calculate magnitude and angle (0 to 360 degrees)
+        mag = max_value
+        avg_ang = math.degrees(math.atan2(y, x)) % 360  # Convert to [0,360) range
+        
         return mag, avg_ang
 
     def _publish_robot_state(self):
