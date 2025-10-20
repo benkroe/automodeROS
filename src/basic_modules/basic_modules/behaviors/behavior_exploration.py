@@ -18,8 +18,8 @@ class Behavior(BehaviorBase):
         self._turning_time = time.time()
 
         self._obstacle_threshold = 10  # Proximity magnitude threshold for obstacle detection
-        self._forward_speed = 0.3       # Forward movement speed
-        self._turn_speed = 0.6          # Turning speed (will calibrate later)
+        self._forward_speed = 0.5       # Forward movement speed
+        self._turn_speed = 0.4          # Turning speed (will calibrate later)
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
@@ -83,7 +83,7 @@ class Behavior(BehaviorBase):
 
             self._last_turn_direction = turn_direction
             rwm = int(self._params.get("rwm", 100))
-            self._turning_time = time.time() + (random.uniform(0, rwm))/10
+            self._turning_time = time.time() + (random.uniform(0, rwm))/30
             msg.data = turn_direction
             self._pub.publish(msg)
         else:
