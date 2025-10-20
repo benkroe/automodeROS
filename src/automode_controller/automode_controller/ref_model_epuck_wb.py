@@ -83,15 +83,17 @@ class EPuckReferenceNode(Node):
         def cb(msg: Range):
             try:
                 # Convert range to proximity value (0-100 scale)
+                # The closer the object, the higher the value
                 if msg.range <= msg.min_range:
                     proximity_value = 100.0  # closest = highest value
                 elif msg.range >= msg.max_range:
                     proximity_value = 0.0    # too far = no detection
                 else:
-                    # Exponential scaling to amplify closer readings (0-100 range)
-                    normalized_range = msg.range / msg.max_range
-                    proximity_value = 100.0 * math.exp(-2.0 * normalized_range)
-                
+                    # Linear scaling inverted (closer = higher value)
+                    # Scale from min_range..max_range to 100..0
+                    normalized_range = (msg.range - msg.min_range) / (msg.max_range - msg.min_range)
+                    proximity_value = 100.0 * (1.0 - normalized_range)
+
                 self._ps_values[idx] = proximity_value
                 
                 # Debug output
