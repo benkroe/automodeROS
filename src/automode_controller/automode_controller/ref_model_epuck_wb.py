@@ -14,7 +14,7 @@ import time
 from typing import List, Optional
 
 WHEEL_BASE = 0.053  # meters, approximate e-puck wheel base
-PROXIMITY_SMOOTH_WINDOW = 3
+PROXIMITY_SMOOTH_WINDOW = 1
 PROXIMITY_HYSTERESIS = 0.02
 
 
