@@ -198,24 +198,36 @@ class EPuckReferenceNode(Node):
         return mag, ang
 
     def _wheels_speed_cb(self, msg: Float32MultiArray):
-        # Expect [left, right]
+        # Expect [left, right] as Float32 values
         if not msg.data or len(msg.data) < 2:
             self.get_logger().warning("wheels_speed must contain two values [left, right]")
             return
-        left = float(msg.data[0])
-        right = float(msg.data[1])
-        self.latest_wheels_speed = [left, right]
+        
+        try:
+            # Ensure we're getting proper float values
+            left = float(msg.data[0])
+            right = float(msg.data[1])
+            
+            # Validate the values are within reasonable bounds
+            if not (-100.0 <= left <= 100.0) or not (-100.0 <= right <= 100.0):
+                self.get_logger().warning(f"Invalid wheel speeds: [{left}, {right}]")
+                return
 
-        # convert differential wheel speeds to Twist (linear.x, angular.z)
-        twist = Twist()
-        twist.linear.x = (left + right) / 2.0
-        if abs(WHEEL_BASE) < 1e-6:
-            twist.angular.z = 0.0
-        else:
-            twist.angular.z = (right - left) / WHEEL_BASE
+            self.latest_wheels_speed = [left, right]
 
-        self.latest_cmd_vel = (twist.linear.x, twist.angular.z)
-        self._cmd_vel_pub.publish(twist)
+            # convert differential wheel speeds to Twist (linear.x, angular.z)
+            twist = Twist()
+            twist.linear.x = float((left + right) / 2.0)
+            if abs(WHEEL_BASE) < 1e-6:
+                twist.angular.z = 0.0
+            else:
+                twist.angular.z = float((right - left) / WHEEL_BASE)
+
+            self.latest_cmd_vel = (twist.linear.x, twist.angular.z)
+            self._cmd_vel_pub.publish(twist)
+            
+        except (TypeError, ValueError) as e:
+            self.get_logger().error(f"Invalid wheel speed values: {e}")
 
     def _publish_robot_state(self):
         msg = RobotState()
