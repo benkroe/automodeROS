@@ -142,16 +142,19 @@ class EPuckReferenceNode(Node):
         total = sum(weights)
 
         if total <= 0.0:
-            # record zero in smoothing history
             self._prox_mag_hist.append(0.0)
             self._prox_ang_hist.append(0.0)
-        else:
-            x = sum(w * math.cos(math.radians(a)) for w, a in zip(weights, angles))
-            y = sum(w * math.sin(math.radians(a)) for w, a in zip(weights, angles))
-            avg_ang = (math.degrees(math.atan2(y, x))) % 360
-            mag = total / len(self._ps_values)
-            self._prox_mag_hist.append(mag)
-            self._prox_ang_hist.append(avg_ang)
+            return 0.0, 0.0
+
+        # Find maximum sensor value for magnitude
+        max_weight = max(weights)
+        # Calculate weighted direction
+        x = sum(w * math.cos(math.radians(a)) for w, a in zip(weights, angles))
+        y = sum(w * math.sin(math.radians(a)) for w, a in zip(weights, angles))
+        avg_ang = (math.degrees(math.atan2(y, x))) % 360
+        
+        self._prox_mag_hist.append(max_weight)
+        self._prox_ang_hist.append(avg_ang)
 
         # keep smoothing window
         if len(self._prox_mag_hist) > self._prox_smooth_window:
