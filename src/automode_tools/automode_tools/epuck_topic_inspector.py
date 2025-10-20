@@ -14,6 +14,7 @@ from sensor_msgs.msg import LaserScan
 from tf2_msgs.msg import TFMessage
 from automode_interfaces.msg import RobotState
 from rclpy.qos import QoSReliabilityPolicy, QoSHistoryPolicy, QoSDurabilityPolicy
+from webots_ros2_msgs.msg import StringStamped, FloatStamped
 
 
 TYPE_MAP = {
@@ -157,6 +158,20 @@ class EpuckTopicInspector(Node):
                     'range_max': max(msg.ranges),
                     'samples': len(msg.ranges)
                 }
+            elif isinstance(msg, Int32):
+                val = int(msg.data)
+            elif isinstance(msg, Illuminance):
+                val = float(msg.illuminance)
+            elif isinstance(msg, Vector3Stamped):
+                val = {
+                    'x': msg.vector.x,
+                    'y': msg.vector.y,
+                    'z': msg.vector.z
+                }
+            elif isinstance(msg, StringStamped):
+                val = msg.data
+            elif isinstance(msg, FloatStamped):
+                val = float(msg.data)
             elif isinstance(msg, TFMessage):
                 val = f"{len(msg.transforms)} transforms"
             elif isinstance(msg, Float32):
