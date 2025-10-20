@@ -220,7 +220,15 @@ class EpuckTopicInspector(Node):
         except Exception as e:
             val = f"<parse_error: {e}>"
 
-        self.last[topic] = {'present': True, 'type': type(msg).__name__, 'value': val, 'ts': time.time()}
+        # Preserve existing subscription when updating topic info
+        existing = self.last.get(topic, {})
+        self.last[topic] = {
+            'present': True,
+            'type': type(msg).__name__,
+            'value': val,
+            'ts': time.time(),
+            'sub': existing.get('sub')  # Keep the subscription reference
+        }
 
     def _print_status(self):
         current = dict(self.get_topic_names_and_types())
