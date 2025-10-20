@@ -150,7 +150,11 @@ class EpuckTopicInspector(Node):
             elif isinstance(msg, Twist):
                 val = {'linear_x': msg.linear.x, 'angular_z': msg.angular.z}
             elif isinstance(msg, String):
-                val = msg.data
+                # Skip long behavior/condition list messages
+                if any(x in topic for x in ['/behaviors/list', '/conditions/list']):
+                    val = '<behavior/condition list>'
+                else:
+                    val = msg.data
             else:
                 val = repr(msg)[:200]
         except Exception as e:
