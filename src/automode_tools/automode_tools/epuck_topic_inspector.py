@@ -21,6 +21,9 @@ TYPE_MAP = {
     'sensor_msgs/msg/Range': Range,
     'geometry_msgs/msg/Twist': Twist,
     'automode_interfaces/msg/RobotState': RobotState,
+    'nav_msgs/msg/Odometry': Odometry,
+    'sensor_msgs/msg/LaserScan': LaserScan,
+    'tf2_msgs/msg/TFMessage': TFMessage,
 }
 
 REF_TOPICS = [
@@ -83,21 +86,14 @@ class EpuckTopicInspector(Node):
             for tname in candidates:
                 if tname in topics_and_types:
                     types = topics_and_types[tname]
-                    chosen_type = None
-                    for ty in types:
-                        if ty in TYPE_MAP:
-                            chosen_type = ty
-                            break
-                    if chosen_type is None and types:
-                        chosen_type = types[0]
-
-                    if chosen_type in TYPE_MAP:
-                        msg_cls = TYPE_MAP[chosen_type]
-                        self._subscribe_safe(tname, msg_cls)
-                        found = True
-                        break
-                    else:
-                        self.get_logger().warning(f"Topic {tname} has unknown msg types {types}; skipping subscription")
+                    # Try to subscribe to all supported message types
+                    for typ in types:
+                        if typ in TYPE_MAP:
+                            msg_cls = TYPE_MAP[typ]
+                            self._subscribe_safe(tname, msg_cls)
+                            found = True
+                    if not found and types:
+                        self.get_logger().warning(f"Topic {tname} has no supported types in {types}")
                         found = True
                         break
             if not found:
