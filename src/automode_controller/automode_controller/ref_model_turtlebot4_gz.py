@@ -163,7 +163,7 @@ class TurtleBot4ReferenceNode(Node):
         twist = Twist()
         twist.linear.x = (left + right) / 2.0
         twist.angular.z = (right - left)
-        #self._cmd_vel_pub.publish(twist)
+        self._cmd_vel_pub.publish(twist)
         self.latest_wheels_speed = [left, right]
         self.latest_cmd_vel = (twist.linear.x, twist.angular.z)
 
