@@ -1,3 +1,4 @@
+# ...existing code...
 #!/usr/bin/env python3
 
 import rclpy
@@ -6,12 +7,14 @@ from geometry_msgs.msg import Twist
 from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
 from std_msgs.msg import Float32MultiArray, Float32, String
-from sensor_msgs.msg import PointCloud2
-import sensor_msgs_py.point_cloud2 as pc2
 import math
 import numpy as np
 
 PROXIMITY_MAX_RANGE = 2.0  # meters (reduced for IR realism)
+
+# New tunable IR parameters (matches new ir_intensity input semantics)
+IR_MIN_RANGE = 0.02  # meters
+IR_MAX_RANGE = 0.20  # meters
 
 class TurtleBot4ReferenceNode(Node):
     def __init__(self):
@@ -24,20 +27,41 @@ class TurtleBot4ReferenceNode(Node):
         # Subscriber for wheel commands
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)
 
-        # Track latest IR readings
+        # Track latest IR readings (keeps [estimated_distance_m, angle_deg] per sensor)
         self.latest_ir_vectors = {}
 
-        # Subscribed IR topics (only the ones that work)
-        ir_topics = {
-            '/Turtlebot4/ir_intensity_front_center_right/point_cloud': 'front_center_right',
-            '/Turtlebot4/ir_intensity_front_right/point_cloud': 'front_right',
-            '/Turtlebot4/ir_intensity_left/point_cloud': 'left',
-            '/Turtlebot4/ir_intensity_right/point_cloud': 'right',
-            '/Turtlebot4/ir_intensity_side_left/point_cloud': 'side_left'
+        # New: subscribe to consolidated ir_intensity topic (Float32MultiArray)
+        # Index map:
+        # 0 -> front_center_left
+        # 1 -> front_center_right
+        # 2 -> front_left
+        # 3 -> front_right
+        # 4 -> left
+        # 5 -> right
+        # 6 -> side_left
+        self._ir_index_map = [
+            'front_center_left',
+            'front_center_right',
+            'front_left',
+            'front_right',
+            'left',
+            'right',
+            'side_left'
+        ]
+
+        # Fixed sensor mounting angles (degrees, x-forward, +y left)
+        self._sensor_angle_map = {
+            'front_center_left':  10.0,
+            'front_center_right': -10.0,
+            'front_left':         30.0,
+            'front_right':       -30.0,
+            'left':               90.0,
+            'right':             -90.0,
+            'side_left':         135.0
         }
 
-        for topic, name in ir_topics.items():
-            self.create_subscription(PointCloud2, topic, lambda msg, n=name: self._process_point_cloud(msg, n), 10)
+        # subscribe to consolidated ir_intensity only (compatibility pointcloud code removed)
+        self.create_subscription(Float32MultiArray, '/Turtlebot4/ir_intensity', self._ir_intensity_cb, 10)
 
         # Optional: Light, ground, and neighbour sensors
         self.create_subscription(Float32, 'light_sensor_front_left', self._light_fl_cb, 10)
@@ -57,31 +81,39 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_wheels_speed = [0.0, 0.0]
         self.latest_cmd_vel = (0.0, 0.0)
 
+        # Initialize entries so compute_proximity has consistent keys
+        for name in self._ir_index_map:
+            angle = self._sensor_angle_map.get(name, 0.0)
+            # store as [distance_m, angle_deg]; default to max range (no detection)
+            self.latest_ir_vectors[name] = [IR_MAX_RANGE, angle]
+
         # Periodic publication (20 Hz)
         self.create_timer(0.05, self._publish_robot_state)
 
     # ----------------------------
-    # IR point cloud processing
+    # ir_intensity array callback
     # ----------------------------
-    def _process_point_cloud(self, msg: PointCloud2, sensor_name: str):
-        points = pc2.read_points(msg, field_names=("x", "y", "z"), skip_nans=True)
-        distances, angles = [], []
+    def _ir_intensity_cb(self, msg: Float32MultiArray):
+        # msg.data elements are normalized intensities in [0,1] for each sensor index.
+        n = min(len(msg.data), len(self._ir_index_map))
+        for i in range(n):
+            name = self._ir_index_map[i]
+            intensity = float(msg.data[i]) if msg.data[i] is not None else 0.0
+            # clamp intensity
+            intensity = max(0.0, min(1.0, intensity))
+            # convert intensity -> estimated distance (meters)
+            est_dist = IR_MIN_RANGE + (1.0 - intensity) * (IR_MAX_RANGE - IR_MIN_RANGE)
+            angle = self._sensor_angle_map.get(name, 0.0)
+            self.latest_ir_vectors[name] = [est_dist, angle]
 
-        for x, y, z in points:
-            dist = math.sqrt(x**2 + y**2)
-            if 0.01 < dist < PROXIMITY_MAX_RANGE:
-                distances.append(dist)
-                angles.append(math.degrees(math.atan2(y, x)))
-
-        if distances:
-            min_idx = np.argmin(distances)
-            dist, angle = distances[min_idx], angles[min_idx]
-            self.latest_ir_vectors[sensor_name] = [dist, angle]
-        else:
-            self.latest_ir_vectors[sensor_name] = [0.0, 0.0]
+        # For any missing indices, set to max-range (no detection)
+        for i in range(n, len(self._ir_index_map)):
+            name = self._ir_index_map[i]
+            angle = self._sensor_angle_map.get(name, 0.0)
+            self.latest_ir_vectors[name] = [IR_MAX_RANGE, angle]
 
     # ----------------------------
-    # Compute proximity vector
+    # Compute proximity vector (uses estimated distances stored in latest_ir_vectors)
     # ----------------------------
     def compute_proximity(self):
         if not self.latest_ir_vectors:
@@ -89,9 +121,11 @@ class TurtleBot4ReferenceNode(Node):
 
         x_total, y_total = 0.0, 0.0
         for dist, angle_deg in self.latest_ir_vectors.values():
+            # larger weight for closer obstacles: (PROXIMITY_MAX_RANGE - dist)
+            weight = max(0.0, PROXIMITY_MAX_RANGE - dist)
             angle_rad = math.radians(angle_deg)
-            x_total += (PROXIMITY_MAX_RANGE - dist) * math.cos(angle_rad)
-            y_total += (PROXIMITY_MAX_RANGE - dist) * math.sin(angle_rad)
+            x_total += weight * math.cos(angle_rad)
+            y_total += weight * math.sin(angle_rad)
 
         mag = math.sqrt(x_total**2 + y_total**2)
         angle = (math.degrees(math.atan2(y_total, x_total))) % 360
@@ -122,7 +156,7 @@ class TurtleBot4ReferenceNode(Node):
         left, right = msg.data
         twist = Twist()
         twist.linear.x = (left + right) / 2.0
-        twist.angular.z = (right - left) 
+        twist.angular.z = (right - left)
         self._cmd_vel_pub.publish(twist)
         self.latest_wheels_speed = [left, right]
         self.latest_cmd_vel = (twist.linear.x, twist.angular.z)
@@ -168,3 +202,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+# ...existing code...
