@@ -21,7 +21,7 @@ class TurtleBot4ReferenceNode(Node):
         super().__init__('turtlebot4_reference_node')
 
         # Publishers
-        self._cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 10)
+        # self._cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 10)
         self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10)
 
         # Subscriber for wheel commands
