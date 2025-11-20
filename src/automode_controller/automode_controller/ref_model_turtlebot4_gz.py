@@ -84,8 +84,8 @@ class TurtleBot4ReferenceNode(Node):
         # Initialize entries so compute_proximity has consistent keys
         for name in self._ir_index_map:
             angle = self._sensor_angle_map.get(name, 0.0)
-            # store as [distance_m, angle_deg]; default to max range (no detection)
-            self.latest_ir_vectors[name] = [IR_MAX_RANGE, angle]
+            # store as [distance_m, angle_deg]; default to PROXIMITY_MAX_RANGE -> treated as "no detection"
+            self.latest_ir_vectors[name] = [PROXIMITY_MAX_RANGE, angle]
 
         # Periodic publication (20 Hz)
         self.create_timer(0.05, self._publish_robot_state)
@@ -102,7 +102,13 @@ class TurtleBot4ReferenceNode(Node):
             # clamp intensity
             intensity = max(0.0, min(1.0, intensity))
             # convert intensity -> estimated distance (meters)
-            est_dist = IR_MIN_RANGE + (1.0 - intensity) * (IR_MAX_RANGE - IR_MIN_RANGE)
+            # treat zero intensity as "no detection" -> set to PROXIMITY_MAX_RANGE
+            if intensity <= 0.0:
+                est_dist = PROXIMITY_MAX_RANGE
+            else:
+                est_dist = IR_MIN_RANGE + (1.0 - intensity) * (IR_MAX_RANGE - IR_MIN_RANGE)
+            angle = self._sensor_angle_map.get(name, 0.0)
+            self.latest_ir_vectors[name] = [est_dist, angle]
             angle = self._sensor_angle_map.get(name, 0.0)
             self.latest_ir_vectors[name] = [est_dist, angle]
 
@@ -110,7 +116,7 @@ class TurtleBot4ReferenceNode(Node):
         for i in range(n, len(self._ir_index_map)):
             name = self._ir_index_map[i]
             angle = self._sensor_angle_map.get(name, 0.0)
-            self.latest_ir_vectors[name] = [IR_MAX_RANGE, angle]
+            self.latest_ir_vectors[name] = [PROXIMITY_MAX_RANGE, angle]
 
     # ----------------------------
     # Compute proximity vector (uses estimated distances stored in latest_ir_vectors)
