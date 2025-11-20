@@ -21,7 +21,7 @@ class TurtleBot4ReferenceNode(Node):
         super().__init__('turtlebot4_reference_node')
 
         # Publishers
-        # self._cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 10)
+        self._cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 10)
         self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10)
 
         # Subscriber for wheel commands
@@ -163,7 +163,7 @@ class TurtleBot4ReferenceNode(Node):
         twist = Twist()
         twist.linear.x = (left + right) / 2.0
         twist.angular.z = (right - left)
-        self._cmd_vel_pub.publish(twist)
+        #self._cmd_vel_pub.publish(twist)
         self.latest_wheels_speed = [left, right]
         self.latest_cmd_vel = (twist.linear.x, twist.angular.z)
 
