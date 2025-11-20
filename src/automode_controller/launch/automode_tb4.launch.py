@@ -8,7 +8,7 @@ def generate_launch_description():
     # Declare launch arguments
     namespace_arg = DeclareLaunchArgument(
         'robot_namespace',
-        default_value='tb1',
+        default_value='',
         description='Namespace for robot nodes'
     )
     module_package_arg = DeclareLaunchArgument(
