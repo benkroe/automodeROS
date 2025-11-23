@@ -7,6 +7,11 @@ from geometry_msgs.msg import Twist
 from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
 from std_msgs.msg import Float32MultiArray, Float32, String
+from irobot_create_msgs.msg import IrIntensityVector
+from std_msgs.msg import Float32MultiArray, String
+from sensor_msgs.msg import Illuminance
+from irobot_create_msgs.msg import IrIntensityVector
+
 import math
 import numpy as np
 
@@ -63,16 +68,21 @@ class TurtleBot4ReferenceNode(Node):
         # subscribe to consolidated ir_intensity only (compatibility pointcloud code removed)
         self.create_subscription(Float32MultiArray, '/Turtlebot4/ir_intensity', self._ir_intensity_cb, 10)
 
+        # subscribe to cliff intensity sensors, for ground color detection
+        self.create_subscription(IrIntensityVector, '/Turtlebot4/cliff_intensity', self._cliff_intensity_cb, 10)
+
         # Optional: Light, ground, and neighbour sensors
-        self.create_subscription(Float32, 'light_sensor_front_left', self._light_fl_cb, 10)
-        self.create_subscription(Float32, 'light_sensor_front_right', self._light_fr_cb, 10)
-        self.create_subscription(Float32, 'light_sensor_back', self._light_back_cb, 10)
-        self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb, 10)
+
+        self.create_subscription(Illuminance, '/Turtlebot4/light_front_left', self._light_fl_cb, 10)
+        self.create_subscription(Illuminance, '/Turtlebot4/light_front_right', self._light_fr_cb, 10)
+
+        #self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb, 10)
         self.create_subscription(String, 'neighbours_info', self._neighbours_cb, 10)
 
         # State variables
         self.robot_id = 1
         self.latest_floor_color = "gray"
+        self.count_floor_color = 0
         self.latest_light_fl = None
         self.latest_light_fr = None
         self.latest_light_back = None
@@ -80,6 +90,13 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_attraction_angle = 0.0
         self.latest_wheels_speed = [0.0, 0.0]
         self.latest_cmd_vel = (0.0, 0.0)
+
+        # black: (969, 982), grey: (887, 901), white: (962, 975)
+        self._floor_color_refs = {
+            'black': (969, 969),
+            'gray':  (887, 887),
+            'white': (962, 962)
+        }
 
         # Initialize entries so compute_proximity has consistent keys
         for name in self._ir_index_map:
@@ -89,6 +106,43 @@ class TurtleBot4ReferenceNode(Node):
 
         # Periodic publication (20 Hz)
         self.create_timer(0.05, self._publish_robot_state)
+
+
+    # ----------------------------
+    # cliff_intensity callback -> compute floor colour
+    # ----------------------------
+    def _cliff_intensity_cb(self, msg: IrIntensityVector):
+        # Use the two front cliff sensors (index 0: front_left, 1: front_right)
+        try:
+            readings = msg.readings
+        except Exception:
+            return
+
+        if not readings or len(readings) < 2:
+            return
+
+        # Extract raw integer values (safety with getattr)
+        v0 = int(getattr(readings[0], 'value', 0))
+        v1 = int(getattr(readings[1], 'value', 0))
+
+        # Choose the colour with minimal squared error to the reference pair
+        best_color = None
+        best_err = float('inf')
+        for color, (r0, r1) in self._floor_color_refs.items():
+            err = (v0 - r0) ** 2 + (v1 - r1) ** 2
+            if err < best_err:
+                best_err = err
+                best_color = color
+
+        if best_color is not None:
+            self.count_floor_color += 1
+            if self.count_floor_color > 10:
+                self.latest_floor_color = best_color
+                self.count_floor_color = 0
+            # optional debug log
+            self.get_logger().debug(f"Cliff intensity -> v0={v0} v1={v1} -> colour={best_color} (err={best_err})")
+
+
 
     # ----------------------------
     # ir_intensity array callback
@@ -137,13 +191,32 @@ class TurtleBot4ReferenceNode(Node):
         angle = (math.degrees(math.atan2(y_total, x_total))) % 360
         return mag, angle
 
+
+
+    # ----------------------------
+    # Compute light vector (uses latest_light_fl and latest_light_fr)
+    # ----------------------------
+    def compute_light_vector(self):
+        if self.latest_light_fl is None or self.latest_light_fr is None:
+            return 0.0, 0.0
+
+        # Simple model: each sensor contributes a vector
+        fl_intensity = float(self.latest_light_fl)
+        fr_intensity = float(self.latest_light_fr)
+
+        # Weights proportional to intensity
+        x_total = fl_intensity * math.cos(math.radians(45.0)) + fr_intensity * math.cos(math.radians(-45.0))
+        y_total = fl_intensity * math.sin(math.radians(45.0)) + fr_intensity * math.sin(math.radians(-45.0))
+
+        mag = math.sqrt(x_total**2 + y_total**2)
+        angle = (math.degrees(math.atan2(y_total, x_total))) % 360
+        return mag, angle
+
     # ----------------------------
     # Light, ground, neighbours
     # ----------------------------
-    def _light_fl_cb(self, msg: Float32): self.latest_light_fl = msg.data
-    def _light_fr_cb(self, msg: Float32): self.latest_light_fr = msg.data
-    def _light_back_cb(self, msg: Float32): self.latest_light_back = msg.data
-    def _ground_sensor_cb(self, msg: String): self.latest_floor_color = msg.data
+    def _light_fl_cb(self, msg: Illuminance): self.latest_light_fl = msg.illuminance
+    def _light_fr_cb(self, msg: Illuminance): self.latest_light_fr = msg.illuminance
 
     def _neighbours_cb(self, msg: String):
         try:
@@ -177,17 +250,17 @@ class TurtleBot4ReferenceNode(Node):
         msg.neighbour_count = self.latest_neighbour_count
         msg.attraction_angle = self.latest_attraction_angle
         msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
-        msg.light_magnitude, msg.light_angle = 0.0, 0.0  # simplified
+        msg.light_magnitude, msg.light_angle = self.compute_light_vector()
 
-        self.get_logger().info(
-            f"[RobotState] ID={msg.robot_id}, "
-            f"Floor='{msg.floor_color}', "
-            f"Neighbours={msg.neighbour_count}, "
-            f"AttractionAngle={msg.attraction_angle:.1f}, "
-            f"Proximity=(Mag={msg.proximity_magnitude:.3f}, Angle={msg.proximity_angle:.1f}), "
-            f"Light=(Mag={msg.light_magnitude:.3f}, Angle={msg.light_angle:.1f})"
-            f"CmdVel= {self.latest_cmd_vel}"
-        )
+        # self.get_logger().info(
+        #     f"[RobotState] ID={msg.robot_id}, "
+        #     f"Floor='{msg.floor_color}', "
+        #     f"Neighbours={msg.neighbour_count}, "
+        #     f"AttractionAngle={msg.attraction_angle:.1f}, "
+        #     f"Proximity=(Mag={msg.proximity_magnitude:.3f}, Angle={msg.proximity_angle:.1f}), "
+        #     f"Light=(Mag={msg.light_magnitude:.3f}, Angle={msg.light_angle:.1f})"
+        #     f"CmdVel= {self.latest_cmd_vel}"
+        # )
 
         self._robot_state_pub.publish(msg)
 
