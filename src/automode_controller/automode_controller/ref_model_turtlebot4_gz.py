@@ -66,15 +66,15 @@ class TurtleBot4ReferenceNode(Node):
         }
 
         # subscribe to consolidated ir_intensity only (compatibility pointcloud code removed)
-        self.create_subscription(Float32MultiArray, '/Turtlebot4/ir_intensity', self._ir_intensity_cb, 10)
+        self.create_subscription(Float32MultiArray, 'ir_intensity', self._ir_intensity_cb, 10)
 
         # subscribe to cliff intensity sensors, for ground color detection
-        self.create_subscription(IrIntensityVector, '/Turtlebot4/cliff_intensity', self._cliff_intensity_cb, 10)
+        self.create_subscription(IrIntensityVector, 'cliff_intensity', self._cliff_intensity_cb, 10)
 
         # Optional: Light, ground, and neighbour sensors
 
-        self.create_subscription(Illuminance, '/Turtlebot4/light_front_left', self._light_fl_cb, 10)
-        self.create_subscription(Illuminance, '/Turtlebot4/light_front_right', self._light_fr_cb, 10)
+        self.create_subscription(Illuminance, 'light_front_left', self._light_fl_cb, 10)
+        self.create_subscription(Illuminance, 'light_front_right', self._light_fr_cb, 10)
 
         #self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb, 10)
         self.create_subscription(String, 'neighbours_info', self._neighbours_cb, 10)
