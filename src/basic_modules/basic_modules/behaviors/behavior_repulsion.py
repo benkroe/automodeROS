@@ -77,7 +77,7 @@ class Behavior(BehaviorBase):
             return False, "Communication not set up", False
 
         prox_mag = self._last_robot_state.proximity_magnitude
-        prox_ang = self._last_robot_state.proximity_angle
+        prox_ang = math.degrees(self._last_robot_state.proximity_angle)  # Convert radians to degrees
         neighbor_count = self._last_robot_state.neighbour_count
 
         # If no neighbors or too weak signal → stop

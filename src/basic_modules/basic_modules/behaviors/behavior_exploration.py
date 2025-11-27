@@ -6,6 +6,7 @@ from automode_interfaces.msg import RobotState
 
 import random
 import time
+import math
 
 class Behavior(BehaviorBase):
     def __init__(self) -> None:
@@ -66,7 +67,7 @@ class Behavior(BehaviorBase):
 
         if self._last_robot_state:
             proximity_magnitude = self._last_robot_state.proximity_magnitude
-            proximity_angle = self._last_robot_state.proximity_angle
+            proximity_angle = math.degrees(self._last_robot_state.proximity_angle)  # Convert radians to degrees
 
         msg = self._Float32MultiArray()
 

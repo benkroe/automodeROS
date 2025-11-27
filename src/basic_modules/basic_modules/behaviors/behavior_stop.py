@@ -10,7 +10,7 @@ class Behavior(BehaviorBase):
         self._pub = None
         self._sub = None
         self._params: Dict[str, Any] = {}
-        self._last_robot_state: Optional[str] = None
+        self._last_robot_state: Optional[RobotState] = None
         self._Float32MultiArray = None
 
     @staticmethod
@@ -29,10 +29,7 @@ class Behavior(BehaviorBase):
 
     def _robot_state_cb(self, msg) -> None:
         try:
-            if hasattr(msg, "data"):
-                self._last_robot_state = str(msg.data)
-            else:
-                self._last_robot_state = repr(msg)
+            self._last_robot_state = msg
             if self._node is not None:
                 self._node.get_logger().debug(f'behavior_stop robotState: {self._last_robot_state}')
         except Exception:
@@ -52,7 +49,6 @@ class Behavior(BehaviorBase):
         self._sub = self._node.create_subscription(RobotState, 'robotState', self._robot_state_cb, 10)
 
     def execute_step(self) -> Tuple[bool, str, bool]:
-        # self._node.get_logger().debug(f'Random number: {self._last_robot_state.random_number}')
         if self._node is None or self._pub is None:
             return False, "behavior_stop not initialised; call setup_communication(node) first"
         try:

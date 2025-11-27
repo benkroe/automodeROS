@@ -5,6 +5,7 @@ from .behavior_interface import BehaviorBase
 from automode_interfaces.msg import RobotState
 
 import time
+import math
 
 class Behavior(BehaviorBase):
     def __init__(self) -> None:
@@ -66,9 +67,9 @@ class Behavior(BehaviorBase):
             return False, "Communication not set up", False
 
         light_magnitude = self._last_robot_state.light_magnitude
-        light_angle = self._last_robot_state.light_angle
+        light_angle = math.degrees(self._last_robot_state.light_angle)  # Convert radians to degrees
         proximity_magnitude = self._last_robot_state.proximity_magnitude
-        proximity_angle = self._last_robot_state.proximity_angle
+        proximity_angle = math.degrees(self._last_robot_state.proximity_angle)  # Convert radians to degrees
 
         msg = self._Float32MultiArray()
 

@@ -27,7 +27,7 @@ setup(
             'behavior_node = automode_controller.behavior_node:main',
             'condition_node = automode_controller.condition_node:main',
             'controller_node = automode_controller.controller_node:main',
-            'ref_model_turtlebot4_gz = automode_controller.ref_model_turtlebot4_gz:main',
+            'ref_model_turtlebot4 = automode_controller.ref_model_turtlebot4:main',
         ],
     },
 )
