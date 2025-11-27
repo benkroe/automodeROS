@@ -17,7 +17,7 @@ class Behavior(BehaviorBase):
         self._Float32MultiArray = None
 
         self._forward_speed = 1.0       # Forward movement speed
-        self._turn_speed = 100.0         # Turning speed
+        self._turn_speed = 5.0         # Turning speed
         self._light_threshold = 0.0     # Light detection threshold
         self._obstacle_threshold = 3.0   # Proximity threshold to consider obstacle too close
         self._avoidance_turn_speed = 0.6  # Turn speed when avoiding obstacles
@@ -67,10 +67,9 @@ class Behavior(BehaviorBase):
             return False, "Communication not set up", False
 
         light_magnitude = self._last_robot_state.light_magnitude
-        light_angle = math.degrees(self._last_robot_state.light_angle)  # Convert radians to degrees
+        light_angle = self._last_robot_state.light_angle  
         proximity_magnitude = self._last_robot_state.proximity_magnitude
-        proximity_angle = math.degrees(self._last_robot_state.proximity_angle)  # Convert radians to degrees
-
+        proximity_angle = self._last_robot_state.proximity_angle
         msg = self._Float32MultiArray()
 
         # OBSTACLE AVOIDANCE: Turn until obstacle is no longer in front
@@ -95,21 +94,19 @@ class Behavior(BehaviorBase):
             right_wheel_speed = self._forward_speed
             
             if light_magnitude > self._light_threshold:
-                # Calculate escape angle (opposite direction from light)
-                escape_angle = (light_angle + 180) % 360
-
-                # Convert escape angle to turning direction
-                if escape_angle > 180:
-                    turn_angle = escape_angle - 360
-                else:
-                    turn_angle = escape_angle
+                # Calculate escape angle in radians (opposite direction from light)
+                escape_angle = (light_angle + math.pi) % (2 * math.pi)
+                # Normalize to (-π, π)
+                if escape_angle > math.pi:
+                    escape_angle -= 2 * math.pi
                 
-                # Apply differential steering away from light
-                turn_factor = self._turn_speed * (turn_angle / 180.0)
+                turn_angle = escape_angle
+                
+                # Apply differential steering away from light (scaled for radians)
+                turn_factor = self._turn_speed * (turn_angle / math.pi)
                 left_wheel_speed -= turn_factor
                 right_wheel_speed += turn_factor
-                
-                status_msg = f"Escaping from light (light_mag: {light_magnitude:.3f}, light_angle: {light_angle:.1f}°, escape_angle: {escape_angle:.1f}°)"
+                status_msg = f"Escaping from light (light_mag: {light_magnitude:.3f}, light_angle: {math.degrees(light_angle):.1f}°, escape_angle: {math.degrees(escape_angle):.1f}°)"
             else:
                 status_msg = f"No light detected, moving forward"
 

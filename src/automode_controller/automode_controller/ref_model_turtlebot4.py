@@ -6,6 +6,8 @@ from rclpy.executors import ExternalShutdownException
 from std_msgs.msg import Float32MultiArray, Float32, String
 from irobot_create_msgs.msg import IrIntensityVector
 from sensor_msgs.msg import Illuminance
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
+
 
 import math
 import numpy as np
@@ -30,24 +32,24 @@ class TurtleBot4ReferenceNode(Node):
         )
 
         # Publishers
-        self._cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 10, qos=self.qos)
-        self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10, qos=self.qos)
+        self._cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 5)
+        self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10)
 
         # Subscriber for wheel commands
-        self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10, qos=self.qos)    
+        self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)    
         # subscribe to consolidated ir_intensity only (compatibility pointcloud code removed)
-        self.create_subscription(Float32MultiArray, 'ir_intensity', self._ir_intensity_cb, 10, qos=self.qos)
+        self.create_subscription(Float32MultiArray, 'ir_intensity', self._ir_intensity_cb, self.qos)
 
         # subscribe to cliff intensity sensors, for ground color detection
-        self.create_subscription(IrIntensityVector, 'cliff_intensity', self._cliff_intensity_cb, 10, qos=self.qos)
+        self.create_subscription(IrIntensityVector, 'cliff_intensity', self._cliff_intensity_cb, self.qos)
 
-        # Optional: Light, ground, and neighbour sensors
+        # Optional: Light, ground, and neighbour senso
 
-        self.create_subscription(Illuminance, 'light_front_left', self._light_fl_cb, 10, qos=self.qos)
-        self.create_subscription(Illuminance, 'light_front_right', self._light_fr_cb, 10, qos=self.qos)
+        self.create_subscription(Illuminance, 'light_front_left', self._light_fl_cb, self.qos)
+        self.create_subscription(Illuminance, 'light_front_right', self._light_fr_cb, self.qos)
 
-        #self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb, 10)
-        self.create_subscription(String, 'neighbours_info', self._neighbours_cb, 10, qos=self.qos)
+        #self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb)
+        self.create_subscription(String, 'neighbours_info', self._neighbours_cb, self.qos)
 
         # Track latest IR readings (keeps [estimated_distance_m, angle] per sensor)
         self.latest_ir_vectors = {}
@@ -180,8 +182,7 @@ class TurtleBot4ReferenceNode(Node):
             y_total += weight * math.sin(angle_rad)
 
         mag = math.sqrt(x_total**2 + y_total**2)
-        angle_rad = math.atan2(y_total, x_total)  # atan2 already returns radians
-        angle_rad = (angle_rad + 2 * math.pi) % (2 * math.pi)  # Normalize to [0, 2π)
+        angle_rad = math.atan2(y_total, x_total)  
         return mag, angle_rad
 
     def compute_light_vector(self):
@@ -197,8 +198,7 @@ class TurtleBot4ReferenceNode(Node):
         y_total = fl_intensity * math.sin(math.radians(45.0)) + fr_intensity * math.sin(math.radians(-45.0))
 
         mag = math.sqrt(x_total**2 + y_total**2)
-        angle_rad = math.atan2(y_total, x_total)
-        angle_rad = (angle_rad + 2 * math.pi) % (2 * math.pi)
+        angle_rad = math.atan2(y_total, x_total)  
         return mag, angle_rad
 
     def _light_fl_cb(self, msg: Illuminance): self.latest_light_fl = msg.illuminance
@@ -216,9 +216,16 @@ class TurtleBot4ReferenceNode(Node):
         if len(msg.data) != 2:
             return
         left, right = msg.data
+
         twist = Twist()
         twist.linear.x = (left + right) / 2.0
-        twist.angular.z = (right - left)
+        twist.angular.z = (right - left) / 0.3
+
+        scale = max(abs(twist.linear.x), abs(twist.angular.z))
+        if scale > 1.0:
+            twist.linear.x /= scale
+            twist.angular.z /= scale
+            
         self._cmd_vel_pub.publish(twist)
         self.latest_wheels_speed = [left, right]
         self.latest_cmd_vel = (twist.linear.x, twist.angular.z)

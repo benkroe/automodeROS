@@ -52,7 +52,7 @@ def generate_launch_description():
 
     ref_model_node = Node(
         package='automode_controller',
-        executable='ref_model_turtlebot4_gz',
+        executable='ref_model_turtlebot4',
         name='turtlebot4_reference_node',
         namespace=namespace,
         parameters=[{'use_sim_time': True}],
