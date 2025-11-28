@@ -38,7 +38,7 @@ class TurtleBot4ReferenceNode(Node):
         # Subscriber for wheel commands
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)    
         # subscribe to consolidated ir_intensity only (compatibility pointcloud code removed)
-        self.create_subscription(Float32MultiArray, 'ir_intensity', self._ir_intensity_cb, self.qos)
+        self.create_subscription(IrIntensityVector, 'ir_intensity', self._ir_intensity_cb, self.qos)
 
         # subscribe to cliff intensity sensors, for ground color detection
         self.create_subscription(IrIntensityVector, 'cliff_intensity', self._cliff_intensity_cb, self.qos)
@@ -122,8 +122,6 @@ class TurtleBot4ReferenceNode(Node):
         except Exception:
             return
 
-        if not readings or len(readings) < 2:
-            return
 
         # Extract raw integer values (safety with getattr)
         v0 = int(getattr(readings[0], 'value', 0))
@@ -144,18 +142,30 @@ class TurtleBot4ReferenceNode(Node):
                 self.latest_floor_color = best_color
                 self.count_floor_color = 0
             # optional debug log
-            self.get_logger().debug(f"Cliff intensity -> v0={v0} v1={v1} -> colour={best_color} (err={best_err})")
+            # self.get_logger().debug(f"Cliff intensity -> v0={v0} v1={v1} -> colour={best_color} (err={best_err})")
 
-    def _ir_intensity_cb(self, msg: Float32MultiArray):
-        # msg.data elements are normalized intensities in [0,1] for each sensor index.
-        n = min(len(msg.data), len(self._ir_index_map))
+    def _ir_intensity_cb(self, msg: IrIntensityVector):
+        readings = getattr(msg, 'readings', None)
+        if not readings:
+            return
+
+        # Extract normalized intensities [0..1] from readings
+        intensities = []
+        for r in readings:
+            val = getattr(r, 'value', None)
+            if val is None:
+                val = getattr(r, 'intensity', 0.0)
+            try:
+                f = float(val)
+            except Exception:
+                f = 0.0
+            intensities.append(max(0.0, min(1.0, f)))
+
+        # Map intensities -> estimated distance per configured index map
+        n = min(len(intensities), len(self._ir_index_map))
         for i in range(n):
             name = self._ir_index_map[i]
-            intensity = float(msg.data[i]) if msg.data[i] is not None else 0.0
-            # clamp intensity
-            intensity = max(0.0, min(1.0, intensity))
-            # convert intensity -> estimated distance (meters)
-            # treat zero intensity as "no detection" -> set to PROXIMITY_MAX_RANGE
+            intensity = intensities[i]
             if intensity <= 0.0:
                 est_dist = PROXIMITY_MAX_RANGE
             else:
