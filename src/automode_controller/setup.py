@@ -12,7 +12,8 @@ setup(
         ('share/' + package_name, ['package.xml']),
         # Launch files
         ('share/' + package_name + '/launch', [
-            'launch/automode_tb4.launch.py'
+            'launch/automode_tb4.launch.py',
+            'launch/config_turt_gz_foraging.yaml',
         ]),
     ],
     install_requires=['setuptools'],
@@ -27,7 +28,9 @@ setup(
             'behavior_node = automode_controller.behavior_node:main',
             'condition_node = automode_controller.condition_node:main',
             'controller_node = automode_controller.controller_node:main',
-            'ref_model_turtlebot4 = automode_controller.ref_model_turtlebot4:main',
+            'ref_model_turtlebot4_gz = automode_controller.ref_model_turtlebot4_gz:main',
+            'ref_model_turtlebot4_wb = automode_controller.ref_model_turtlebot4_wb:main',
+            'ref_model_turtlebot4_real = automode_controller.ref_model_turtlebot4_real:main',
         ],
     },
 )

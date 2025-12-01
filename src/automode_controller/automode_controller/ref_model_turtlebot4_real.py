@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, TwistStamped
 from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
 from std_msgs.msg import Float32MultiArray, Float32, String
@@ -22,7 +22,7 @@ IR_MAX_RANGE = 0.20  # meters
 
 class TurtleBot4ReferenceNode(Node):
     def __init__(self):
-        super().__init__('turtlebot4_reference_node')
+        super().__init__('turtlebot4_reference_node_real')
 
         self.qos = QoSProfile(
             reliability=ReliabilityPolicy.BEST_EFFORT,
@@ -32,7 +32,7 @@ class TurtleBot4ReferenceNode(Node):
         )
 
         # Publishers
-        self._cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 5)
+        self._cmd_vel_pub = self.create_publisher(TwistStamped, 'cmd_vel', 5)
         self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10)
 
         # Subscriber for wheel commands
@@ -236,7 +236,14 @@ class TurtleBot4ReferenceNode(Node):
             twist.linear.x /= scale
             twist.angular.z /= scale
             
-        self._cmd_vel_pub.publish(twist)
+        # self._cmd_vel_pub.publish(twist)
+        # new with TwistStamped
+        stamped = TwistStamped()
+        stamped.header.stamp = self.get_clock().now().to_msg()
+        stamped.twist = twist
+        self._cmd_vel_pub.publish(stamped)
+
+
         self.latest_wheels_speed = [left, right]
         self.latest_cmd_vel = (twist.linear.x, twist.angular.z)
 
