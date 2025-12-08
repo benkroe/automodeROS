@@ -19,6 +19,8 @@ PROXIMITY_MAX_RANGE = 2.0  # meters (reduced for IR realism)
 # New tunable IR parameters (matches new ir_intensity input semantics)
 IR_MIN_RANGE = 0.02  # meters
 IR_MAX_RANGE = 0.20  # meters
+IR_DETECTION_THRESHOLD = 0.1
+IR_INTENSITY_MAX = 1725.0 
 
 class TurtleBot4ReferenceNode(Node):
     def __init__(self):
@@ -38,15 +40,16 @@ class TurtleBot4ReferenceNode(Node):
         # Subscriber for wheel commands
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)    
         # subscribe to consolidated ir_intensity only (compatibility pointcloud code removed)
-        self.create_subscription(IrIntensityVector, 'ir_intensity', self._ir_intensity_cb, self.qos)
+        self.create_subscription(IrIntensityVector, 'ir_intensities', self._ir_intensities_cb, self.qos)
 
-        # subscribe to cliff intensity sensors, for ground color detection
-        self.create_subscription(IrIntensityVector, 'cliff_intensity', self._cliff_intensity_cb, self.qos)
+        # subscribe to demo_sensor instead of cliff sensors
+        self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb, self.qos)
 
-        # Optional: Light, ground, and neighbour senso
+        # Subscribe to the three light sensor topics (Float32)
+        self.create_subscription(Float32, 'light_sensor_front_left', self._light_fl_cb, self.qos)
+        self.create_subscription(Float32, 'light_sensor_front_right', self._light_fr_cb, self.qos)
+        self.create_subscription(Float32, 'light_sensor_back', self._light_back_cb, self.qos)
 
-        self.create_subscription(Illuminance, 'light_front_left', self._light_fl_cb, self.qos)
-        self.create_subscription(Illuminance, 'light_front_right', self._light_fr_cb, self.qos)
 
         #self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb)
         self.create_subscription(String, 'neighbours_info', self._neighbours_cb, self.qos)
@@ -84,6 +87,10 @@ class TurtleBot4ReferenceNode(Node):
             'side_left':          math.radians(65.3)
         }
 
+        self.latest_light_fl = None
+        self.latest_light_fr = None
+        self.latest_light_back = None
+
 
         # State variables
         self.robot_id = ROBOT_ID
@@ -97,12 +104,6 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_wheels_speed = [0.0, 0.0]
         self.latest_cmd_vel = (0.0, 0.0)
 
-        # black: (969, 982), grey: (887, 901), white: (962, 975)
-        self._floor_color_refs = {
-            'black': (969, 969),
-            'gray':  (887, 887),
-            'white': (962, 962)
-        }
 
         # Initialize entries so compute_proximity has consistent keys
         for name in self._ir_index_map:
@@ -114,36 +115,10 @@ class TurtleBot4ReferenceNode(Node):
         self.create_timer(0.05, self._publish_robot_state)
 
 
-    def _cliff_intensity_cb(self, msg: IrIntensityVector):
-        # Use the two front cliff sensors (index 0: front_left, 1: front_right)
-        try:
-            readings = msg.readings
-        except Exception:
-            return
+    def _ground_sensor_cb(self, msg: String):
+        self.latest_floor_color = msg.data
 
-
-        # Extract raw integer values (safety with getattr)
-        v0 = int(getattr(readings[0], 'value', 0))
-        v1 = int(getattr(readings[1], 'value', 0))
-
-        # Choose the colour with minimal squared error to the reference pair
-        best_color = None
-        best_err = float('inf')
-        for color, (r0, r1) in self._floor_color_refs.items():
-            err = (v0 - r0) ** 2 + (v1 - r1) ** 2
-            if err < best_err:
-                best_err = err
-                best_color = color
-
-        if best_color is not None:
-            self.count_floor_color += 1
-            if self.count_floor_color > 10:
-                self.latest_floor_color = best_color
-                self.count_floor_color = 0
-            # optional debug log
-            # self.get_logger().debug(f"Cliff intensity -> v0={v0} v1={v1} -> colour={best_color} (err={best_err})")
-
-    def _ir_intensity_cb(self, msg: IrIntensityVector):
+    def _ir_intensities_cb(self, msg: IrIntensityVector):
         readings = getattr(msg, 'readings', None)
         if not readings:
             return
@@ -155,7 +130,10 @@ class TurtleBot4ReferenceNode(Node):
             if val is None:
                 val = getattr(r, 'intensity', 0.0)
             try:
+                # Normalize if value is integer (0..1725), else use as-is
                 f = float(val)
+                if isinstance(val, int) or (isinstance(f, float) and f > 1.0):
+                    f = f / IR_INTENSITY_MAX
             except Exception:
                 f = 0.0
             intensities.append(max(0.0, min(1.0, f)))
@@ -165,7 +143,8 @@ class TurtleBot4ReferenceNode(Node):
         for i in range(n):
             name = self._ir_index_map[i]
             intensity = intensities[i]
-            if intensity <= 0.0:
+
+            if intensity <= IR_DETECTION_THRESHOLD:
                 est_dist = PROXIMITY_MAX_RANGE
             else:
                 est_dist = IR_MIN_RANGE + (1.0 - intensity) * (IR_MAX_RANGE - IR_MIN_RANGE)
@@ -191,7 +170,10 @@ class TurtleBot4ReferenceNode(Node):
             y_total += weight * math.sin(angle_rad)
 
         mag = math.sqrt(x_total**2 + y_total**2)
-        angle_rad = math.atan2(y_total, x_total)  
+        angle_rad = math.atan2(y_total, x_total)
+
+        # Normalize proximity magnitude to [0, 1]
+        mag = max(0.0, min(1.0, mag / (len(self.latest_ir_vectors) * PROXIMITY_MAX_RANGE)))
         return mag, angle_rad
 
     def compute_light_vector(self):
@@ -210,8 +192,32 @@ class TurtleBot4ReferenceNode(Node):
         angle_rad = math.atan2(y_total, x_total)  
         return mag, angle_rad
 
-    def _light_fl_cb(self, msg: Illuminance): self.latest_light_fl = msg.illuminance
-    def _light_fr_cb(self, msg: Illuminance): self.latest_light_fr = msg.illuminance
+    def compute_light_vector(self):
+        # Use all three sensors if available
+        if self.latest_light_fl is None or self.latest_light_fr is None or self.latest_light_back is None:
+            return 0.0, 0.0
+
+        # Sensor arrangement: front_left (+45°), front_right (-45°), back (180°)
+        fl = float(self.latest_light_fl)
+        fr = float(self.latest_light_fr)
+        back = float(self.latest_light_back)
+
+        # Each sensor contributes a vector
+        x_total = fl * math.cos(math.radians(45.0)) + fr * math.cos(math.radians(-45.0)) + back * math.cos(math.radians(180.0))
+        y_total = fl * math.sin(math.radians(45.0)) + fr * math.sin(math.radians(-45.0)) + back * math.sin(math.radians(180.0))
+
+        mag = math.sqrt(x_total**2 + y_total**2)
+        angle_rad = math.atan2(y_total, x_total)
+        return mag, angle_rad
+
+    def _light_fl_cb(self, msg: Float32):
+        self.latest_light_fl = msg.data
+
+    def _light_fr_cb(self, msg: Float32):
+        self.latest_light_fr = msg.data
+
+    def _light_back_cb(self, msg: Float32):
+        self.latest_light_back = msg.data
 
     def _neighbours_cb(self, msg: String):
         try:

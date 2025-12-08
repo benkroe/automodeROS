@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Float32MultiArray
+from irobot_create_msgs.msg import IrIntensityVector, IrIntensity
 import math
 import functools
 from rclpy.qos import qos_profile_sensor_data
@@ -39,8 +40,8 @@ class IRSensor(Node):
             )
             self.scan_subscriptions.append(sub)
 
-        # Publisher for the IR intensity vector
-        self.ir_intensities_publisher = self.create_publisher(Float32MultiArray, 'ir_intensities', qos_profile_sensor_data)
+        # Publisher for the IR intensity vector (changed from Float32MultiArray)
+        self.ir_intensities_publisher = self.create_publisher(IrIntensityVector, 'ir_intensities', qos_profile_sensor_data)
 
 
     def ir_scan_callback(self, msg, topic):
@@ -76,21 +77,22 @@ class IRSensor(Node):
 
     def publish_ir_data(self):
         """Publishes the updated IR intensity vector to the topic 'ir_intensities'."""
-        ir_intensities_msg = Float32MultiArray()
-        ir_intensities_msg.data = [self.ir_values[sensor] for sensor in self.ir_sensors_list]
+        ir_intensities_msg = IrIntensityVector()
 
-        # add gaussian noise to the ir_values (I had to set the max because if the value is 0, won't be added)
-        # a 0 value happens when the IR sensor is not detecting anything
-        # I set a standard deviation of 10, which is a reasonable value for IR sensors since they vary between 0 and 1725
-        ir_intensities_msg.data = [x + np.random.normal(0.0, 10) for x in ir_intensities_msg.data]
+        # Produce the same numeric values you used before (raw [0..1725] with noise)
+        values = [self.ir_values[sensor] for sensor in self.ir_sensors_list]
+        values = [x + np.random.normal(0.0, 10) for x in values]
+        values = np.clip(values, 0.0, 1725.0).tolist()  # ensure plain Python list
 
-        # clip the values to be between 0 and 1725
-        ir_intensities_msg.data = np.clip(ir_intensities_msg.data, 0.0, 1725.0)
-
-
+        # Create IrIntensity reading objects and populate .value
+        ir_intensities_msg.readings = []
+        for v in values:
+            reading = IrIntensity()
+            reading.value = int(round(v))
+            ir_intensities_msg.readings.append(reading)
 
         self.ir_intensities_publisher.publish(ir_intensities_msg)
-        #self.get_logger().info(f'Published IR intensities: {ir_intensities_msg.data}')
+        # self.get_logger().info(f'Published IR intensities (IrIntensityVector): {[r.value for r in ir_intensities_msg.readings]}')
 
 
 def main(args=None):
