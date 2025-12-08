@@ -75,13 +75,13 @@ class TurtleBot4ReferenceNode(Node):
 
         # Fixed sensor mounting angles (degrees, x-forward, +y left)
         self._sensor_angle_map = {
-            'front_center_left':  math.radians(10.0),
-            'front_center_right': math.radians(-10.0),
-            'front_left':         math.radians(30.0),
-            'front_right':        math.radians(-30.0),
-            'left':               math.radians(90.0),
-            'right':              math.radians(-90.0),
-            'side_left':          math.radians(135.0)
+            'front_center_left':  math.radians(0.0),     
+            'front_center_right': math.radians(-25.0),   
+            'front_left':         math.radians(25.0),    
+            'front_right':        math.radians(-50.0),   
+            'left':               math.radians(50.0),    
+            'right':              math.radians(-75.0),  
+            'side_left':          math.radians(75.0)     
         }
 
 
