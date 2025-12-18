@@ -24,6 +24,7 @@ IR_MIN_RANGE = 0.02  # meters
 IR_MAX_RANGE = 0.20  # meters
 IR_DETECTION_THRESHOLD = 0.05
 IR_INTENSITY_MAX = 1725.0 
+NEIGHBOUR_DETECTION_RANGE=1000
 
 # Arena definition
 # Arena points
@@ -233,6 +234,29 @@ class TurtleBot4ReferenceNode(Node):
         mag = max(0.0, min(1.0, mag / (len(self.latest_ir_vectors) * PROXIMITY_MAX_RANGE)))
         return mag, angle_rad
 
+    def compute_neighbours(self):
+        my_pose = self.robots.get(SUBJECT_NAME, None)
+        if my_pose is None:
+            return 0, 0.0
+        my_x, my_y, my_theta = my_pose
+        count = 0
+        sum_dx = 0.0
+        sum_dy = 0.0
+        for name, (x, y, theta) in self.robots.items():
+            if name == SUBJECT_NAME:
+                continue
+            dx = x - my_x
+            dy = y - my_y
+            dist = math.sqrt(dx*dx + dy*dy)
+            if dist <= NEIGHBOUR_DETECTION_RANGE:
+                count += 1
+                sum_dx += dx
+                sum_dy += dy
+        if count > 0:
+            angle = math.atan2(sum_dy, sum_dx) - my_theta
+        else:
+            angle = 0.0
+        return count, angle
 
     def compute_light_vector(self):
         # Collect the latest sensor readings
@@ -304,8 +328,9 @@ class TurtleBot4ReferenceNode(Node):
         msg = RobotState()
         msg.robot_id = self.robot_id
         msg.floor_color = self.latest_floor_color
-        msg.neighbour_count = self.latest_neighbour_count
-        msg.attraction_angle = self.latest_attraction_angle
+        count, angle = self.compute_neighbours()
+        msg.neighbour_count = count
+        msg.attraction_angle = angle
         msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
         msg.light_magnitude, msg.light_angle = self.compute_light_vector()
 
