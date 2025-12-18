@@ -8,12 +8,14 @@ from irobot_create_msgs.msg import IrIntensityVector
 from sensor_msgs.msg import Illuminance
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
 from vicon_receiver.msg import Position
+from vicon_receiver.msg import PositionList
 
 
 import math
 import numpy as np
 
 ROBOT_ID = 1  # Default robot ID (change if used)
+SUBJECT_NAME = f"turtlebot4_11"
 
 PROXIMITY_MAX_RANGE = 2.0  # meters (reduced for IR realism)
 
@@ -23,9 +25,47 @@ IR_MAX_RANGE = 0.20  # meters
 IR_DETECTION_THRESHOLD = 0.05
 IR_INTENSITY_MAX = 1725.0 
 
+# Arena definition
+# Arena points
+# x=663, y=1596 -- door -right
+# x=-1368, y=2036 -- door -left
+# x=-1569, y=-418 --window -left
+# x=470, y=-124 --window -right (kind of)
+class Arena:
+    def __init__(self):
+        # Arena edge points (approximate polygon)
+        self.arena_points = [
+            (663, 1596),    # door - right
+            (-1368, 2036),  # door - left
+            (-1569, -418),  # window - left
+            (470, -124)     # window - right
+        ]
+        # Define color regions (example: white, black, gray)
+        # For simplicity, use bounding boxes for each region
+        self.white_box = (0, 600, 0, 1600)    # Example: right upper area
+        self.black_box = (-1600, -1300, -500, 2100)  # Example: left side
+        # The rest is gray
+
+    def get_color(self, x, y):
+        # White region (example: right upper area)
+        xw_min, xw_max, yw_min, yw_max = self.white_box
+        if xw_min <= x <= xw_max and yw_min <= y <= yw_max:
+            return "white"
+        # Black region (example: left side)
+        xb_min, xb_max, yb_min, yb_max = self.black_box
+        if xb_min <= x <= xb_max and yb_min <= y <= yb_max:
+            return "black"
+        # Otherwise gray
+        return "gray"
+    
+
+
 class TurtleBot4ReferenceNode(Node):
     def __init__(self):
         super().__init__('turtlebot4_reference_node_gz')
+
+        self.arena = Arena()
+        self.robots = {} 
 
         self.qos = QoSProfile(
             reliability=ReliabilityPolicy.RELIABLE,
@@ -51,7 +91,7 @@ class TurtleBot4ReferenceNode(Node):
         self.create_subscription(IrIntensityVector, 'ir_intensity', self._ir_intensities_cb, self.qos)
 
         # subscribtion for position from tracking system. for now only turt11
-        self.vicon_sub = self.create_subscription(Position, '/vicon/turtlebot4_11/turtlebot4_11_segment', self.vicon_callback, 10 )
+        self.vicon_sub = self.create_subscription(PositionList, '/vicon/default/data', self.vicon_callback, 10)
 
         # Subscribe to the three light sensor topics (Float32)
         self.create_subscription(Float32, 'light_sensor_front_left', self._light_fl_cb, self.light_qos)
@@ -123,8 +163,16 @@ class TurtleBot4ReferenceNode(Node):
         self.create_timer(0.05, self._publish_robot_state)
 
 
-    def _ground_sensor_cb(self, msg: String):
-        self.latest_floor_color = msg.data
+    def vicon_callback(self, msg):
+        # msg is PositionList
+        for pos in msg.positions:
+            x = pos.x_trans
+            y = pos.y_trans
+            theta = pos.z_rot_euler  # Or use quaternion if you prefer
+            self.robots[pos.subject_name] = (x, y, theta)
+            # If this is our robot, update floor color
+            if pos.subject_name == SUBJECT_NAME:  # Or use self.subject_name if configurable
+                self.latest_floor_color = self.arena.get_color(x, y)
 
     def _ir_intensities_cb(self, msg: IrIntensityVector):
         self._publish_robot_state()

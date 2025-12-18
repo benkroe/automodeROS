@@ -24,6 +24,7 @@ setup(
             'condition_test_node = automode_tools.condition_test_node:main',
             'robotState_test_pub = automode_tools.robotState_test_pub:main',
             'categories_creator = automode_tools.categories_creator:main',
+            'vicon_terminal_viz_node = automode_tools.vicon_terminal_viz_node:main',
         ],
     },
 )
