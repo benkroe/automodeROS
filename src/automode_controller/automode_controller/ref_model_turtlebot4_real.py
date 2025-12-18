@@ -7,6 +7,7 @@ from std_msgs.msg import Float32MultiArray, Float32, String
 from irobot_create_msgs.msg import IrIntensityVector
 from sensor_msgs.msg import Illuminance
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
+from vicon_receiver.msg import Position
 
 
 import math
@@ -39,6 +40,7 @@ class TurtleBot4ReferenceNode(Node):
 
 
 
+
         # Publishers
         self._cmd_vel_pub = self.create_publisher(TwistStamped, 'cmd_vel', 5)
         self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10)
@@ -48,17 +50,14 @@ class TurtleBot4ReferenceNode(Node):
         # subscribe to consolidated ir_intensity only (compatibility pointcloud code removed)
         self.create_subscription(IrIntensityVector, 'ir_intensity', self._ir_intensities_cb, self.qos)
 
-        # subscribe to demo_sensor instead of cliff sensors
-        self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb, self.qos)
+        # subscribtion for position from tracking system. for now only turt11
+        self.vicon_sub = self.create_subscription(Position, '/vicon/turtlebot4_11/turtlebot4_11_segment', self.vicon_callback, 10 )
 
         # Subscribe to the three light sensor topics (Float32)
         self.create_subscription(Float32, 'light_sensor_front_left', self._light_fl_cb, self.light_qos)
         self.create_subscription(Float32, 'light_sensor_front_right', self._light_fr_cb, self.light_qos)
         self.create_subscription(Float32, 'light_sensor_back', self._light_back_cb, self.light_qos)
 
-
-        #self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb)
-        self.create_subscription(String, 'neighbours_info', self._neighbours_cb, self.qos)
 
         # Track latest IR readings (keeps [estimated_distance_m, angle] per sensor)
         self.latest_ir_vectors = {}
