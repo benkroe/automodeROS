@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, TwistStamped
 from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
 from std_msgs.msg import Float32MultiArray, Float32, String
@@ -32,7 +32,7 @@ class TurtleBot4ReferenceNode(Node):
         )
 
         # Publishers
-        self._cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 5)
+        self._cmd_vel_pub = self.create_publisher(TwistStamped, 'diffdrive_controller/cmd_vel', 5)
         self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10)
 
         # Subscriber for wheel commands
@@ -192,7 +192,7 @@ class TurtleBot4ReferenceNode(Node):
             y_total += weight * math.sin(angle_rad)
 
         mag = math.sqrt(x_total**2 + y_total**2)
-        angle_rad = math.atan2(y_total, x_total)  
+        angle_rad = math.atan2(x_total, y_total)  
         return mag, angle_rad
 
     def compute_light_vector(self):
@@ -236,7 +236,13 @@ class TurtleBot4ReferenceNode(Node):
             twist.linear.x /= scale
             twist.angular.z /= scale
             
-        self._cmd_vel_pub.publish(twist)
+        # self._cmd_vel_pub.publish(twist)
+        # new with TwistStamped
+        stamped = TwistStamped()
+        stamped.header.stamp = self.get_clock().now().to_msg()
+        stamped.twist = twist
+        self._cmd_vel_pub.publish(stamped)
+
 
         self.latest_wheels_speed = [left, right]
         self.latest_cmd_vel = (twist.linear.x, twist.angular.z)

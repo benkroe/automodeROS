@@ -1,6 +1,6 @@
 # Launch-level defaults for automode_tb4.launch.py
-robot_namespace: "turtlebot4_11"
+robot_namespace: "Turtlebot4"
 module_package: "basic_modules"
 fsm_config: "--fsm-config --nstates 3 --s0 0 --rwm0 50 --n0 1 --n0x0 0 --c0x0 2 --p0x0 1 --s1 2 --n1 1 --n1x0 1 --c1x0 1 --p1x0 1 --s2 3 --n2 1 --n2x0 0 --c2x0 0 --color2x0 2 --p2x0 1 "
-ref_model: "ref_model_turtlebot4_real"
+ref_model: "ref_model_turtlebot4_wb"
 
