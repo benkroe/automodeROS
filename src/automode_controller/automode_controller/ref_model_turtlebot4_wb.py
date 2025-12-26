@@ -32,7 +32,7 @@ class TurtleBot4ReferenceNode(Node):
         )
 
         # Publishers
-        self._cmd_vel_pub = self.create_publisher(TwistStamped, 'diffdrive_controller/cmd_vel', 5)
+        self._cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 5)
         self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10)
 
         # Subscriber for wheel commands
@@ -236,12 +236,12 @@ class TurtleBot4ReferenceNode(Node):
             twist.linear.x /= scale
             twist.angular.z /= scale
             
-        # self._cmd_vel_pub.publish(twist)
+        self._cmd_vel_pub.publish(twist)
         # new with TwistStamped
-        stamped = TwistStamped()
-        stamped.header.stamp = self.get_clock().now().to_msg()
-        stamped.twist = twist
-        self._cmd_vel_pub.publish(stamped)
+        # stamped = TwistStamped()
+        # stamped.header.stamp = self.get_clock().now().to_msg()
+        # stamped.twist = twist
+        # self._cmd_vel_pub.publish(stamped)
 
 
         self.latest_wheels_speed = [left, right]
