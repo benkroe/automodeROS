@@ -31,6 +31,7 @@ setup(
             'ref_model_turtlebot4_gz = automode_controller.ref_model_turtlebot4_gz:main',
             'ref_model_turtlebot4_wb = automode_controller.ref_model_turtlebot4_wb:main',
             'ref_model_turtlebot4_real = automode_controller.ref_model_turtlebot4_real:main',
+            'ref_model_turtlebot4_gz_nav = automode_controller.ref_model_turtlebot4_gz_nav:main',
         ],
     },
 )
