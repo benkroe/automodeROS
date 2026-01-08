@@ -5,7 +5,7 @@ from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
 from std_msgs.msg import Float32MultiArray, Float32, String
 from sensor_msgs.msg import Illuminance, LaserScan
-from tf2_msgs.msg import TFMessage
+from nav_msgs.msg import Odometry
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
 from tf2_ros.buffer import Buffer
 from tf2_ros.transform_listener import TransformListener
@@ -55,9 +55,9 @@ class TurtleBot4ReferenceNode(Node):
         self.tf_listener = TransformListener(self.tf_buffer, self)
         self.namespace = self.get_namespace().strip('/')
         
-        # Subscribe to world/pose for ground truth position
+        # Subscribe to ground truth odometry
         self.ground_truth_position = None
-        self.create_subscription(TFMessage, '/world/pose', self._world_pose_cb, 10)
+        self.create_subscription(Odometry, 'ground_truth_odom', self._ground_truth_odom_cb, 10)
         
         # Subscriber for wheel commands
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)
@@ -123,10 +123,12 @@ class TurtleBot4ReferenceNode(Node):
         self.create_timer(0.05, self._publish_robot_state)
 
 
-    def _world_pose_cb(self, msg: TFMessage):
-
-        if len(msg.transforms) > 6: # index 6 is the mission frame
-            self.ground_truth_position = msg.transforms[6].transform.translation
+    def _ground_truth_odom_cb(self, msg: Odometry):
+        """Callback for ground truth odometry from Gazebo."""
+        self.ground_truth_position = msg.pose.pose.position
+        self.get_logger().info(f"Ground truth position: x={self.ground_truth_position.x:.3f}, "
+                               f"y={self.ground_truth_position.y:.3f}, "
+                               f"z={self.ground_truth_position.z:.3f}")
 
     def _update_ground_sensor(self):
         if self.ground_truth_position is None:
