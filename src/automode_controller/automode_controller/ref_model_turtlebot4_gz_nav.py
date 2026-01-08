@@ -5,7 +5,11 @@ from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
 from std_msgs.msg import Float32MultiArray, Float32, String
 from sensor_msgs.msg import Illuminance, LaserScan
+from tf2_msgs.msg import TFMessage
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
+from tf2_ros.buffer import Buffer
+from tf2_ros.transform_listener import TransformListener
+from tf2_ros import TransformException
 
 
 import math
@@ -16,7 +20,20 @@ ROBOT_ID = 1  # Default robot ID (change if used)
 PROXIMITY_MAX_RANGE = 2.0  # meters (reduced for IR realism)
 PROXIMITY_RANGE_MIN = 0.01  # meters
 PROXIMITY_RANGE_MAX = 0.10  # meters
-PROXIMITY_INF_THRESHOLD = 10.0  # Treat anything >= this as inf/no detection 
+PROXIMITY_INF_THRESHOLD = 10.0  # Treat anything >= this as inf/no detection
+
+# Ground sensor configuration (mission world)
+GROUND_SENSOR_BASE_FRAME = 'mission'
+WHITE_X_MIN = -3
+WHITE_X_MAX = 3
+WHITE_Y_MIN = 1
+WHITE_Y_MAX = 3
+BLACK1_X = -1.5
+BLACK1_Y = -1.0
+BLACK1_RADIUS = 0.4
+BLACK2_X = 1.5
+BLACK2_Y = -1.0
+BLACK2_RADIUS = 0.4 
 
 class TurtleBot4ReferenceNode(Node):
     def __init__(self):
@@ -33,6 +50,15 @@ class TurtleBot4ReferenceNode(Node):
         self._cmd_vel_pub = self.create_publisher(TwistStamped, 'cmd_vel', 5)
         self._robot_state_pub = self.create_publisher(RobotState, 'robotState', 10)
 
+        # TF2 buffer and listener for ground sensor
+        self.tf_buffer = Buffer()
+        self.tf_listener = TransformListener(self.tf_buffer, self)
+        self.namespace = self.get_namespace().strip('/')
+        
+        # Subscribe to world/pose for ground truth position
+        self.ground_truth_position = None
+        self.create_subscription(TFMessage, '/world/pose', self._world_pose_cb, 10)
+        
         # Subscriber for wheel commands
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)
         
@@ -43,16 +69,15 @@ class TurtleBot4ReferenceNode(Node):
                                    lambda msg, sensor_id=i: self._proximity_cb(msg, sensor_id), 
                                    self.qos)
 
-        # subscribe to demo_sensor instead of cliff sensors
-        self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb, self.qos)
+        # Ground sensor computation timer (0.2s = 5 Hz)
+        self.create_timer(0.2, self._update_ground_sensor)
 
         # Subscribe to the three light sensor topics (Float32)
         self.create_subscription(Float32, 'light_sensor_front_left', self._light_fl_cb, self.qos)
         self.create_subscription(Float32, 'light_sensor_front_right', self._light_fr_cb, self.qos)
         self.create_subscription(Float32, 'light_sensor_back', self._light_back_cb, self.qos)
 
-
-        #self.create_subscription(String, 'ground_sensor_center', self._ground_sensor_cb)
+        # Subscribe to neighbours info
         self.create_subscription(String, 'neighbours_info', self._neighbours_cb, self.qos)
 
         # Track latest IR readings (keeps [estimated_distance_m, angle] per sensor)
@@ -61,13 +86,13 @@ class TurtleBot4ReferenceNode(Node):
         # Fixed sensor mounting angles (degrees from xacro definitions)
         # Proximity sensors are numbered 1-7 with specific angles
         self._sensor_angle_map = {
-            1: math.radians(-65.3),  # front_left
-            2: math.radians(-38.0),  # left
-            3: math.radians(-20.0),  # mid_left
-            4: math.radians(-3.0),   # center
-            5: math.radians(14.25),  # mid_right
-            6: math.radians(34.0),   # right
-            7: math.radians(65.3)    # front_right
+            1: math.radians(65.3),  # left
+            2: math.radians(38.0),  # lmid left
+            3: math.radians(20.0),  # middle legt
+            4: math.radians(3.0),   # center
+            5: math.radians(-14.25),  # middle right
+            6: math.radians(-34.0),   # mid right
+            7: math.radians(-65.3)    # right
         }
 
         self.latest_light_fl = None
@@ -98,11 +123,33 @@ class TurtleBot4ReferenceNode(Node):
         self.create_timer(0.05, self._publish_robot_state)
 
 
-    def _ground_sensor_cb(self, msg: String):
-        self.latest_floor_color = msg.data
+    def _world_pose_cb(self, msg):
+        if len(msg.transforms) > 6: # nav2_turlebot4 is the 7th transform --- index vise because no names after bridge
+            self.ground_truth_position = msg.transforms[6].transform.translation
+
+    def _update_ground_sensor(self):
+        if self.ground_truth_position is None:
+            self.get_logger().info("Waiting for ground truth position from /world/pose")
+            return
+
+        x = self.ground_truth_position.x
+        y = self.ground_truth_position.y
+        self.get_logger().info(f"Ground sensor position (ground truth): x={x:.2f}, y={y:.2f}")
+
+        # Mission world logic
+        if (WHITE_X_MIN <= x <= WHITE_X_MAX and
+            WHITE_Y_MIN <= y <= WHITE_Y_MAX):
+            color = "white"
+        elif ((x - BLACK1_X)**2 + (y - BLACK1_Y)**2 <= BLACK1_RADIUS**2):
+            color = "black"
+        elif ((x - BLACK2_X)**2 + (y - BLACK2_Y)**2 <= BLACK2_RADIUS**2):
+            color = "black"
+        else:
+            color = "gray"
+
+        self.latest_floor_color = color
 
     def _proximity_cb(self, msg: LaserScan, sensor_id: int):
-        self.get_logger().info(f"Proximity[{sensor_id}] ranges: {list(msg.ranges)}")
         if not msg.ranges or len(msg.ranges) == 0:
             # No ranges available, treat as no detection
             angle = self._sensor_angle_map.get(sensor_id, 0.0)
@@ -127,7 +174,6 @@ class TurtleBot4ReferenceNode(Node):
         if not self.latest_ir_vectors:
             return 0.0, 0.0
 
-        self.get_logger().info(f"Proximity vectors: {self.latest_ir_vectors}")
         x_total, y_total = 0.0, 0.0
         for dist, angle in self.latest_ir_vectors.values():
             # larger weight for closer obstacles: (PROXIMITY_MAX_RANGE - dist)
@@ -213,7 +259,7 @@ class TurtleBot4ReferenceNode(Node):
         stamped = TwistStamped()
         stamped.header.stamp = self.get_clock().now().to_msg()
         stamped.twist = twist
-        self._cmd_vel_pub.publish(stamped)
+        #self._cmd_vel_pub.publish(stamped)
 
 
         self.latest_wheels_speed = [left, right]
