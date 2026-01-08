@@ -123,8 +123,9 @@ class TurtleBot4ReferenceNode(Node):
         self.create_timer(0.05, self._publish_robot_state)
 
 
-    def _world_pose_cb(self, msg):
-        if len(msg.transforms) > 6: # nav2_turlebot4 is the 7th transform --- index vise because no names after bridge
+    def _world_pose_cb(self, msg: TFMessage):
+
+        if len(msg.transforms) > 6: # index 6 is the mission frame
             self.ground_truth_position = msg.transforms[6].transform.translation
 
     def _update_ground_sensor(self):
@@ -134,7 +135,6 @@ class TurtleBot4ReferenceNode(Node):
 
         x = self.ground_truth_position.x
         y = self.ground_truth_position.y
-        self.get_logger().info(f"Ground sensor position (ground truth): x={x:.2f}, y={y:.2f}")
 
         # Mission world logic
         if (WHITE_X_MIN <= x <= WHITE_X_MAX and
