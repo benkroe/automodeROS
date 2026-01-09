@@ -33,7 +33,15 @@ BLACK1_Y = -1.0
 BLACK1_RADIUS = 0.4
 BLACK2_X = 1.5
 BLACK2_Y = -1.0
-BLACK2_RADIUS = 0.4 
+BLACK2_RADIUS = 0.4
+
+# Light sensor configuration (mission world)
+LIGHT_SOURCE_X = 0.0
+LIGHT_SOURCE_Y = 3.5
+LIGHT_SENSOR_OFFSET = 0.1  # meters from robot center
+LIGHT_SENSOR_FL_ANGLE = math.radians(45.0)   # front left
+LIGHT_SENSOR_FR_ANGLE = math.radians(-45.0)  # front right
+LIGHT_SENSOR_BACK_ANGLE = math.radians(180.0)  # back 
 
 class TurtleBot4ReferenceNode(Node):
     def __init__(self):
@@ -57,6 +65,7 @@ class TurtleBot4ReferenceNode(Node):
         
         # Subscribe to ground truth odometry
         self.ground_truth_position = None
+        self.ground_truth_orientation = None
         self.create_subscription(Odometry, 'ground_truth_odom', self._ground_truth_odom_cb, 10)
         
         # Subscriber for wheel commands
@@ -72,10 +81,8 @@ class TurtleBot4ReferenceNode(Node):
         # Ground sensor computation timer (0.2s = 5 Hz)
         self.create_timer(0.2, self._update_ground_sensor)
 
-        # Subscribe to the three light sensor topics (Float32)
-        self.create_subscription(Float32, 'light_sensor_front_left', self._light_fl_cb, self.qos)
-        self.create_subscription(Float32, 'light_sensor_front_right', self._light_fr_cb, self.qos)
-        self.create_subscription(Float32, 'light_sensor_back', self._light_back_cb, self.qos)
+        # Light sensor computation timer (10 Hz, same as external node)
+        self.create_timer(0.01, self._update_light_sensors)
 
         # Subscribe to neighbours info
         self.create_subscription(String, 'neighbours_info', self._neighbours_cb, self.qos)
@@ -126,9 +133,7 @@ class TurtleBot4ReferenceNode(Node):
     def _ground_truth_odom_cb(self, msg: Odometry):
         """Callback for ground truth odometry from Gazebo."""
         self.ground_truth_position = msg.pose.pose.position
-        self.get_logger().info(f"Ground truth position: x={self.ground_truth_position.x:.3f}, "
-                               f"y={self.ground_truth_position.y:.3f}, "
-                               f"z={self.ground_truth_position.z:.3f}")
+        self.ground_truth_orientation = msg.pose.pose.orientation
 
     def _update_ground_sensor(self):
         if self.ground_truth_position is None:
@@ -150,6 +155,68 @@ class TurtleBot4ReferenceNode(Node):
             color = "gray"
 
         self.latest_floor_color = color
+
+    def _update_light_sensors(self):
+
+        if self.ground_truth_position is None or self.ground_truth_orientation is None:
+            return
+
+        q = self.ground_truth_orientation
+        siny_cosp = 2.0 * (q.w * q.z + q.x * q.y)
+        cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z)
+        robot_yaw = math.atan2(siny_cosp, cosy_cosp)
+
+        robot_x = self.ground_truth_position.x
+        robot_y = self.ground_truth_position.y
+
+        dx = LIGHT_SOURCE_X - robot_x
+        dy = LIGHT_SOURCE_Y - robot_y
+        distance = math.sqrt(dx**2 + dy**2)
+        
+        if distance == 0:
+            self.latest_light_fl = 0.0
+            self.latest_light_fr = 0.0
+            self.latest_light_back = 0.0
+            return
+
+        # Angle from robot to light in world frame
+        angle_to_light_world = math.atan2(dy, dx)
+        
+        angle_to_light_robot = angle_to_light_world - robot_yaw
+
+        while angle_to_light_robot > math.pi:
+            angle_to_light_robot -= 2 * math.pi
+        while angle_to_light_robot < -math.pi:
+            angle_to_light_robot += 2 * math.pi
+
+        # Base intensity from distance (inverse square law)
+        base_intensity = 1.0 / (distance ** 2)
+
+        sensors = [
+            ('fl', LIGHT_SENSOR_FL_ANGLE),
+            ('fr', LIGHT_SENSOR_FR_ANGLE),
+            ('back', LIGHT_SENSOR_BACK_ANGLE)
+        ]
+
+        for sensor_name, sensor_facing_angle in sensors:
+            # Angular difference between sensor facing direction and light direction
+            angle_diff = angle_to_light_robot - sensor_facing_angle
+            # Normalize to [-pi, pi]
+            while angle_diff > math.pi:
+                angle_diff -= 2 * math.pi
+            while angle_diff < -math.pi:
+                angle_diff += 2 * math.pi
+            
+            directional_factor = max(0.0, math.cos(angle_diff))
+            
+            sensor_value = base_intensity * directional_factor
+
+            if sensor_name == 'fl':
+                self.latest_light_fl = sensor_value
+            elif sensor_name == 'fr':
+                self.latest_light_fr = sensor_value
+            elif sensor_name == 'back':
+                self.latest_light_back = sensor_value
 
     def _proximity_cb(self, msg: LaserScan, sensor_id: int):
         if not msg.ranges or len(msg.ranges) == 0:
@@ -192,22 +259,6 @@ class TurtleBot4ReferenceNode(Node):
         return mag, angle_rad
 
     def compute_light_vector(self):
-        if self.latest_light_fl is None or self.latest_light_fr is None:
-            return 0.0, 0.0
-
-        # Simple model: each sensor contributes a vector
-        fl_intensity = float(self.latest_light_fl)
-        fr_intensity = float(self.latest_light_fr)
-
-        # Weights proportional to intensity
-        x_total = fl_intensity * math.cos(math.radians(45.0)) + fr_intensity * math.cos(math.radians(-45.0))
-        y_total = fl_intensity * math.sin(math.radians(45.0)) + fr_intensity * math.sin(math.radians(-45.0))
-
-        mag = math.sqrt(x_total**2 + y_total**2)
-        angle_rad = math.atan2(y_total, x_total)  
-        return mag, angle_rad
-
-    def compute_light_vector(self):
         # Use all three sensors if available
         if self.latest_light_fl is None or self.latest_light_fr is None or self.latest_light_back is None:
             return 0.0, 0.0
@@ -217,22 +268,15 @@ class TurtleBot4ReferenceNode(Node):
         fr = float(self.latest_light_fr)
         back = float(self.latest_light_back)
 
-        # Each sensor contributes a vector
-        x_total = fl * math.cos(math.radians(45.0)) + fr * math.cos(math.radians(-45.0)) + back * math.cos(math.radians(180.0))
-        y_total = fl * math.sin(math.radians(45.0)) + fr * math.sin(math.radians(-45.0)) + back * math.sin(math.radians(180.0))
+        x_total = fl * math.cos(LIGHT_SENSOR_FL_ANGLE) + fr * math.cos(LIGHT_SENSOR_FR_ANGLE) + back * math.cos(LIGHT_SENSOR_BACK_ANGLE)
+        y_total = fl * math.sin(LIGHT_SENSOR_FL_ANGLE) + fr * math.sin(LIGHT_SENSOR_FR_ANGLE) + back * math.sin(LIGHT_SENSOR_BACK_ANGLE)
 
-        mag = math.sqrt(x_total**2 + y_total**2)
+        # Magnitude is the sum of sensor readings
+        mag = fl + fr + back
+        
+        # Angle is determined by the weighted vector sum
         angle_rad = math.atan2(y_total, x_total)
         return mag, angle_rad
-
-    def _light_fl_cb(self, msg: Float32):
-        self.latest_light_fl = msg.data
-
-    def _light_fr_cb(self, msg: Float32):
-        self.latest_light_fr = msg.data
-
-    def _light_back_cb(self, msg: Float32):
-        self.latest_light_back = msg.data
 
     def _neighbours_cb(self, msg: String):
         try:
@@ -261,7 +305,7 @@ class TurtleBot4ReferenceNode(Node):
         stamped = TwistStamped()
         stamped.header.stamp = self.get_clock().now().to_msg()
         stamped.twist = twist
-        #self._cmd_vel_pub.publish(stamped)
+        self._cmd_vel_pub.publish(stamped)
 
 
         self.latest_wheels_speed = [left, right]
