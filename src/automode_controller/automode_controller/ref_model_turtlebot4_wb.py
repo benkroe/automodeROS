@@ -5,12 +5,12 @@ from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
 from std_msgs.msg import Float32MultiArray, Float32, String
 from irobot_create_msgs.msg import IrIntensityVector
-from sensor_msgs.msg import Illuminance
+from sensor_msgs.msg import Illuminance, Image
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
-
-
-import math
+from cv_bridge import CvBridge
+import cv2
 import numpy as np
+import math
 
 ROBOT_ID = 1  # Default robot ID (change if used)
 
@@ -97,6 +97,12 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_attraction_angle = 0.0
         self.latest_wheels_speed = [0.0, 0.0]
         self.latest_cmd_vel = (0.0, 0.0)
+        
+        # Red ball detection variables
+        self.bridge = CvBridge()
+        self.latest_camera_image = None
+        self.red_ball_magnitude = 0.0  # Amount of red pixels (normalized)
+        self.red_ball_position = 0.0   # Position: -1.0 (left) to 1.0 (right), 0.0 (center)
 
         # black: (969, 982), grey: (887, 901), white: (962, 975)
         self._floor_color_refs = {
@@ -110,6 +116,12 @@ class TurtleBot4ReferenceNode(Node):
             angle = self._sensor_angle_map.get(name, 0.0)
             # store as [distance_m, angle]; default to PROXIMITY_MAX_RANGE -> treated as "no detection"
             self.latest_ir_vectors[name] = [PROXIMITY_MAX_RANGE, angle]
+
+        # Subscribe to camera for red ball detection
+        self.create_subscription(Image, '/rgbd_camera/image', self._camera_cb, 10)
+        
+        # Red ball detection timer (every 0.5 seconds)
+        self.create_timer(0.5, self._process_red_ball_detection)
 
         # Periodic publication (20 Hz)
         self.create_timer(0.05, self._publish_robot_state)
@@ -222,6 +234,67 @@ class TurtleBot4ReferenceNode(Node):
         except Exception:
             pass
 
+    def _camera_cb(self, msg: Image):
+        self.latest_camera_image = msg
+
+    def _process_red_ball_detection(self):
+        # Only every 0.5 seconds
+        if self.latest_camera_image is None:
+            self.get_logger().info("[Red Ball] Waiting for camera image")
+            return
+        
+        try:
+            # Convert ROS Image to OpenCV format
+            cv_image = self.bridge.imgmsg_to_cv2(self.latest_camera_image, desired_encoding='bgr8')
+            
+            # Convert BGR to HSV for better red detection
+            hsv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
+            
+            # Define red color range in HSV
+            # Red wraps around in HSV, so we need two ranges
+            lower_red1 = np.array([0, 100, 100])
+            upper_red1 = np.array([10, 255, 255])
+            lower_red2 = np.array([160, 100, 100])
+            upper_red2 = np.array([180, 255, 255])
+            
+            # Create masks for red color
+            mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
+            mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
+            mask = cv2.bitwise_or(mask1, mask2)
+            
+            # Count red pixels
+            red_pixel_count = cv2.countNonZero(mask)
+            total_pixels = cv_image.shape[0] * cv_image.shape[1]
+            
+            # Calculate magnitude (normalized by total pixels)
+            self.red_ball_magnitude = red_pixel_count / total_pixels
+            
+            # Calculate position (center of red pixels)
+            if red_pixel_count > 0:
+                # Find moments to get center of mass
+                moments = cv2.moments(mask)
+                if moments['m00'] > 0:
+                    cx = moments['m10'] / moments['m00']
+                    image_width = cv_image.shape[1]
+                    
+                    # Normalize position: -1.0 (left) to 1.0 (right), 0.0 (center)
+                    self.red_ball_position = (cx - image_width / 2.0) / (image_width / 2.0)
+                else:
+                    self.red_ball_position = 0.0
+            else:
+                self.red_ball_position = 0.0
+            
+            # Log the values for debugging
+            self.get_logger().info(
+                f"[Red Ball Detection] Magnitude: {self.red_ball_magnitude:.4f} "
+                f"(red pixels: {red_pixel_count}/{total_pixels}), "
+                f"Position: {self.red_ball_position:.3f} "
+                f"({'LEFT' if self.red_ball_position < -0.1 else 'RIGHT' if self.red_ball_position > 0.1 else 'CENTER'})"
+            )
+            
+        except Exception as e:
+            self.get_logger().error(f"[Red Ball] Error processing image: {str(e)}")
+
     def _wheels_speed_cb(self, msg: Float32MultiArray):
         if len(msg.data) != 2:
             return
@@ -255,8 +328,8 @@ class TurtleBot4ReferenceNode(Node):
         msg.attraction_angle = self.latest_attraction_angle
         msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
         msg.light_magnitude, msg.light_angle = self.compute_light_vector()
-        msg.red_ball_magnitude = 0.0
-        msg.red_ball_position = 0.0
+        msg.red_ball_magnitude = float(self.red_ball_magnitude)
+        msg.red_ball_position = float(self.red_ball_position)
 
         # self.get_logger().info(
         #     f"[RobotState] ID={msg.robot_id}, "

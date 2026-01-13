@@ -368,7 +368,7 @@ class TurtleBot4ReferenceNode(Node):
     def _process_red_ball_detection(self):
         # Only every 0.5 seconds
         if self.latest_camera_image is None:
-            self.get_logger().info("[Red Ball] Waiting for camera image...")
+            self.get_logger().info("[Red Ball] Waiting for camera image")
             return
         
         try:
