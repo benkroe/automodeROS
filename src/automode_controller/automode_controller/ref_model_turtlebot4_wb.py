@@ -118,7 +118,7 @@ class TurtleBot4ReferenceNode(Node):
             self.latest_ir_vectors[name] = [PROXIMITY_MAX_RANGE, angle]
 
         # Subscribe to camera for red ball detection
-        self.create_subscription(Image, 'oakd_stereo_camera/image', self._camera_cb, 10)
+        self.create_subscription(Image, 'oakd_rgb_camera/image_color', self._camera_cb, 10)
         
         # Red ball detection timer (every 0.5 seconds)
         self.create_timer(0.5, self._process_red_ball_detection)
