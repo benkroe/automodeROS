@@ -3,24 +3,28 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist, TwistStamped
 from automode_interfaces.msg import RobotState
 from rclpy.executors import ExternalShutdownException
-from std_msgs.msg import Float32MultiArray, Float32, String
-from sensor_msgs.msg import Illuminance, LaserScan
+from std_msgs.msg import Float32MultiArray
+from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import Odometry
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
 from tf2_ros.buffer import Buffer
 from tf2_ros.transform_listener import TransformListener
-from tf2_ros import TransformException
 
 
 import math
-import numpy as np
 
 ROBOT_ID = 1  # Default robot ID (change if used)
+
+ROBOT_NAMES = ["tb1", "tb2", "tb3", "tb4"]
+WHEELBASE = 0.3  # meters (distance between left and right wheels)
 
 PROXIMITY_MAX_RANGE = 2.0  # meters (reduced for IR realism)
 PROXIMITY_RANGE_MIN = 0.01  # meters
 PROXIMITY_RANGE_MAX = 0.10  # meters
 PROXIMITY_INF_THRESHOLD = 10.0  # Treat anything >= this as inf/no detection
+
+# Neighbor detection configuration
+NEIGHBOR_DETECTION_RANGE = 2.0  # meters
 
 # Ground sensor configuration (mission world)
 GROUND_SENSOR_BASE_FRAME = 'mission'
@@ -62,11 +66,24 @@ class TurtleBot4ReferenceNode(Node):
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
         self.namespace = self.get_namespace().strip('/')
+        self.other_robot_positions = {}
+        self.self_robot_name = self.namespace if self.namespace else f"tb{ROBOT_ID}"
+        self.cached_robot_yaw = None
         
         # Subscribe to ground truth odometry
         self.ground_truth_position = None
         self.ground_truth_orientation = None
         self.create_subscription(Odometry, 'ground_truth_odom', self._ground_truth_odom_cb, 10)
+
+        # Subscribe to ground truth odometry for all robots (tb1-tb4)
+        for robot_name in ROBOT_NAMES:
+            topic = f'/{robot_name}/ground_truth_odom'
+            self.create_subscription(
+                Odometry,
+                topic,
+                lambda msg, rn=robot_name: self._multi_robot_odom_cb(msg, rn),
+                10
+            )
         
         # Subscriber for wheel commands
         self.create_subscription(Float32MultiArray, 'wheels_speed', self._wheels_speed_cb, 10)
@@ -84,9 +101,6 @@ class TurtleBot4ReferenceNode(Node):
         # Light sensor computation timer (10 Hz, same as external node)
         self.create_timer(0.01, self._update_light_sensors)
 
-        # Subscribe to neighbours info
-        self.create_subscription(String, 'neighbours_info', self._neighbours_cb, self.qos)
-
         # Track latest IR readings (keeps [estimated_distance_m, angle] per sensor)
         self.latest_ir_vectors = {}
 
@@ -95,7 +109,7 @@ class TurtleBot4ReferenceNode(Node):
         self._sensor_angle_map = {
             1: math.radians(65.3),  # left
             2: math.radians(38.0),  # lmid left
-            3: math.radians(20.0),  # middle legt
+            3: math.radians(20.0),  # middle left
             4: math.radians(3.0),   # center
             5: math.radians(-14.25),  # middle right
             6: math.radians(-34.0),   # mid right
@@ -131,9 +145,17 @@ class TurtleBot4ReferenceNode(Node):
 
 
     def _ground_truth_odom_cb(self, msg: Odometry):
-        """Callback for ground truth odometry from Gazebo."""
         self.ground_truth_position = msg.pose.pose.position
         self.ground_truth_orientation = msg.pose.pose.orientation
+        self.cached_robot_yaw = self._compute_yaw_from_quaternion(self.ground_truth_orientation)
+
+    def _multi_robot_odom_cb(self, msg: Odometry, robot_name: str):
+        # Store positions from other robots for neighbour calculations
+        if robot_name == self.self_robot_name:
+            return
+
+        position = msg.pose.pose.position
+        self.other_robot_positions[robot_name] = (position.x, position.y)
 
     def _update_ground_sensor(self):
         if self.ground_truth_position is None:
@@ -158,13 +180,10 @@ class TurtleBot4ReferenceNode(Node):
 
     def _update_light_sensors(self):
 
-        if self.ground_truth_position is None or self.ground_truth_orientation is None:
+        if self.ground_truth_position is None or self.cached_robot_yaw is None:
             return
 
-        q = self.ground_truth_orientation
-        siny_cosp = 2.0 * (q.w * q.z + q.x * q.y)
-        cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z)
-        robot_yaw = math.atan2(siny_cosp, cosy_cosp)
+        robot_yaw = self.cached_robot_yaw
 
         robot_x = self.ground_truth_position.x
         robot_y = self.ground_truth_position.y
@@ -218,6 +237,12 @@ class TurtleBot4ReferenceNode(Node):
             elif sensor_name == 'back':
                 self.latest_light_back = sensor_value
 
+    def _compute_yaw_from_quaternion(self, quaternion):
+        q = quaternion
+        siny_cosp = 2.0 * (q.w * q.z + q.x * q.y)
+        cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z)
+        return math.atan2(siny_cosp, cosy_cosp)
+
     def _proximity_cb(self, msg: LaserScan, sensor_id: int):
         if not msg.ranges or len(msg.ranges) == 0:
             # No ranges available, treat as no detection
@@ -239,7 +264,7 @@ class TurtleBot4ReferenceNode(Node):
         angle = self._sensor_angle_map.get(sensor_id, 0.0)
         self.latest_ir_vectors[sensor_id] = [min_range, angle]
 
-    def compute_proximity(self):
+    def _compute_proximity(self):
         if not self.latest_ir_vectors:
             return 0.0, 0.0
 
@@ -258,7 +283,7 @@ class TurtleBot4ReferenceNode(Node):
         mag = max(0.0, min(1.0, mag / (len(self.latest_ir_vectors) * PROXIMITY_MAX_RANGE)))
         return mag, angle_rad
 
-    def compute_light_vector(self):
+    def _compute_light_vector(self):
         # Use all three sensors if available
         if self.latest_light_fl is None or self.latest_light_fr is None or self.latest_light_back is None:
             return 0.0, 0.0
@@ -278,13 +303,51 @@ class TurtleBot4ReferenceNode(Node):
         angle_rad = math.atan2(y_total, x_total)
         return mag, angle_rad
 
-    def _neighbours_cb(self, msg: String):
-        try:
-            angle_str, count_str = msg.data.split(',')
-            self.latest_attraction_angle = math.radians(float(angle_str))  # Convert to radians
-            self.latest_neighbour_count = int(count_str)
-        except Exception:
-            pass
+    def _neighbours_cb(self, msg=None):
+        # Compute neighbour stats from stored positions instead of subscribing to an aggregated message
+        if self.ground_truth_position is None:
+            self.latest_neighbour_count = 0
+            self.latest_attraction_angle = 0.0
+            return
+
+        robot_yaw = self.cached_robot_yaw
+
+        total_x, total_y = 0.0, 0.0
+        count = 0
+
+        for robot_name, (x, y) in self.other_robot_positions.items():
+            if robot_name == self.self_robot_name:
+                continue
+
+            dx = x - self.ground_truth_position.x
+            dy = y - self.ground_truth_position.y
+
+            if dx == 0.0 and dy == 0.0:
+                continue
+
+            distance = math.sqrt(dx**2 + dy**2)
+            if distance > NEIGHBOR_DETECTION_RANGE:
+                continue
+
+            total_x += dx
+            total_y += dy
+            count += 1
+
+        self.latest_neighbour_count = count
+
+        if count > 0:
+            angle_world = math.atan2(total_y, total_x)
+            if robot_yaw is not None:
+                angle_robot = angle_world - robot_yaw
+                while angle_robot > math.pi:
+                    angle_robot -= 2 * math.pi
+                while angle_robot < -math.pi:
+                    angle_robot += 2 * math.pi
+            else:
+                angle_robot = angle_world
+            self.latest_attraction_angle = angle_robot
+        else:
+            self.latest_attraction_angle = 0.0
 
     def _wheels_speed_cb(self, msg: Float32MultiArray):
         if len(msg.data) != 2:
@@ -293,7 +356,7 @@ class TurtleBot4ReferenceNode(Node):
 
         twist = Twist()
         twist.linear.x = (left + right) / 2.0
-        twist.angular.z = (right - left) / 0.3
+        twist.angular.z = (right - left) / WHEELBASE
 
         scale = max(abs(twist.linear.x), abs(twist.angular.z))
         if scale > 1.0:
@@ -312,13 +375,15 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_cmd_vel = (twist.linear.x, twist.angular.z)
 
     def _publish_robot_state(self):
+        self._neighbours_cb()
+
         msg = RobotState()
         msg.robot_id = self.robot_id
         msg.floor_color = self.latest_floor_color
         msg.neighbour_count = self.latest_neighbour_count
         msg.attraction_angle = self.latest_attraction_angle
-        msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
-        msg.light_magnitude, msg.light_angle = self.compute_light_vector()
+        msg.proximity_magnitude, msg.proximity_angle = self._compute_proximity()
+        msg.light_magnitude, msg.light_angle = self._compute_light_vector()
 
         # self.get_logger().info(
         #     f"[RobotState] ID={msg.robot_id}, "
