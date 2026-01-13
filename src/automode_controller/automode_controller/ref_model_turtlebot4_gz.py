@@ -260,6 +260,8 @@ class TurtleBot4ReferenceNode(Node):
         msg.attraction_angle = self.latest_attraction_angle
         msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
         msg.light_magnitude, msg.light_angle = self.compute_light_vector()
+        msg.red_ball_magnitude = 0.0
+        msg.red_ball_position = 0.0
 
         # self.get_logger().info(
         #     f"[RobotState] ID={msg.robot_id}, "
