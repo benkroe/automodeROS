@@ -10,7 +10,7 @@ module_package: "basic_modules"
 #   - Transition 0: goes to state 1 when target_presence (condition 6) with present=1 (true)
 # State 1: follow_target (behavior 6, id=6)
 #   - Transition 0: goes to state 0 when target_presence (condition 6) with present=0 (false)
-fsm_config: "--fsm-config --nstates 2 --s0 0 --rwm0 30 --n0 1 --n0x0 0 --c0x0 6 --present0x0 1 --s1 6 --n1 1 --n1x0 0 --c1x0 6 --present1x0 0 "
+fsm_config: "--fsm-config --nstates 2 --s0 0 --rwm0 30 --n0 1 --n0x0 1 --c0x0 6 --present0x0 1 --s1 6 --n1 1 --n1x0 0 --c1x0 6 --present1x0 0 "
 
-ref_model: "ref_model_turtlebot4_gz_nav"
+ref_model: "ref_model_turtlebot4_wb"
 
