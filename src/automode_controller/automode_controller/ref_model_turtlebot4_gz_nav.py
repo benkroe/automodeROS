@@ -179,7 +179,9 @@ class TurtleBot4ReferenceNode(Node):
             self.latest_ir_vectors[sensor_id] = [PROXIMITY_MAX_RANGE, angle]
 
         # Subscribe to camera for target detection
-        self.create_subscription(Image, '/rgbd_camera/image', self._camera_cb, 10)
+        # Construct topic with robot namespace to avoid doubling
+        camera_topic = f'{self.self_robot_name}/rgbd_camera/image' if self.self_robot_name else 'rgbd_camera/image'
+        self.create_subscription(Image, camera_topic, self._camera_cb, 10)
         
         # Target detection timer (every 0.5 seconds)
         self.create_timer(0.5, self._process_target_detection)

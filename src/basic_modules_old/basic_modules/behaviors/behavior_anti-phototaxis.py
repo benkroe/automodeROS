@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+
+from typing import Optional, Dict, Any, Tuple
+from .behavior_interface import BehaviorBase
+from automode_interfaces.msg import RobotState
+
+import time
+import math
+
+class Behavior(BehaviorBase):
+    def __init__(self) -> None:
+        self._node = None
+        self._pub = None
+        self._sub = None
+        self._params: Dict[str, Any] = {}
+        self._last_robot_state: Optional[RobotState] = None
+        self._Float32MultiArray = None
+
+        self._forward_speed = 1.0       # Forward movement speed
+        self._turn_speed = 5.0         # Turning speed
+        self._light_threshold = 0.0     # Light detection threshold
+        self._obstacle_threshold = 3.0   # Proximity threshold to consider obstacle too close
+        self._avoidance_turn_speed = 0.6  # Turn speed when avoiding obstacles
+
+    @staticmethod
+    def get_description() -> Dict[str, Any]:
+        return {
+            "name": "anti_phototaxis",
+            "type": 3,
+            "description": "If it sees light, it walks away from this direction",
+            "params": []
+        }
+
+    def set_params(self, params: Dict[str, Any]) -> None:
+        if not isinstance(params, dict):
+            raise TypeError("params must be a dict")
+        self._params.update(params)
+
+    def _robot_state_cb(self, msg) -> None:
+        self._last_robot_state = msg
+
+    def setup_communication(self, node) -> None:
+        self._node = node
+        try:
+            from std_msgs.msg import Float32MultiArray, String  # type: ignore
+        except ImportError:
+            if self._node is not None:
+                self._node.get_logger().warning('Required std_msgs not available; setup_communication aborted')
+            return
+        self._Float32MultiArray = Float32MultiArray
+        self._pub = self._node.create_publisher(Float32MultiArray, 'wheels_speed', 10)
+        self._sub = self._node.create_subscription(RobotState, 'robotState', self._robot_state_cb, 10)
+
+    def execute_step(self) -> Tuple[bool, str, bool]:
+        """
+        Execute anti-phototaxis behavior with obstacle avoidance.
+        
+        Returns:
+            (success, message, goal_reached)
+        """
+        # Check if we have robotState
+        if self._last_robot_state is None:
+            return True, "No robot state data available", False
+
+        # Check if publisher is ready
+        if self._pub is None or self._Float32MultiArray is None:
+            return False, "Communication not set up", False
+
+        light_magnitude = self._last_robot_state.light_magnitude
+        light_angle = self._last_robot_state.light_angle  
+        proximity_magnitude = self._last_robot_state.proximity_magnitude
+        proximity_angle = self._last_robot_state.proximity_angle
+        msg = self._Float32MultiArray()
+
+        # OBSTACLE AVOIDANCE: Turn until obstacle is no longer in front
+        if proximity_magnitude > self._obstacle_threshold:
+            # Obstacle detected, turn away from it
+            if proximity_angle > 0:
+                # Obstacle on right, turn left
+                left_wheel_speed = self._avoidance_turn_speed
+                right_wheel_speed = -self._avoidance_turn_speed
+            else:
+                # Obstacle on left, turn right
+                left_wheel_speed = -self._avoidance_turn_speed
+                right_wheel_speed = self._avoidance_turn_speed
+
+            msg.data = [left_wheel_speed, right_wheel_speed]
+            self._pub.publish(msg)
+            
+            status_msg = f"AVOIDING OBSTACLE (prox_mag: {proximity_magnitude:.3f}, prox_angle: {proximity_angle:.1f}°)"
+        else:
+            # No obstacle, apply normal anti-phototaxis behavior
+            left_wheel_speed = self._forward_speed
+            right_wheel_speed = self._forward_speed
+            
+            if light_magnitude > self._light_threshold:
+                # Calculate escape angle in radians (opposite direction from light)
+                escape_angle = (light_angle + math.pi) % (2 * math.pi)
+                # Normalize to (-π, π)
+                if escape_angle > math.pi:
+                    escape_angle -= 2 * math.pi
+                
+                turn_angle = escape_angle
+                
+                # Apply differential steering away from light (scaled for radians)
+                turn_factor = self._turn_speed * (turn_angle / math.pi)
+                left_wheel_speed -= turn_factor
+                right_wheel_speed += turn_factor
+                status_msg = f"Escaping from light (light_mag: {light_magnitude:.3f}, light_angle: {math.degrees(light_angle):.1f}°, escape_angle: {math.degrees(escape_angle):.1f}°)"
+            else:
+                status_msg = f"No light detected, moving forward"
+
+            # Ensure wheel speeds don't go negative
+            left_wheel_speed = max(0.0, left_wheel_speed)
+            right_wheel_speed = max(0.0, right_wheel_speed)
+
+            msg.data = [left_wheel_speed, right_wheel_speed]
+            self._pub.publish(msg)
+
+        # Behavior never finishes - always returns False for goal_reached
+        return True, f"{status_msg}, wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]", False
+    
+    def reset(self) -> None:
+        """Reset the behavior state."""
+        self._last_robot_state = None
+        self._params = {}
+        self._pub = None
+        self._sub = None
+        self._Float32MultiArray = None
