@@ -20,7 +20,7 @@ module_package: "basic_modules"
 # tj0: social activation threshold (neighbor count for 50% recruitment)
 # qmax0: maximum leaving probability
 # kl0: social stabilization strength (leaving suppression by neighbors)
-fsm_config: "--fsm-config --nstates 1 --s0 9 --rwm0 100 --kj0 0.5 --tj0 2.0 --qmax0 0.001 --kl0 0.5 --n0 0"
+fsm_config: "--fsm-config --nstates 1 --s0 9 --rwm0 100 --kj0 0.5 --tj0 1.0 --qmax0 0.01 --kl0 0.5 --n0 0"
 
 ref_model: "ref_model_turtlebot4_gz_nav"
 

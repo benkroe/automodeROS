@@ -41,7 +41,7 @@ PROXIMITY_RANGE_MAX = 0.10  # meters
 PROXIMITY_INF_THRESHOLD = 10.0  # Treat anything >= this as inf/no detection
 
 # Neighbor detection configuration
-NEIGHBOR_DETECTION_RANGE = 2.0  # meters
+NEIGHBOR_DETECTION_RANGE = 1.0  # meters
 
 # Ground sensor configuration (mission world)
 GROUND_SENSOR_BASE_FRAME = 'mission'
