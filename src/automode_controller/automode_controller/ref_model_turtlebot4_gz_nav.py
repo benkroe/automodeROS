@@ -15,6 +15,21 @@ import numpy as np
 
 import math
 
+# ArUco marker configuration
+ARUCO_DICT = cv2.aruco.DICT_4X4_50
+ARUCO_MARKER_ID = 1
+ARUCO_MARKER_SIZE = 0.35  # meters (physical size)
+
+# Camera parameters (estimated for OakD RGB camera)
+# Approximate values for OakD-Lite RGB camera
+CAMERA_FOCAL_LENGTH = 450.0  # pixels (approximate for 640x480 resolution)
+CAMERA_CX = 320.0  # principal point x
+CAMERA_CY = 240.0  # principal point y
+
+# Distance normalization for magnitude calculation
+MIN_DETECTION_DISTANCE = 0.3  # meters (minimum distance to normalize)
+MAX_DETECTION_DISTANCE = 5.0  # meters (maximum distance to normalize)
+
 ROBOT_ID = 1  # Default robot ID (change if used)
 
 ROBOT_NAMES = ["tb1", "tb2", "tb3", "tb4"]
@@ -135,11 +150,27 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_wheels_speed = [0.0, 0.0]
         self.latest_cmd_vel = (0.0, 0.0)
         
-        # Red ball detection variables
+        # Target detection variables
         self.bridge = CvBridge()
         self.latest_camera_image = None
-        self.red_ball_magnitude = 0.0  # Amount of red pixels (normalized)
-        self.red_ball_position = 0.0   # Position: -1.0 (left) to 1.0 (right), 0.0 (center)
+        self.target_magnitude = 0.0  # Target detection confidence/magnitude (normalized)
+        self.target_position = 0.0   # Position: -1.0 (left) to 1.0 (right), 0.0 (center)
+        self.target_distance = 0.0   # Actual distance to target in meters
+        
+        # ArUco detector setup
+        aruco_dict = cv2.aruco.getPredefinedDictionary(ARUCO_DICT)
+        aruco_params = cv2.aruco.DetectorParameters()
+        aruco_params.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_SUBPIX
+        
+        self.aruco_detector = cv2.aruco.ArucoDetector(aruco_dict, aruco_params)
+        
+        # Camera matrix for pose estimation (estimated parameters)
+        self.camera_matrix = np.array([
+            [CAMERA_FOCAL_LENGTH, 0, CAMERA_CX],
+            [0, CAMERA_FOCAL_LENGTH, CAMERA_CY],
+            [0, 0, 1]
+        ], dtype=np.float32)
+        self.dist_coeffs = np.zeros((4, 1), dtype=np.float32)  # Assume no distortion
 
 
         # Initialize entries so compute_proximity has consistent keys
@@ -147,11 +178,11 @@ class TurtleBot4ReferenceNode(Node):
             angle = self._sensor_angle_map.get(sensor_id, 0.0)
             self.latest_ir_vectors[sensor_id] = [PROXIMITY_MAX_RANGE, angle]
 
-        # Subscribe to camera for red ball detection
+        # Subscribe to camera for target detection
         self.create_subscription(Image, '/rgbd_camera/image', self._camera_cb, 10)
         
-        # Red ball detection timer (every 0.5 seconds)
-        self.create_timer(0.5, self._process_red_ball_detection)
+        # Target detection timer (every 0.5 seconds)
+        self.create_timer(0.5, self._process_target_detection)
 
         # Periodic publication (20 Hz)
         self.create_timer(0.05, self._publish_robot_state)
@@ -365,63 +396,81 @@ class TurtleBot4ReferenceNode(Node):
     def _camera_cb(self, msg: Image):
         self.latest_camera_image = msg
 
-    def _process_red_ball_detection(self):
-        # Only every 0.5 seconds
+    def _process_target_detection(self):
         if self.latest_camera_image is None:
-            self.get_logger().info("[Red Ball] Waiting for camera image")
             return
         
         try:
             # Convert ROS Image to OpenCV format
             cv_image = self.bridge.imgmsg_to_cv2(self.latest_camera_image, desired_encoding='bgr8')
+            gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
             
-            # Convert BGR to HSV for better red detection
-            hsv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
+            # Detect ArUco markers
+            corners, ids, rejected = self.aruco_detector.detectMarkers(gray)
             
-            # Define red color range in HSV
-            # Red wraps around in HSV, so we need two ranges
-            lower_red1 = np.array([0, 100, 100])
-            upper_red1 = np.array([10, 255, 255])
-            lower_red2 = np.array([160, 100, 100])
-            upper_red2 = np.array([180, 255, 255])
-            
-            # Create masks for red color
-            mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
-            mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
-            mask = cv2.bitwise_or(mask1, mask2)
-            
-            # Count red pixels
-            red_pixel_count = cv2.countNonZero(mask)
-            total_pixels = cv_image.shape[0] * cv_image.shape[1]
-            
-            # Calculate magnitude (normalized by total pixels)
-            self.red_ball_magnitude = red_pixel_count / total_pixels
-            
-            # Calculate position (center of red pixels)
-            if red_pixel_count > 0:
-                # Find moments to get center of mass
-                moments = cv2.moments(mask)
-                if moments['m00'] > 0:
-                    cx = moments['m10'] / moments['m00']
+            # Check if our target marker (ID=1) was detected
+            target_found = False
+            if ids is not None and len(ids) > 0:
+                # Find marker with ID=1
+                marker_indices = np.where(ids.flatten() == ARUCO_MARKER_ID)[0]
+                
+                if len(marker_indices) > 0:
+                    target_found = True
+                    idx = marker_indices[0]
+                    marker_corners = corners[idx][0]  # Shape: (4, 2)
+                    
+                    # Calculate center position for horizontal placement
+                    center_x = np.mean(marker_corners[:, 0])
                     image_width = cv_image.shape[1]
                     
                     # Normalize position: -1.0 (left) to 1.0 (right), 0.0 (center)
-                    self.red_ball_position = (cx - image_width / 2.0) / (image_width / 2.0)
-                else:
-                    self.red_ball_position = 0.0
-            else:
-                self.red_ball_position = 0.0
+                    self.target_position = (center_x - image_width / 2.0) / (image_width / 2.0)
+                    
+                    # Estimate distance using solvePnP
+                    # Define 3D points of marker corners in marker coordinate system
+                    half_size = ARUCO_MARKER_SIZE / 2.0
+                    obj_points = np.array([
+                        [-half_size, half_size, 0],   # Top-left
+                        [half_size, half_size, 0],    # Top-right
+                        [half_size, -half_size, 0],   # Bottom-right
+                        [-half_size, -half_size, 0]   # Bottom-left
+                    ], dtype=np.float32)
+                    
+                    # Solve PnP to get rotation and translation vectors
+                    success, rvec, tvec = cv2.solvePnP(
+                        obj_points,
+                        marker_corners,
+                        self.camera_matrix,
+                        self.dist_coeffs
+                    )
+                    
+                    if success:
+                        # Calculate distance (magnitude of translation vector)
+                        self.target_distance = np.linalg.norm(tvec)
+                        
+                        # Normalize distance to magnitude [0, 1]
+                        # Closer = higher magnitude, further = lower magnitude
+                        if self.target_distance <= MIN_DETECTION_DISTANCE:
+                            self.target_magnitude = 1.0
+                        elif self.target_distance >= MAX_DETECTION_DISTANCE:
+                            self.target_magnitude = 0.0
+                        else:
+                            # Linear mapping: close->1, far->0
+                            self.target_magnitude = 1.0 - (
+                                (self.target_distance - MIN_DETECTION_DISTANCE) / 
+                                (MAX_DETECTION_DISTANCE - MIN_DETECTION_DISTANCE)
+                            )
+                    else:
+                        target_found = False
             
-            # Log the values for debugging
-            self.get_logger().info(
-                f"[Red Ball Detection] Magnitude: {self.red_ball_magnitude:.4f} "
-                f"(red pixels: {red_pixel_count}/{total_pixels}), "
-                f"Position: {self.red_ball_position:.3f} "
-                f"({'LEFT' if self.red_ball_position < -0.1 else 'RIGHT' if self.red_ball_position > 0.1 else 'CENTER'})"
-            )
-            
+            if not target_found:
+                # No target detected - reset values
+                self.target_magnitude = 0.0
+                self.target_position = 0.0
+                self.target_distance = 0.0
+                
         except Exception as e:
-            self.get_logger().error(f"[Red Ball] Error processing image: {str(e)}")
+            self.get_logger().error(f"[Target] Error processing image: {str(e)}")
 
     def _wheels_speed_cb(self, msg: Float32MultiArray):
         if len(msg.data) != 2:
@@ -442,7 +491,7 @@ class TurtleBot4ReferenceNode(Node):
         stamped = TwistStamped()
         stamped.header.stamp = self.get_clock().now().to_msg()
         stamped.twist = twist
-        self._cmd_vel_pub.publish(stamped)
+        #self._cmd_vel_pub.publish(stamped)
 
 
         self.latest_wheels_speed = [left, right]
@@ -458,8 +507,8 @@ class TurtleBot4ReferenceNode(Node):
         msg.attraction_angle = self.latest_attraction_angle
         msg.proximity_magnitude, msg.proximity_angle = self._compute_proximity()
         msg.light_magnitude, msg.light_angle = self._compute_light_vector()
-        msg.red_ball_magnitude = float(self.red_ball_magnitude)
-        msg.red_ball_position = float(self.red_ball_position)
+        msg.target_magnitude = float(self.target_magnitude)
+        msg.target_position = float(self.target_position)
 
         # self.get_logger().info(
         #     f"[RobotState] ID={msg.robot_id}, "

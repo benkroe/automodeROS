@@ -59,11 +59,11 @@ class Behavior(BehaviorBase):
         rs = self._last_robot_state
 
         # Safety: stop if obstacle magnitude high (reuse existing convention)
-        if rs.proximity_magnitude > self._obstacle_threshold:
-            msg = self._Float32MultiArray()
-            msg.data = [0.0, 0.0]
-            self._pub.publish(msg)
-            return True, f"Obstacle detected (prox_mag={rs.proximity_magnitude:.3f}) -> stop", False
+        # if rs.proximity_magnitude > self._obstacle_threshold:
+        #     msg = self._Float32MultiArray()
+        #     msg.data = [0.0, 0.0]
+        #     self._pub.publish(msg)
+        #     return True, f"Obstacle detected (prox_mag={rs.proximity_magnitude:.3f}) -> stop", False
 
         # If no target detected, stop
         if rs.red_ball_magnitude <= 0.0:

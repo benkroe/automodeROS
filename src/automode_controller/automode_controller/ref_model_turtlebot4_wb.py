@@ -98,11 +98,11 @@ class TurtleBot4ReferenceNode(Node):
         self.latest_wheels_speed = [0.0, 0.0]
         self.latest_cmd_vel = (0.0, 0.0)
         
-        # Red ball detection variables
+        # Target detection variables
         self.bridge = CvBridge()
         self.latest_camera_image = None
-        self.red_ball_magnitude = 0.0  # Amount of red pixels (normalized)
-        self.red_ball_position = 0.0   # Position: -1.0 (left) to 1.0 (right), 0.0 (center)
+        self.target_magnitude = 0.0  # Target detection confidence/magnitude (normalized)
+        self.target_position = 0.0   # Position: -1.0 (left) to 1.0 (right), 0.0 (center)
 
         # black: (969, 982), grey: (887, 901), white: (962, 975)
         self._floor_color_refs = {
@@ -120,8 +120,8 @@ class TurtleBot4ReferenceNode(Node):
         # Subscribe to camera for red ball detection
         self.create_subscription(Image, 'oakd_rgb_camera/image_color', self._camera_cb, 10)
         
-        # Red ball detection timer (every 0.5 seconds)
-        self.create_timer(0.5, self._process_red_ball_detection)
+        # Target detection timer (every 0.5 seconds)
+        self.create_timer(0.5, self._process_target_detection)
 
         # Periodic publication (20 Hz)
         self.create_timer(0.05, self._publish_robot_state)
@@ -237,10 +237,10 @@ class TurtleBot4ReferenceNode(Node):
     def _camera_cb(self, msg: Image):
         self.latest_camera_image = msg
 
-    def _process_red_ball_detection(self):
+    def _process_target_detection(self):
         # Only every 0.5 seconds
         if self.latest_camera_image is None:
-            self.get_logger().info("[Red Ball] Waiting for camera image")
+            self.get_logger().info("[Target] Waiting for camera image")
             return
         
         try:
@@ -267,7 +267,7 @@ class TurtleBot4ReferenceNode(Node):
             total_pixels = cv_image.shape[0] * cv_image.shape[1]
             
             # Calculate magnitude (normalized by total pixels)
-            self.red_ball_magnitude = red_pixel_count / total_pixels
+            self.target_magnitude = red_pixel_count / total_pixels
             
             # Calculate position (center of red pixels)
             if red_pixel_count > 0:
@@ -278,22 +278,22 @@ class TurtleBot4ReferenceNode(Node):
                     image_width = cv_image.shape[1]
                     
                     # Normalize position: -1.0 (left) to 1.0 (right), 0.0 (center)
-                    self.red_ball_position = (cx - image_width / 2.0) / (image_width / 2.0)
+                    self.target_position = (cx - image_width / 2.0) / (image_width / 2.0)
                 else:
-                    self.red_ball_position = 0.0
+                    self.target_position = 0.0
             else:
-                self.red_ball_position = 0.0
+                self.target_position = 0.0
             
             # Log the values for debugging
             self.get_logger().info(
-                f"[Red Ball Detection] Magnitude: {self.red_ball_magnitude:.4f} "
+                f"[Target Detection] Magnitude: {self.target_magnitude:.4f} "
                 f"(red pixels: {red_pixel_count}/{total_pixels}), "
-                f"Position: {self.red_ball_position:.3f} "
-                f"({'LEFT' if self.red_ball_position < -0.1 else 'RIGHT' if self.red_ball_position > 0.1 else 'CENTER'})"
+                f"Position: {self.target_position:.3f} "
+                f"({'LEFT' if self.target_position < -0.1 else 'RIGHT' if self.target_position > 0.1 else 'CENTER'})"
             )
             
         except Exception as e:
-            self.get_logger().error(f"[Red Ball] Error processing image: {str(e)}")
+            self.get_logger().error(f"[Target] Error processing image: {str(e)}")
 
     def _wheels_speed_cb(self, msg: Float32MultiArray):
         if len(msg.data) != 2:
@@ -328,8 +328,8 @@ class TurtleBot4ReferenceNode(Node):
         msg.attraction_angle = self.latest_attraction_angle
         msg.proximity_magnitude, msg.proximity_angle = self.compute_proximity()
         msg.light_magnitude, msg.light_angle = self.compute_light_vector()
-        msg.red_ball_magnitude = float(self.red_ball_magnitude)
-        msg.red_ball_position = float(self.red_ball_position)
+        msg.target_magnitude = float(self.target_magnitude)
+        msg.target_position = float(self.target_position)
 
         # self.get_logger().info(
         #     f"[RobotState] ID={msg.robot_id}, "
