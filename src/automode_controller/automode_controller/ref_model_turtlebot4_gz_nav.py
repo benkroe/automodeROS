@@ -493,7 +493,7 @@ class TurtleBot4ReferenceNode(Node):
         stamped = TwistStamped()
         stamped.header.stamp = self.get_clock().now().to_msg()
         stamped.twist = twist
-        #self._cmd_vel_pub.publish(stamped)
+        self._cmd_vel_pub.publish(stamped)
 
 
         self.latest_wheels_speed = [left, right]

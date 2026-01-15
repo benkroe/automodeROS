@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'basic_modules'
+package_name = 'basic_modules_old'
 
 setup(
     name=package_name,

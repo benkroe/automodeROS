@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>basic_modules</name>
+  <name>basic_modules_old</name>
   <version>1.0.0</version>
   <description>Contains basic modules for the AutoMoDe framework</description>
   <maintainer email="ben.kr@live.com">ben</maintainer>
