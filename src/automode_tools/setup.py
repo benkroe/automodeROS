@@ -10,6 +10,10 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        # Launch files
+        ('share/' + package_name + '/launch', [
+            'launch/start_all.launch.py',
+        ]),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -25,6 +29,7 @@ setup(
             'robotState_test_pub = automode_tools.robotState_test_pub:main',
             'categories_creator = automode_tools.categories_creator:main',
             'vicon_terminal_viz_node = automode_tools.vicon_terminal_viz_node:main',
+            'group_evaluator = automode_tools.group_evaluator:main',
         ],
     },
 )
