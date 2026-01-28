@@ -40,6 +40,7 @@ class BehaviorNode(Node):
         self.get_logger().info('Starting BehaviorNode')
         # mapping: behavior_name -> {'instance': obj, 'descriptor': dict, 'module_name': str}
         self._behaviors: Dict[str, Dict[str, Any]] = {}
+        self._current_goal_handle = None
         self._list_pub = self.create_publisher(String, 'behaviors/list', 10)
         self._list_srv = self.create_service(Trigger, 'behaviors/list_srv', self._handle_list_srv)
         # timer to republish discovery periodically
@@ -200,6 +201,17 @@ class BehaviorNode(Node):
         result = Behavior.Result() if Behavior is not None else None
 
         self.get_logger().info(f'Received goal for behavior "{req_name}" with params: {params_list}')
+        
+        # Abort any previous goal to ensure only one behavior runs at a time
+        if self._current_goal_handle is not None and self._current_goal_handle != goal_handle:
+            try:
+                self._current_goal_handle.abort()
+                self.get_logger().info(f'Aborted previous behavior goal')
+            except Exception as e:
+                self.get_logger().debug(f'Failed to abort previous goal: {e}')
+        
+        self._current_goal_handle = goal_handle
+        
         # Validate and setup behavior
         behavior_instance = self._setup_behavior(req_name, params_list, goal_handle, result)
         if behavior_instance is None:
@@ -235,14 +247,18 @@ class BehaviorNode(Node):
         execution_rate = 20.0  # Hz
         sleep_duration = 1.0 / execution_rate
 
+        self.get_logger().info(f'Starting behavior "{req_name}"')
+
         try:
             while rclpy.ok():
+                # Check for cancellation or abortion at the start of each loop iteration
+                if goal_handle.is_cancel_requested or not goal_handle.is_active:
+                    return self._handle_cancellation(req_name, step_count, "Goal cancelled or aborted", goal_handle, result)
+
                 # Add debug output
                 if step_count % 10 == 0:  # Every 1 second
                     # self.get_logger().info(f'Behavior "{req_name}" step {step_count}, cancel_requested: {goal_handle.is_cancel_requested}')
                     pass # Logger for debugging
-                if goal_handle.is_cancel_requested:
-                    return self._handle_cancellation(req_name, step_count, "User requested cancellation", goal_handle, result)
 
                 # Execute one step
                 step_result = self._execute_behavior_step(inst, req_name, step_count)
@@ -294,7 +310,8 @@ class BehaviorNode(Node):
         # used above to abort in exeptions. Makes the abortion above shorter (oneline)
         self.get_logger().warning(message)
         if result is not None:
-            goal_handle.abort()
+            if goal_handle.is_active:
+                goal_handle.abort()
             result.success = False
             result.message = message
         return result
@@ -310,7 +327,8 @@ class BehaviorNode(Node):
     def _handle_cancellation(self, req_name, step_count, message, goal_handle, result):
         """Handle behavior cancellation."""
         self.get_logger().info(f'Behavior "{req_name}" cancelled after {step_count} steps')
-        goal_handle.canceled()
+        if goal_handle.is_active:
+            goal_handle.canceled()
         result.success = False
         result.message = f'Cancelled after {step_count} steps'
         return result
@@ -318,7 +336,8 @@ class BehaviorNode(Node):
     def _handle_failure(self, req_name, step_count, message, goal_handle, result):
         """Handle behavior failure."""
         self.get_logger().warning(f'Behavior "{req_name}" failed at step {step_count}: {message}')
-        goal_handle.abort()
+        if goal_handle.is_active:
+            goal_handle.abort()
         result.success = False
         result.message = f'Failed at step {step_count}: {message}'
         return result

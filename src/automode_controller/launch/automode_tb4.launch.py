@@ -6,6 +6,8 @@ from launch.actions import DeclareLaunchArgument, RegisterEventHandler
 from ament_index_python.packages import get_package_share_directory
 from launch.substitutions import LaunchConfiguration
 from launch.event_handlers import OnProcessStart
+from launch.conditions import IfCondition
+from launch.substitutions import PythonExpression
 
 def generate_launch_description():
     pkg_share = get_package_share_directory('automode_controller')
@@ -35,6 +37,16 @@ def generate_launch_description():
         default_value=cfg.get('fsm_config', '--fsm-config --nstates 1 --s0 0 --rwm0 50'),
         description='Path to FSM config file'
     )
+    bt_config_arg = DeclareLaunchArgument(
+        'bt_config',
+        default_value=cfg.get('bt_config', ''),
+        description='BT config string for controller_bt_node'
+    )
+    controller_type_arg = DeclareLaunchArgument(
+        'controller_type',
+        default_value=cfg.get('controller_type', 'fsm'),
+        description='Controller type to start: "fsm" or "bt"'
+    )
     ref_model_arg = DeclareLaunchArgument(
         'ref_model',
         default_value=cfg.get('ref_model', 'ref_model_turtlebot4_gz'),
@@ -44,6 +56,8 @@ def generate_launch_description():
     namespace = LaunchConfiguration('robot_namespace')
     module_pkg = LaunchConfiguration('module_package')
     fsm_config = LaunchConfiguration('fsm_config')
+    bt_config = LaunchConfiguration('bt_config')
+    controller_type = LaunchConfiguration('controller_type')
     ref_model = LaunchConfiguration('ref_model')
     use_sim_time = LaunchConfiguration('use_sim_time')
 
@@ -90,6 +104,20 @@ def generate_launch_description():
             {'fsm_config': fsm_config}
         ],
         output='log',
+        condition=IfCondition(PythonExpression(["'", controller_type, "' == 'fsm'"])),
+    )
+
+    controller_bt_node = Node(
+        package='automode_controller',
+        executable='controller_bt_node',
+        name='controller_bt_node',
+        namespace=namespace,
+        parameters=[
+            {'use_sim_time': True},
+            {'bt_config': bt_config}
+        ],
+        output='log',
+        condition=IfCondition(PythonExpression(["'", controller_type, "' == 'bt'"]))
     )
 
     # Start controller after both condition and behavior nodes are started
@@ -100,7 +128,7 @@ def generate_launch_description():
                 RegisterEventHandler(
                     OnProcessStart(
                         target_action=behavior_node,
-                        on_start=[controller_node]
+                        on_start=[controller_node, controller_bt_node]
                     )
                 )
             ]
@@ -109,6 +137,8 @@ def generate_launch_description():
 
     return LaunchDescription([
         fsm_config_arg,
+        bt_config_arg,
+        controller_type_arg,
         namespace_arg,
         module_package_arg,
         ref_model_arg,

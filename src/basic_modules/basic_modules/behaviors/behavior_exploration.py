@@ -5,7 +5,6 @@ from .behavior_interface import BehaviorBase
 from automode_interfaces.msg import RobotState
 
 import random
-import time
 import math
 
 class Behavior(BehaviorBase):
@@ -16,7 +15,7 @@ class Behavior(BehaviorBase):
         self._params: Dict[str, Any] = {}
         self._last_robot_state: Optional[RobotState] = None
         self._Float32MultiArray = None
-        self._turning_time = time.time()
+        self._turning_time = 0
 
         self._obstacle_threshold = 9.99  # Proximity magnitude threshold for obstacle detection
         self._forward_speed = 0.3       # Forward movement speed
@@ -54,8 +53,9 @@ class Behavior(BehaviorBase):
         self._sub = self._node.create_subscription(RobotState, 'robotState', self._robot_state_cb, 10)
 
     def execute_step(self) -> Tuple[bool, str, bool]:
+        current_time = self._node.get_clock().now().nanoseconds / 1e9
         # If currently turning, keep publishing turn speeds
-        if self._turning_time > time.time():
+        if self._turning_time > current_time:
             msg = self._Float32MultiArray()
             if hasattr(self, "_last_turn_direction"):
                 msg.data = self._last_turn_direction
@@ -82,7 +82,7 @@ class Behavior(BehaviorBase):
 
             self._last_turn_direction = turn_direction
             rwm = int(self._params.get("rwm", 100))
-            self._turning_time = time.time() + (random.uniform(0, rwm))/30
+            self._turning_time = current_time + (random.uniform(0, rwm))/30
             msg.data = turn_direction
             self._pub.publish(msg)
         else:
@@ -93,7 +93,7 @@ class Behavior(BehaviorBase):
     
     def reset(self) -> None:
         """Reset the behavior state."""
-        self._turning_time = time.time()
+        self._turning_time = self._node.get_clock().now().nanoseconds / 1e9 if self._node else 0
         self._last_robot_state = None
         self._params = {}
         self._pub = None

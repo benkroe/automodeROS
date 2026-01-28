@@ -96,3 +96,5 @@ CMakeLists.txt.user*
 # config/secrets.yaml
 # *.key
 # *.pem
+
+.github/copilot-instructions.md

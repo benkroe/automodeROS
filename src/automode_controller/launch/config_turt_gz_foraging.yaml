@@ -2,6 +2,24 @@
 robot_namespace: ""
 module_package: "basic_modules"
 
+# Which controller to start: 'fsm' or 'bt'
+controller_type: "bt"
+
+# BT config (optional) - used when controller_type is 'bt'
+# Working example: Foraging BT tree
+# Root: Sequence (memory=True) with 4 children
+# - Child 0: Selector (memory=False) - Try white_floor condition (p=0.5), else run exploration
+# - Child 1: Selector (memory=False) - Try inverted_neighbour_count condition (p=0.5), else run phototaxis
+# - Child 2: Selector (memory=False) - Try black_floor condition (p=1), else run anti_phototaxis
+# - Child 3: Action - exploration
+# The Sequence progresses through phases: explore until white floor, then phototaxis until neighbor count, then anti-phototaxis until black floor, then explore again (loops).
+bt_config: "--bt-config --nroot 1 --nchildroot 3 --n0 2 --nchild0 2 --n00 6 --c00 2 --p00 1 --n01 5 --a01 2 --n1 2 --nchild1 2 --n10 6 --c10 0 --color10 2 --p10 1 --n11 5 --a11 0 --rwm11 0 --n2 2 --nchild2 2 --n20 6 --c20 1 --p20 1 --n21 5 --a21 3 "
+
+# Commented out the complex config, adding a simple working example: Sequence with exploration
+#bt_config: "--bt-config --nroot 2 --nchildroot 4 --n0 0 --nchild0 2 --n00 6 --c00 2 --p00 0.5 --n01 5 --a01 0 --n1 0 --nchild1 2 --n10 6 --c10 1 --p10 0.5 --n11 5 --a11 2 --n2 0 --nchild2 2 --n20 6 --c20 0 --p20 1 --n21 5 --a21 3 --n3 5 --a3 0"
+
+#bt_config: "--bt-config --nroot 2 --nchildroot 1 --n0 5 --a0 0"
+
 # OLD CONFIG (foraging with phototaxis/anti-phototaxis):
 #fsm_config: "--fsm-config --nstates 3 --s0 0 --rwm0 50 --n0 1 --n0x0 0 --c0x0 2 --p0x0 1 --s1 2 --n1 1 --n1x0 1 --c1x0 1 --p1x0 1 --s2 3 --n2 1 --n2x0 0 --c2x0 0 --color2x0 2 --p2x0 1 "
 
@@ -20,7 +38,7 @@ module_package: "basic_modules"
 # tj0: social activation threshold (neighbor count for 50% recruitment)
 # qmax0: maximum leaving probability
 # kl0: social stabilization strength (leaving suppression by neighbors)
-fsm_config: "--fsm-config --nstates 1 --s0 9 --rwm0 100 --kj0 1.5 --tj0 1.0 --qmax0 0.005 --kl0 1.5 --n0 0"
+fsm_config: "--fsm-config --nstates 1 --s0 9 --rwm0 50 --kj0 1.5 --tj0 1.0 --qmax0 0.005 --kl0 1.5 --n0 0"
 
 ref_model: "ref_model_turtlebot4_gz_nav"
 
