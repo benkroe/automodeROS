@@ -183,7 +183,7 @@ class ControllerBTNode(Node):
             params = node_spec.get('params', {})
 
             # Map numeric types to py_trees classes
-            # 0 Selector, 1 Selector*, 2 Sequence, 3 Sequence*, 4 Decorator, 5 Action, 6 Condition.
+            # 0 Selector, 1 Selector*, 2 Sequence, 3 Sequence*, 4 Decorator, 5 Action, 6 Condition, 7 Parallel.
             if ntype == 0:
                 # Use Selector without memory for reactive behavior
                 comp = py_trees.composites.Selector(f'Selector_{nid}', memory=False)
@@ -199,7 +199,7 @@ class ControllerBTNode(Node):
                 self.get_logger().info(f'Built Selector* node {nid} with children {children}')
                 return comp
             if ntype in (2, 3):
-                memory = False
+                memory = True if ntype == 3 else False
                 comp = py_trees.composites.Sequence(f'Sequence_{nid}', memory=memory)
                 if isinstance(children, list) and len(children) == 2:
                     child0_spec = nodes.get(children[0], {})
@@ -226,6 +226,18 @@ class ControllerBTNode(Node):
                 # Use Inverter as a generic decorator for example
                 comp = py_trees.decorators.Inverter(child)
                 self.get_logger().info(f'Built Decorator node {nid} wrapping child {children[0] if children else "Dummy"}')
+                return comp
+            if ntype == 7:
+                # Parallel: ticks all children concurrently, but restrict to conditions only
+                # Check that no children are behaviors (type 5)
+                for c in children:
+                    c_spec = nodes.get(c, {})
+                    if c_spec.get('type') == 5:
+                        raise ValueError(f"Parallel node {nid} cannot contain behavior nodes (child {c} is type 5). Parallel is restricted to conditions and composites.")
+                comp = py_trees.composites.Parallel(f'Parallel_{nid}')
+                for c in children:
+                    comp.add_child(build_node(c))
+                self.get_logger().info(f'Built Parallel node {nid} with children {children}')
                 return comp
             if ntype == 5:
                 # Action -> behavior
@@ -266,13 +278,13 @@ class ControllerBTNode(Node):
             root_memory = False
             root = py_trees.composites.Selector('Root', memory=root_memory)
         elif root_type == 1:
-            root_memory = False
+            root_memory = True
             root = py_trees.composites.Selector('Root', memory=root_memory)
         elif root_type == 2:
-            root_memory = True
+            root_memory = False
             root = py_trees.composites.Sequence('Root', memory=root_memory)
         else:
-            root_memory = True if root_type == 3 else False
+            root_memory = True
             root = py_trees.composites.Sequence('Root', memory=root_memory)
         for c in root_children:
             root.add_child(build_node(c))
@@ -327,7 +339,6 @@ class ControllerBTNode(Node):
 
     def _tick(self):
         try:
-            # Some py_trees versions provide `tick_once`, others provide `tick`.
             if hasattr(self._tree, 'tick_once'):
                 self._tree.tick_once()
             elif hasattr(self._tree, 'tick'):

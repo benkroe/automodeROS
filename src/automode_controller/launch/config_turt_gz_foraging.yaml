@@ -3,7 +3,7 @@ robot_namespace: ""
 module_package: "basic_modules"
 
 # Which controller to start: 'fsm' or 'bt'
-controller_type: "bt"
+controller_type: "fsm"
 
 # BT config (optional) - used when controller_type is 'bt'
 # Working example: Foraging BT tree
@@ -12,7 +12,7 @@ controller_type: "bt"
 # - Child 1: Selector (memory=False) - Try inverted_neighbour_count condition (p=0.5), else run phototaxis
 # - Child 2: Selector (memory=False) - Try black_floor condition (p=1), else run anti_phototaxis
 # - Child 3: Action - exploration
-# The Sequence progresses through phases: explore until white floor, then phototaxis until neighbor count, then anti-phototaxis until black floor, then explore again (loops).
+# !! The Sequence progresses through phases: explore until white floor, then phototaxis until neighbor count, then anti-phototaxis until black floor, then explore again (loops).
 bt_config: "--bt-config --nroot 1 --nchildroot 3 --n0 2 --nchild0 2 --n00 6 --c00 2 --p00 1 --n01 5 --a01 2 --n1 2 --nchild1 2 --n10 6 --c10 0 --color10 2 --p10 1 --n11 5 --a11 0 --rwm11 0 --n2 2 --nchild2 2 --n20 6 --c20 1 --p20 1 --n21 5 --a21 3 "
 
 # Commented out the complex config, adding a simple working example: Sequence with exploration

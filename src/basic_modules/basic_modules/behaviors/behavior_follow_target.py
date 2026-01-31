@@ -5,7 +5,6 @@ from .behavior_interface import BehaviorBase
 from automode_interfaces.msg import RobotState
 
 class Behavior(BehaviorBase):
-    """Follow the detected target (red ball) with a simple P controller."""
 
     def __init__(self) -> None:
         self._node = None
@@ -28,7 +27,7 @@ class Behavior(BehaviorBase):
         return {
             "name": "follow_target",
             "type": 6,
-            "description": "Follow detected target using red_ball_position with a simple P controller.",
+            "description": "Follow detected target using target_position with a simple P controller.",
             "params": []
         }
 
@@ -59,24 +58,24 @@ class Behavior(BehaviorBase):
         rs = self._last_robot_state
 
         # Safety: stop if obstacle magnitude high (reuse existing convention)
-        # if rs.proximity_magnitude > self._obstacle_threshold:
-        #     msg = self._Float32MultiArray()
-        #     msg.data = [0.0, 0.0]
-        #     self._pub.publish(msg)
-        #     return True, f"Obstacle detected (prox_mag={rs.proximity_magnitude:.3f}) -> stop", False
+        if rs.proximity_magnitude > self._obstacle_threshold:
+            msg = self._Float32MultiArray()
+            msg.data = [0.0, 0.0]
+            self._pub.publish(msg)
+            return True, f"Obstacle detected (prox_mag={rs.proximity_magnitude:.3f}) -> stop", False
 
         # If no target detected, stop
-        if rs.red_ball_magnitude <= 0.0:
+        if rs.target_magnitude <= 0.0:
             msg = self._Float32MultiArray()
             msg.data = [0.0, 0.0]
             self._pub.publish(msg)
             return True, "No target detected -> stop", False
 
         # P-control on horizontal error
-        error = float(rs.red_ball_position)  # -1 (left) to 1 (right)
+        error = float(rs.target_position)  # -1 (left) to 1 (right)
         w = self._kp_ang * error
 
-        v_raw = self._kp_lin * max(0.0, rs.red_ball_magnitude) + self._base_speed
+        v_raw = self._kp_lin * (1.0 - max(0.0, rs.target_magnitude)) + self._base_speed
         turn_scaler = max(0.2, 1.0 - 0.5 * abs(error))  
         v = v_raw * turn_scaler
         v = max(self._min_speed, min(self._max_speed, v))

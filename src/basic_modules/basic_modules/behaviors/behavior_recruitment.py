@@ -5,7 +5,6 @@ from .behavior_interface import BehaviorBase
 from automode_interfaces.msg import RobotState
 
 import random
-import time
 import math
 
 class Behavior(BehaviorBase):
@@ -26,14 +25,15 @@ class Behavior(BehaviorBase):
         
         # FSM state
         self._state = "free"  # free, recruited, leaving
-        self._turning_time = time.time()
+        self._turning_time = 0.0  # Will be set when node is available
         self._last_turn_direction = [0.0, 0.0]
         self._leaving_turn_time = None  # Timer for 180s-degree turn when leaving
         
         # Recruitment parameters (density-based)
-        self._k_j = 0.5          # sigmoid steepness for recruitment
-        self._theta_j = 2.0      # social activation threshold (neighbor count)
-        self._q_max = 0.0001        # maximum leaving probability
+        self._sigma = 0.5         # Gaussian spread (std dev, curve width)
+        self._mu = 2.0            # Optimal neighbor count (peak probability)
+        self._qmax_r = 0.1        # Maximum recruitment probability (peak of bell curve)
+        self._qmax_l = 0.0001     # Maximum leaving probability
         self._k_l = 0.8          # social stabilization strength
         self._target_approach_threshold = 0.55  # target_magnitude threshold to stop and recruit (close enough)
         
@@ -49,11 +49,12 @@ class Behavior(BehaviorBase):
         return {
             "name": "recruitment",
             "type": 9,
-            "description": "Density-based recruitment: agents aggregate at targets through neighbor-dependent probabilities",
+            "description": "Density-based recruitment with optimal group size: agents aggregate at targets with probability peaking at μ neighbors, self-regulating group size",
             "params": [
-                {"name": "kj", "type": "float64", "required": False, "default": 0.5},    # sigmoid steepness
-                {"name": "tj", "type": "float64", "required": False, "default": 2.0},    # social activation threshold
-                {"name": "qmax", "type": "float64", "required": False, "default": 0.1},  # max leaving probability
+                {"name": "sigma", "type": "float64", "required": False, "default": 0.5},  # Gaussian spread (std dev, controls curve width)
+                {"name": "mu", "type": "float64", "required": False, "default": 2.0},     # Optimal neighbor count (peak probability)
+                {"name": "qmax_r", "type": "float64", "required": False, "default": 0.1}, # Maximum recruitment probability (peak of bell curve)
+                {"name": "qmax_l", "type": "float64", "required": False, "default": 0.0001}, # Maximum leaving probability
                 {"name": "kl", "type": "float64", "required": False, "default": 0.5},    # social stabilization strength
                 {"name": "rwm", "type": "int", "required": False, "default": 100}        # random walk modulation
             ]
@@ -65,19 +66,24 @@ class Behavior(BehaviorBase):
         self._params.update(params)
         
         try:
-            self._k_j = float(params.get("kj", 0.5))
+            self._sigma = float(params.get("sigma", 0.5))
         except (TypeError, ValueError):
-            self._k_j = 0.5
+            self._sigma = 0.5
         
         try:
-            self._theta_j = float(params.get("tj", 2.0))
+            self._mu = float(params.get("mu", 2.0))
         except (TypeError, ValueError):
-            self._theta_j = 2.0
+            self._mu = 2.0
         
         try:
-            self._q_max = float(params.get("qmax", 0.1))
+            self._qmax_r = float(params.get("qmax_r", 0.1))
         except (TypeError, ValueError):
-            self._q_max = 0.1
+            self._qmax_r = 0.1
+        
+        try:
+            self._qmax_l = float(params.get("qmax_l", 0.0001))
+        except (TypeError, ValueError):
+            self._qmax_l = 0.0001
         
         try:
             self._k_l = float(params.get("kl", 0.5))
@@ -100,15 +106,12 @@ class Behavior(BehaviorBase):
         self._sub = self._node.create_subscription(RobotState, 'robotState', self._robot_state_cb, 10)
 
     def _sigmoid(self, n: int) -> float:
-        """Sigmoid recruitment probability: p_join(n) = 1 / (1 + e^(-k_j(n - θ_j)))"""
-        exponent = self._k_j * (n - self._theta_j)
-        # Clamp exponent to avoid overflow
-        exponent = max(-500, min(500, exponent))
-        return 1.0 / (1.0 + math.exp(-exponent))
+        """Gaussian bell curve recruitment probability: p_join(n) = qmax_r * exp( - (n - μ)^2 / (2 σ^2) )"""
+        return self._qmax_r * math.exp( - ((n - self._mu) ** 2) / (2 * self._sigma ** 2) )
     
     def _exponential_leaving(self, n: int) -> float:
-        """Exponential leaving probability: p_leave(n) = q_max * e^(-k_l * n)"""
-        return self._q_max * math.exp(-self._k_l * n)
+        """Exponential leaving probability: p_leave(n) = qmax_l * e^(-k_l * n)"""
+        return self._qmax_l * math.exp(-self._k_l * n)
 
     def _robot_state_cb(self, msg) -> None:
         self._last_robot_state = msg
@@ -128,6 +131,8 @@ class Behavior(BehaviorBase):
     def execute_step(self) -> Tuple[bool, str, bool]:
         if self._node is None or self._pub is None:
             return False, "recruitment behavior not initialized", False
+
+        current_time = self._node.get_clock().now().nanoseconds / 1e9
 
         target_magnitude = 0.0
         target_position = 0.0
@@ -162,7 +167,7 @@ class Behavior(BehaviorBase):
                 p_leave = self._exponential_leaving(neighbour_count)
                 if random.random() < p_leave:
                     self._state = "leaving"
-                    self._leaving_turn_time = time.time() + 1.5  # Turn for ~1.5 seconds (approx 180 degrees)
+                    self._leaving_turn_time = current_time + 1.5  # Turn for 1.5 seconds (approx 180 degrees)
                     self._node.get_logger().info(
                         f"[Recruitment] RECRUITED → LEAVING: n={neighbour_count}, p_leave={p_leave:.3f}"
                     )
@@ -185,7 +190,7 @@ class Behavior(BehaviorBase):
                 # Proportional turning control based on target position
                 # target_position: -1 (left) to +1 (right), 0 (center)
                 # Scale turn gain to keep both wheels moving forward
-                turn_gain = self._forward_speed * 0.5 * target_position  # Max ±0.15 when forward_speed=0.3
+                turn_gain = self._forward_speed * 0.5 * target_position  
                 
                 # Move forward while turning toward target
                 # Negative target_position (left) → turn left (left slower, right faster)
@@ -197,7 +202,7 @@ class Behavior(BehaviorBase):
                 self._pub.publish(msg)
             else:
                 # No target visible: random walk with obstacle avoidance
-                if self._turning_time > time.time():
+                if self._turning_time > current_time:
                     msg.data = self._last_turn_direction
                     self._pub.publish(msg)
                 elif proximity_magnitude < self._obstacle_threshold and proximity_magnitude != 0.0:
@@ -209,7 +214,7 @@ class Behavior(BehaviorBase):
 
                     self._last_turn_direction = turn_direction
                     rwm = int(self._params.get("rwm", 100))
-                    self._turning_time = time.time() + (random.uniform(0, rwm)) / 30
+                    self._turning_time = current_time + (random.uniform(0, rwm)) / 30
                     msg.data = turn_direction
                     self._pub.publish(msg)
                 else:
@@ -218,13 +223,12 @@ class Behavior(BehaviorBase):
                     self._pub.publish(msg)
 
         elif self._state == "recruited":
-            # Remain at target (stop for simplicity; can add cohesion motion later)
             msg.data = [0.0, 0.0]
             self._pub.publish(msg)
 
         elif self._state == "leaving":
             # Move away from target: first turn 180 degrees, then move forward
-            if self._leaving_turn_time is not None and time.time() < self._leaving_turn_time:
+            if self._leaving_turn_time is not None and current_time < self._leaving_turn_time:
                 # Still turning around
                 msg.data = [self._turn_speed, -self._turn_speed]  # Turn in place
                 self._pub.publish(msg)
@@ -238,7 +242,8 @@ class Behavior(BehaviorBase):
     def reset(self) -> None:
         """Reset behavior state."""
         self._state = "free"
-        self._turning_time = time.time()
+        current_time = self._node.get_clock().now().nanoseconds / 1e9 if self._node else 0.0
+        self._turning_time = current_time
         self._leaving_turn_time = None
         self._last_robot_state = None
         self._params = {}

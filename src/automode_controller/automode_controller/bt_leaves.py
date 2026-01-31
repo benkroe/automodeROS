@@ -5,7 +5,6 @@ from automode_interfaces.action import Behavior, Condition
 
 
 class BehaviorLeaf(py_trees.behaviour.Behaviour):
-    """BT leaf that requests the controller to set the current behavior."""
 
     def __init__(self, name: str, controller: rclpy.node.Node, behavior_name: str, behavior_params=None):
         super().__init__(name)
@@ -26,12 +25,11 @@ class BehaviorLeaf(py_trees.behaviour.Behaviour):
         return py_trees.common.Status.RUNNING
 
     def terminate(self, new_status):
-        """Halt method: no action needed, controller handles stopping."""
+        # Not needed as the behavior_node only allows on behavior active at a time and the new one will override the old one
         pass
 
 
 class ConditionLeaf(py_trees.behaviour.Behaviour):
-    """BT leaf that initializes a condition action once and checks feedback continuously."""
 
     def __init__(self, name: str, node: rclpy.node.Node, condition_name: str, condition_params=None):
         super().__init__(name)
@@ -47,7 +45,7 @@ class ConditionLeaf(py_trees.behaviour.Behaviour):
         self._previous_met = False
 
     def setup(self):
-        """Set up client and send goal once at startup."""
+
         self._client = ActionClient(self.node, Condition, 'condition_action')
         if not self._client.wait_for_server(timeout_sec=10.0):
             self.node.get_logger().info(f'Condition action server not available yet for {self.condition_name} (waiting)')
@@ -62,11 +60,9 @@ class ConditionLeaf(py_trees.behaviour.Behaviour):
             self._sent = True
 
     def initialise(self):
-        """No action needed."""
         pass
 
     def update(self):
-        """Check if condition is met from feedback."""
         if self._condition_met != self._previous_met:
             self.node.get_logger().info(f'Condition {self.condition_name} status changed: met={self._condition_met}')
             self._previous_met = self._condition_met
@@ -76,7 +72,6 @@ class ConditionLeaf(py_trees.behaviour.Behaviour):
             return py_trees.common.Status.FAILURE
 
     def terminate(self, new_status):
-        """Cancel the goal if terminating."""
         try:
             if self._goal_handle is not None:
                 self._client.cancel_goal(self._goal_handle)

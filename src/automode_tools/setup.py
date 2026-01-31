@@ -30,6 +30,7 @@ setup(
             'categories_creator = automode_tools.categories_creator:main',
             'vicon_terminal_viz_node = automode_tools.vicon_terminal_viz_node:main',
             'group_evaluator = automode_tools.group_evaluator:main',
+            'position_collector = automode_tools.position_collector:main',
         ],
     },
 )

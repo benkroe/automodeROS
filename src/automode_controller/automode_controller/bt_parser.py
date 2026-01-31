@@ -1,18 +1,3 @@
-"""Parser for --bt-config strings into a tree specification.
-
-Format notes (examples accepted):
-- Tokens are space-separated, flags start with `--` and have a following value.
-- Node type: `--n<ID> <type>` where <ID> is a digit sequence like `0`, `00`, `10`.
-- Child counts: `--nchild<ID> <count>` or `--nchildroot <count>` for the top-level root children.
-- Root type: `--nroot <type>` (optional; if absent a default Selector is assumed).
-- Top-level children: produced as `0..(nchildroot-1)` unless explicit node ids differ.
-- Leaf details: per-node params use short-prefix keys where the suffix is the node id digits,
-  e.g. `--a01 2` (action id), `--c00 1` (condition id), `--p01 0` (param index/value), etc.
-
-The parser returns a dict with a `root` entry and `nodes` mapping node-id -> spec.
-Each node spec: { 'type': int, 'children': [ids], 'params': {key: value, ...} }
-"""
-
 from typing import Dict, Any, List
 import re
 import logging

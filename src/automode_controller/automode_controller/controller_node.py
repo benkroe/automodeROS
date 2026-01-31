@@ -113,7 +113,6 @@ class ControllerNode(Node):
     
 
     def goal_response_behavior(self, future):
-        # We need that primarily to set the _active_behavior_goals
         try: 
             goal_handle = future.result()
             if goal_handle.accepted:
@@ -124,7 +123,6 @@ class ControllerNode(Node):
             self.get_logger().error(f"Error in goal response: {e}")
 
     def goal_response_condition(self, future, edge):
-        # We need that primarily to set the _active_condition_goals
         try:
             goal_handle = future.result()
             if goal_handle.accepted:
@@ -136,7 +134,7 @@ class ControllerNode(Node):
             self.get_logger().error(f"Error in goal response: {e}")
 
     def feedback_callback_behavior(self, feedback):
-        # Actually we don't need to do anything with the feedback maybe error handling
+        # Actually we dont need to do anything with the feedback maybe error handling
         pass
     
     def feedback_callback_condition(self, feedback, edge):
@@ -162,10 +160,7 @@ class ControllerNode(Node):
             if self._fsm.transition_to(new_state):
                 self.get_logger().info(f"Transitioning from {old_state.behavior_name} to {new_state}")
                 
-                # Stop old state
                 self.stop_state(old_state)
-                
-                # Start new state
                 self.start_state()
             else:
                 self.get_logger().error(f"Failed to transition to state: {new_state}")

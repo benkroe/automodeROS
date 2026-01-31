@@ -41,7 +41,7 @@ def include_all(context, *args, **kwargs):
             )
 
             # A helper process that waits until the controller node for this namespace appears
-            waiter_cmd = "/bin/bash -lc 'until ros2 node list | grep -q \"/{ns}/controller_node\"; do sleep 0.25; done'".replace('{ns}', ns)
+            waiter_cmd = "/bin/bash -lc 'until ros2 node list | grep -q \"/{ns}/controller\"; do sleep 0.25; done'".replace('{ns}', ns)
             waiter = ExecuteProcess(cmd=['/bin/bash', '-c', waiter_cmd], output='screen')
 
             if i == 0:
