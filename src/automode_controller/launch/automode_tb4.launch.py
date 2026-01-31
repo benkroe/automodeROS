@@ -11,10 +11,17 @@ from launch.substitutions import PythonExpression
 
 def generate_launch_description():
     pkg_share = get_package_share_directory('automode_controller')
-    default_cfg_path = os.path.join(pkg_share, 'launch', 'config_turt_gz_foraging.yaml')
+
+    # Declare launch arguments
+    config_file_arg = DeclareLaunchArgument(
+        'config_file',
+        default_value='config_foraging.yaml',
+        description='YAML config file name in launch/ directory'
+    )
+    config_file = LaunchConfiguration('config_file')
+    default_cfg_path = os.path.join(pkg_share, 'launch', 'config_foraging.yaml')
 
     # load configuration from YAML file
-    pkg_share = get_package_share_directory('automode_controller')
     try:
         with open(default_cfg_path, 'r') as f:
             cfg = yaml.safe_load(f) or {}
@@ -136,6 +143,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        config_file_arg,
         fsm_config_arg,
         bt_config_arg,
         controller_type_arg,

@@ -13,6 +13,7 @@ setup(
         # Launch files
         ('share/' + package_name + '/launch', [
             'launch/start_all.launch.py',
+            'launch/start_foraging.launch.py',
         ]),
     ],
     install_requires=['setuptools'],
@@ -31,6 +32,8 @@ setup(
             'vicon_terminal_viz_node = automode_tools.vicon_terminal_viz_node:main',
             'group_evaluator = automode_tools.group_evaluator:main',
             'position_collector = automode_tools.position_collector:main',
+            'scorer_node = automode_tools.scorer_node:main',
+            'timer_shutdown = automode_tools.timer_shutdown:main',
         ],
     },
 )
