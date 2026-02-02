@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# irace target runner wrapper
+# Pass all parameters to the Python runner
+export IRACE_SIM_MINUTES=4
+export IRACE_VERBOSE=0
+exec python3 /home/ben/ros2_ws/automodeROS/scripts/irace_foraging.py "$@"

@@ -6,7 +6,7 @@ import numpy as np
 import os
 
 # Path to the CSV file
-csv_file_path = '/home/ben/ros2_ws/automodeROS/data/positions_log.csv'
+csv_file_path = '/home/ben/ros2_ws/automodeROS/data/foraging_fsm_01.csv'
 
 # Check if file exists
 if not os.path.exists(csv_file_path):

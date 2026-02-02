@@ -1,0 +1,26 @@
+# irace scenario file for foraging optimization
+# Target runner: the script that evaluates configurations
+targetRunner = "/home/ben/ros2_ws/automodeROS/target-runner"
+
+# Parameters to tune
+parameterFile = "/home/ben/ros2_ws/automodeROS/irace/parameters.txt"
+
+# Experiment settings
+maxExperiments = 60  # Reduced budget
+firstTest = 3        # Initial configurations
+eachTest = 1         # Configurations per iteration
+mu = 3               # Population size
+nbIterations = 2     # Fewer iterations
+minNbSurvival = 3    # Smaller elite set
+deterministic = 0    # Non-deterministic (simulations vary)
+
+# Instances (required by irace)
+trainInstancesDir = ""
+trainInstancesFile = "/home/ben/ros2_ws/automodeROS/irace/instances.txt"
+
+# Output
+logFile = "irace_log.txt"
+
+# Other options
+seed = 12345
+parallel = 1  # Number of parallel evaluations (set higher if possible)

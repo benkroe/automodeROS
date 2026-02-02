@@ -3,7 +3,7 @@ robot_namespace: ""
 module_package: "basic_modules"
 
 # Which controller to start: 'fsm' or 'bt'
-controller_type: "fsm"
+controller_type: "bt"
 
 # BT config (optional) - used when controller_type is 'bt'
 # Foraging BT: exploration -> black floor -> phototaxis -> white floor -> anti-phototaxis -> grey floor -> exploration
@@ -19,10 +19,12 @@ bt_config: "--bt-config --nroot 0 --nchildroot 3 --n0 2 --nchild0 2 --n00 6 --c0
 
 # Results BT:
 # [timer_shutdown-25] [INFO] [1769872206.619814076] [timer_shutdown]: Simulation time reached 10 minutes. Real time elapsed: 923.18s, RTF: 0.65
-# [INFO] [1769872329.365909133] [foraging_scorer]: Scores: {'tb1': 5, 'tb2': 7, 'tb3': 5, 'tb4': 6}
+# [INFO] [1769872329.365909133] [foraging_scorer]: Scores: {'tb1': 5, 'tb2': 7, 'tb3': 5, 'tb4': 6} = 23
 # pos data: foraging_bt_01.csv
 
 # Results FSM:
 # [timer_shutdown-25] [INFO] [1769873387.925671645] [timer_shutdown]: Simulation time reached 10 minutes. Real time elapsed: 792.11s, RTF: 0.76
-# [INFO] [1769873387.629672139] [foraging_scorer]: Scores: {'tb1': 10, 'tb2': 8, 'tb3': 9, 'tb4': 7}
+# [INFO] [1769873387.629672139] [foraging_scorer]: Scores: {'tb1': 10, 'tb2': 8, 'tb3': 9, 'tb4': 7} = 34
 # pos data: foraging_fsm_01.csv
+
+

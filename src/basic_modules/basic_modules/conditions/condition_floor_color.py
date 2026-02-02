@@ -26,7 +26,7 @@ class Condition(ConditionBase):
             "type": 0,
             "description": "Triggers when specified floor color (float: 1=black, 2=gray, 3=white) is detected with probability (p).",
             "params": [
-                {"name": "color", "type": "float64", "required": True, "default": 1.0},
+                {"name": "color", "type": "float64", "required": True, "default": 2.0},
                 {"name": "p", "type": "float64", "required": False, "default": 1}
             ]
         }

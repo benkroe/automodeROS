@@ -1,0 +1,25 @@
+fsm:
+  nstates: 3
+  conditions_per_state: 1
+  behavior_types:
+    0: exploration
+    1: stop
+    2: phototaxis
+    3: anti-phototaxis
+    4: attraction
+    5: repulsion
+  condition_types:
+    0: floor_color
+    1: white_floor
+    2: black_floor
+    3: neighbour_count
+    4: inverted_neighbours_count
+    5: fixed_probability
+  rules:
+    - "States must be sequential: 0..nstates-1"
+    - "Each state has exactly one condition"
+    - "target_offset must be 0 or 1 (points to another state in a 3-state FSM)"
+    - "No module parameters appear in the config string (defaults are used)"
+  notes:
+    - "Uses module descriptions from the module_package in config_foraging.yaml"
+    - "If a module expects parameters, the default values are applied at runtime"
