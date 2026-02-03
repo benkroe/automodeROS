@@ -17,7 +17,7 @@ class Behavior(BehaviorBase):
 
         # Default parameters
         self._repulsion_gain = 4.0        # rep parameter (typical range [1, 5])
-        self._neighbor_threshold = 0.1    # minimum proximity to consider neighbors
+        self._proximity_threshold = 0.1    # minimum proximity magnitude to trigger emergency stop
         self._wheel_speed_limit = 10.0    # max wheel speed (saturation safeguard)
 
     @staticmethod
@@ -77,29 +77,38 @@ class Behavior(BehaviorBase):
             return False, "Communication not set up", False
 
         prox_mag = self._last_robot_state.proximity_magnitude
-        prox_ang = math.degrees(self._last_robot_state.proximity_angle)  # Convert radians to degrees
+        prox_ang_rad = self._last_robot_state.proximity_angle  # Already in radians
         neighbor_count = self._last_robot_state.neighbour_count
+        attraction_ang_rad = self._last_robot_state.attraction_angle  # In radians
 
-        # If no neighbors or too weak signal → stop
-        if neighbor_count == 0 or prox_mag <= self._neighbor_threshold:
-            msg = self._Float32MultiArray()
-            msg.data = [0.0, 0.0]
-            self._pub.publish(msg)
-            return True, f"No neighbors detected, stopped", False
+        # Determine direction and speed
+        if neighbor_count > 0:
+            # Repel from neighbors: drive directly away from the centroid
+            direction_rad = (attraction_ang_rad + math.pi) % (2 * math.pi)
+            # Avoid backward driving and adjust turn direction to avoid turning towards
+            if math.cos(direction_rad) < 0:  # backward direction
+                direction_rad = math.pi / 2  # turn right
+            elif direction_rad == math.pi / 2:
+                direction_rad = -math.pi / 2  # flip to turn left
+            elif direction_rad == -math.pi / 2:
+                direction_rad = math.pi / 2  # flip to turn right
+            vector_length = self._repulsion_gain
+        else:
+            # No neighbors: drive forward
+            direction_rad = 0.0
+            vector_length = self._repulsion_gain
 
-        # REPULSION: Add 180° to move away from neighbors
-        escape_angle = (prox_ang + 180) % 360
-
-        # Repulsion vector scaled by rep
-        vector_length = self._repulsion_gain * prox_mag
-        angle_rad = math.radians(escape_angle)
+        # Emergency stop for obstacles: turn in place to avoid
+        if prox_mag > self._proximity_threshold:
+            direction_rad = math.pi / 2  # turn right in place
+            vector_length = 1.0
 
         # Map vector into differential drive wheel speeds
         # Standard ARGoS-style mapping: 
         #   left  = v·cos(θ) - v·sin(θ)
         #   right = v·cos(θ) + v·sin(θ)
-        v_cos = vector_length * math.cos(angle_rad)
-        v_sin = vector_length * math.sin(angle_rad)
+        v_cos = vector_length * math.cos(direction_rad)
+        v_sin = vector_length * math.sin(direction_rad)
         left_wheel_speed = v_cos - v_sin
         right_wheel_speed = v_cos + v_sin
 
@@ -112,10 +121,13 @@ class Behavior(BehaviorBase):
         msg.data = [left_wheel_speed, right_wheel_speed]
         self._pub.publish(msg)
 
+        repel_angle_deg = math.degrees(direction_rad)
+        prox_ang_deg = math.degrees(prox_ang_rad)
+
         return True, (
             f"Repulsion active (neighbors: {neighbor_count}, "
-            f"prox: {prox_mag:.3f}, neighbor_angle: {prox_ang:.1f}°, "
-            f"escape_angle: {escape_angle:.1f}°, "
+            f"prox: {prox_mag:.3f}, prox_angle: {prox_ang_deg:.1f}°, "
+            f"repel_angle: {repel_angle_deg:.1f}°, "
             f"rep: {self._repulsion_gain:.1f}), "
             f"wheels: [{left_wheel_speed:.2f}, {right_wheel_speed:.2f}]"
         ), False
@@ -125,6 +137,7 @@ class Behavior(BehaviorBase):
         self._last_robot_state = None
         self._params = {}
         self._repulsion_gain = 4.0
+        self._proximity_threshold = 0.1
         self._pub = None
         self._sub = None
         self._Float32MultiArray = None

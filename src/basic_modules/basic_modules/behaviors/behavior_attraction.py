@@ -64,6 +64,7 @@ class Behavior(BehaviorBase):
     def execute_step(self) -> Tuple[bool, str, bool]:
         """
         Drive straight if facing the attraction direction, otherwise turn toward it.
+        Stop if too close to avoid collision.
         """
         if self._pub is None or self._Float32MultiArray is None:
             return False, "Communication not set up", False
@@ -71,6 +72,17 @@ class Behavior(BehaviorBase):
         msg = self._Float32MultiArray()
 
         if self._last_robot_state is not None:
+            prox_mag = self._last_robot_state.proximity_magnitude
+            proximity_threshold = 0.01  # Stop if closer than 0.3 to avoid collision
+
+            if prox_mag >= proximity_threshold:
+                # Drive slowly backwards to avoid collision
+                left_wheel_speed = -0.1
+                right_wheel_speed = -0.1
+                msg.data = [left_wheel_speed, right_wheel_speed]
+                self._pub.publish(msg)
+                return True, f"Too close to neighbor (prox: {prox_mag:.3f} >= {proximity_threshold}), driving backwards", False
+
             angle_rad = self._last_robot_state.attraction_angle
             gain = self._attraction_gain
 
@@ -82,8 +94,8 @@ class Behavior(BehaviorBase):
             else:
                 # Otherwise, turn in place toward the vector
                 turn_speed = gain * math.copysign(1.0, angle_rad)
-                left_wheel_speed = -turn_speed
-                right_wheel_speed = turn_speed
+                left_wheel_speed = -turn_speed/2
+                right_wheel_speed = turn_speed/2
                 action = "turning toward vector"
 
             left_wheel_speed = max(min(left_wheel_speed, self._wheel_speed_limit), -self._wheel_speed_limit)

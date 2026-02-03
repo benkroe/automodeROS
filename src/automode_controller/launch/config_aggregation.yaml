@@ -1,0 +1,19 @@
+# Launch-level defaults for automode_tb4.launch.py - Aggregation Mission
+robot_namespace: ""
+module_package: "basic_modules"
+
+# Which controller to start: 'fsm' or 'bt'
+controller_type: "bt"
+
+# FSM config (optional) - aggregation baseline
+# State 0: exploration -> if black_floor then go to State 1 (stop)
+# State 1: stop on black -> leave with inverted_neighbour_count (probability depends on neighbour count)
+fsm_config: "--fsm-config --nstates 2 --s0 0 --rwm0 100 --n0 1 --n0x0 1 --c0x0 2 --p0x0 1 --s1 1 --n1 1 --n1x0 0 --c1x0 4 --p1x0 0.01 --w1x0 2 "
+
+# BT config (unused for aggregation by default)
+bt_config: "--bt-config --nroot 0 --nchildroot 3 --n0 2 --nchild0 3 --n00 6 --c00 2 --p00 1 --n01 6 --c01 4 --p01 0.01 --w01 2 --n02 5 --a02 0 --rwm02 100 --n1 2 --nchild1 2 --n10 6 --c10 2 --p10 1 --n11 5 --a11 1 --n2 5 --a2 0 --rwm2 50 "
+
+ref_model: "ref_model_turtlebot4_gz_nav"
+
+
+# working but not very good. 

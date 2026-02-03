@@ -37,11 +37,11 @@ WHEELBASE = 0.3  # meters (distance between left and right wheels)
 
 PROXIMITY_MAX_RANGE = 2.0  # meters (reduced for IR realism)
 PROXIMITY_RANGE_MIN = 0.01  # meters
-PROXIMITY_RANGE_MAX = 0.10  # meters
+PROXIMITY_RANGE_MAX = 0.15  # meters
 PROXIMITY_INF_THRESHOLD = 10.0  # Treat anything >= this as inf/no detection
 
 # Neighbor detection configuration
-NEIGHBOR_DETECTION_RANGE = 1.0  # meters
+NEIGHBOR_DETECTION_RANGE = 1.5  # meters
 
 # Ground sensor configuration (mission world)
 GROUND_SENSOR_BASE_FRAME = 'mission'
@@ -51,10 +51,10 @@ WHITE_Y_MIN = 1
 WHITE_Y_MAX = 3
 BLACK1_X = -1.5
 BLACK1_Y = -1.0
-BLACK1_RADIUS = 0.4
+BLACK1_RADIUS = 0.6
 BLACK2_X = 1.5
 BLACK2_Y = -1.0
-BLACK2_RADIUS = 0.4
+BLACK2_RADIUS = 0.6
 
 # Light sensor configuration (mission world)
 LIGHT_SOURCE_X = 0.0

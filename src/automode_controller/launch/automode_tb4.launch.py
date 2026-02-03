@@ -2,71 +2,40 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 import os
 import yaml
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler, OpaqueFunction
 from ament_index_python.packages import get_package_share_directory
 from launch.substitutions import LaunchConfiguration
 from launch.event_handlers import OnProcessStart
 from launch.conditions import IfCondition
 from launch.substitutions import PythonExpression
 
-def generate_launch_description():
+def _build_nodes(context):
     pkg_share = get_package_share_directory('automode_controller')
 
-    # Declare launch arguments
-    config_file_arg = DeclareLaunchArgument(
-        'config_file',
-        default_value='config_foraging.yaml',
-        description='YAML config file name in launch/ directory'
-    )
-    config_file = LaunchConfiguration('config_file')
-    default_cfg_path = os.path.join(pkg_share, 'launch', 'config_foraging.yaml')
+    config_file = LaunchConfiguration('config_file').perform(context)
+    if not config_file:
+        config_file = 'config_foraging.yaml'
 
-    # load configuration from YAML file
+    cfg_path = config_file
+    if not os.path.isabs(cfg_path):
+        cfg_path = os.path.join(pkg_share, 'launch', cfg_path)
+
     try:
-        with open(default_cfg_path, 'r') as f:
+        with open(cfg_path, 'r') as f:
             cfg = yaml.safe_load(f) or {}
     except FileNotFoundError:
         cfg = {}
 
-    # Declare launch arguments (defaults come from YAML)
-    namespace_arg = DeclareLaunchArgument(
-        'robot_namespace',
-        default_value=cfg.get('robot_namespace', ''),
-        description='Namespace for robot nodes'
-    )
-    module_package_arg = DeclareLaunchArgument(
-        'module_package',
-        default_value=cfg.get('module_package', 'basic_modules'),
-        description='Module package for condition and behavior nodes'
-    )
-    fsm_config_arg = DeclareLaunchArgument(
-        'fsm_config',
-        default_value=cfg.get('fsm_config', '--fsm-config --nstates 1 --s0 0 --rwm0 50'),
-        description='Path to FSM config file'
-    )
-    bt_config_arg = DeclareLaunchArgument(
-        'bt_config',
-        default_value=cfg.get('bt_config', ''),
-        description='BT config string for controller_bt_node'
-    )
-    controller_type_arg = DeclareLaunchArgument(
-        'controller_type',
-        default_value=cfg.get('controller_type', 'fsm'),
-        description='Controller type to start: "fsm" or "bt"'
-    )
-    ref_model_arg = DeclareLaunchArgument(
-        'ref_model',
-        default_value=cfg.get('ref_model', 'ref_model_turtlebot4_gz'),
-        description='Reference model node executable'
-    )
+    def _get_arg(name, default):
+        value = LaunchConfiguration(name).perform(context)
+        return value if value not in (None, '') else default
 
-    namespace = LaunchConfiguration('robot_namespace')
-    module_pkg = LaunchConfiguration('module_package')
-    fsm_config = LaunchConfiguration('fsm_config')
-    bt_config = LaunchConfiguration('bt_config')
-    controller_type = LaunchConfiguration('controller_type')
-    ref_model = LaunchConfiguration('ref_model')
-    use_sim_time = LaunchConfiguration('use_sim_time')
+    namespace = _get_arg('robot_namespace', cfg.get('robot_namespace', ''))
+    module_pkg = _get_arg('module_package', cfg.get('module_package', 'basic_modules'))
+    fsm_config = _get_arg('fsm_config', cfg.get('fsm_config', '--fsm-config --nstates 1 --s0 0 --rwm0 50'))
+    bt_config = _get_arg('bt_config', cfg.get('bt_config', ''))
+    controller_type = _get_arg('controller_type', cfg.get('controller_type', 'fsm'))
+    ref_model = _get_arg('ref_model', cfg.get('ref_model', 'ref_model_turtlebot4_gz'))
 
     condition_node = Node(
         package='automode_controller',
@@ -127,7 +96,6 @@ def generate_launch_description():
         condition=IfCondition(PythonExpression(["'", controller_type, "' == 'bt'"]))
     )
 
-    # Start controller after both condition and behavior nodes are started
     controller_startup_event = RegisterEventHandler(
         OnProcessStart(
             target_action=condition_node,
@@ -142,16 +110,54 @@ def generate_launch_description():
         )
     )
 
+    return [condition_node, behavior_node, ref_model_node, controller_startup_event]
+
+
+def generate_launch_description():
+    config_file_arg = DeclareLaunchArgument(
+        'config_file',
+        default_value='config_foraging.yaml',
+        description='YAML config file name in launch/ directory'
+    )
+
+    namespace_arg = DeclareLaunchArgument(
+        'robot_namespace',
+        default_value='',
+        description='Namespace for robot nodes'
+    )
+    module_package_arg = DeclareLaunchArgument(
+        'module_package',
+        default_value='',
+        description='Module package for condition and behavior nodes'
+    )
+    fsm_config_arg = DeclareLaunchArgument(
+        'fsm_config',
+        default_value='',
+        description='Path to FSM config file'
+    )
+    bt_config_arg = DeclareLaunchArgument(
+        'bt_config',
+        default_value='',
+        description='BT config string for controller_bt_node'
+    )
+    controller_type_arg = DeclareLaunchArgument(
+        'controller_type',
+        default_value='',
+        description='Controller type to start: "fsm" or "bt"'
+    )
+    ref_model_arg = DeclareLaunchArgument(
+        'ref_model',
+        default_value='',
+        description='Reference model node executable'
+    )
+
     return LaunchDescription([
         config_file_arg,
+        namespace_arg,
+        module_package_arg,
         fsm_config_arg,
         bt_config_arg,
         controller_type_arg,
-        namespace_arg,
-        module_package_arg,
         ref_model_arg,
-        condition_node,
-        behavior_node,
-        ref_model_node,
-        controller_startup_event,
+        OpaqueFunction(function=_build_nodes),
     ])
