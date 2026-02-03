@@ -227,18 +227,6 @@ class ControllerBTNode(Node):
                 comp = py_trees.decorators.Inverter(child)
                 self.get_logger().info(f'Built Decorator node {nid} wrapping child {children[0] if children else "Dummy"}')
                 return comp
-            if ntype == 7:
-                # Parallel: ticks all children concurrently, but restrict to conditions only
-                # Check that no children are behaviors (type 5)
-                for c in children:
-                    c_spec = nodes.get(c, {})
-                    if c_spec.get('type') == 5:
-                        raise ValueError(f"Parallel node {nid} cannot contain behavior nodes (child {c} is type 5). Parallel is restricted to conditions and composites.")
-                comp = py_trees.composites.Parallel(f'Parallel_{nid}')
-                for c in children:
-                    comp.add_child(build_node(c))
-                self.get_logger().info(f'Built Parallel node {nid} with children {children}')
-                return comp
             if ntype == 5:
                 # Action -> behavior
                 # expect param 'a' to contain behavior id
