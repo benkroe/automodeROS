@@ -1,0 +1,9 @@
+source;share/basic_modules/hook/pythonpath.ps1
+source;share/basic_modules/hook/pythonpath.dsv
+source;share/basic_modules/hook/pythonpath.sh
+source;share/basic_modules/hook/ament_prefix_path.ps1
+source;share/basic_modules/hook/ament_prefix_path.dsv
+source;share/basic_modules/hook/ament_prefix_path.sh
+source;../../build/basic_modules/share/basic_modules/hook/pythonpath_develop.ps1
+source;../../build/basic_modules/share/basic_modules/hook/pythonpath_develop.dsv
+source;../../build/basic_modules/share/basic_modules/hook/pythonpath_develop.sh

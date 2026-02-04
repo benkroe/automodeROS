@@ -1,0 +1,1 @@
+/home/ben/ros2_ws/automodeROS/build/automode_interfaces/rosidl_generator_c/automode_interfaces/msg/detail/robot_state__struct.h

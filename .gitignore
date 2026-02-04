@@ -1,8 +1,8 @@
-# ROS 2 build artifacts
-build/
-install/
-log/
-data/
+# # ROS 2 build artifacts
+# build/  
+# install/  
+# log/
+/data
 
 # Python
 __pycache__/
