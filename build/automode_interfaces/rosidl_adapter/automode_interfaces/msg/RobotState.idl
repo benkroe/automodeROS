@@ -1,0 +1,57 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from automode_interfaces/msg/RobotState.msg
+// generated code does not contain a copyright notice
+
+#include "builtin_interfaces/msg/Time.idl"
+
+module automode_interfaces {
+  module msg {
+    @verbatim (language="comment", text=
+      "Robot state information for swarm robotics")
+    struct RobotState {
+      @verbatim (language="comment", text=
+        "Unique identifier for the robot in the swarm")
+      uint32 robot_id;
+
+      @verbatim (language="comment", text=
+        "Timestamp when the message was generated")
+      builtin_interfaces::msg::Time stamp;
+
+      @verbatim (language="comment", text=
+        "Detected floor color (\"black\", \"white\", \"gray\", etc.)")
+      string floor_color;
+
+      @verbatim (language="comment", text=
+        "Strength of the detected obstacle vector")
+      double proximity_magnitude;
+
+      @verbatim (language="comment", text=
+        "Direction of the strongest proximity signal -- ROS2 convention - rad (-right, +left)")
+      double proximity_angle;
+
+      @verbatim (language="comment", text=
+        "Magnitude of detected ambient light")
+      double light_magnitude;
+
+      @verbatim (language="comment", text=
+        "Direction of the light source -- ROS2 convention - rad (-right, +left)")
+      double light_angle;
+
+      @verbatim (language="comment", text=
+        "Magnitude of detected target (normalized area or confidence)")
+      double target_magnitude;
+
+      @verbatim (language="comment", text=
+        "Horizontal position of the target (-1 left, 0 center, 1 right)")
+      double target_position;
+
+      @verbatim (language="comment", text=
+        "Direction toward neighbouring robots -- ROS2 convention - rad (-right, +left)")
+      double attraction_angle;
+
+      @verbatim (language="comment", text=
+        "Number of neighbouring robots detected")
+      uint32 neighbour_count;
+    };
+  };
+};

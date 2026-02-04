@@ -1,0 +1,30 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from automode_interfaces/action/Condition.action
+// generated code does not contain a copyright notice
+
+
+module automode_interfaces {
+  module action {
+    @verbatim (language="comment", text=
+      "Goal")
+    struct Condition_Goal {
+      string condition_name;
+
+      sequence<string> params;
+    };
+    @verbatim (language="comment", text=
+      "Result")
+    struct Condition_Result {
+      boolean success;
+
+      string message;
+    };
+    @verbatim (language="comment", text=
+      "Feedback")
+    struct Condition_Feedback {
+      boolean condition_met;
+
+      string current_status;
+    };
+  };
+};

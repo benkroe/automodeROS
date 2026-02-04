@@ -1,0 +1,4 @@
+# generated from rosidl_cmake/cmake/rosidl_cmake-extras.cmake.in
+
+set(automode_interfaces_IDL_FILES "action/Behavior.idl;action/Condition.idl;msg/RobotState.idl")
+set(automode_interfaces_INTERFACE_FILES "action/Behavior.action;action/Condition.action;msg/RobotState.msg")

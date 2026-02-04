@@ -1,0 +1,8 @@
+{
+  "package_name": "automode_interfaces",
+  "non_idl_tuples": [
+    "/home/ben/ros2_ws/automodeROS/src/automode_interfaces:action/Behavior.action",
+    "/home/ben/ros2_ws/automodeROS/src/automode_interfaces:action/Condition.action",
+    "/home/ben/ros2_ws/automodeROS/src/automode_interfaces:msg/RobotState.msg"
+  ]
+}

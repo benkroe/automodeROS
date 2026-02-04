@@ -1,0 +1,16 @@
+{
+  "package_name": "automode_interfaces",
+  "output_dir": "/home/ben/ros2_ws/automodeROS/build/automode_interfaces/rosidl_generator_type_description/automode_interfaces",
+  "idl_tuples": [
+    "/home/ben/ros2_ws/automodeROS/build/automode_interfaces/rosidl_adapter/automode_interfaces:action/Behavior.idl",
+    "/home/ben/ros2_ws/automodeROS/build/automode_interfaces/rosidl_adapter/automode_interfaces:action/Condition.idl",
+    "/home/ben/ros2_ws/automodeROS/build/automode_interfaces/rosidl_adapter/automode_interfaces:msg/RobotState.idl"
+  ],
+  "include_paths": [
+    "std_msgs:/opt/ros/jazzy/share/std_msgs",
+    "builtin_interfaces:/opt/ros/jazzy/share/builtin_interfaces",
+    "action_msgs:/opt/ros/jazzy/share/action_msgs",
+    "unique_identifier_msgs:/opt/ros/jazzy/share/unique_identifier_msgs",
+    "service_msgs:/opt/ros/jazzy/share/service_msgs"
+  ]
+}

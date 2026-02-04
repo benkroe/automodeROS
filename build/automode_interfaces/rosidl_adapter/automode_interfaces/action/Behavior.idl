@@ -1,0 +1,28 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from automode_interfaces/action/Behavior.action
+// generated code does not contain a copyright notice
+
+
+module automode_interfaces {
+  module action {
+    @verbatim (language="comment", text=
+      "Goal")
+    struct Behavior_Goal {
+      string behavior_name;
+
+      sequence<string> params;
+    };
+    @verbatim (language="comment", text=
+      "Result")
+    struct Behavior_Result {
+      boolean success;
+
+      string message;
+    };
+    @verbatim (language="comment", text=
+      "Feedback")
+    struct Behavior_Feedback {
+      uint8 structure_needs_at_least_one_member;
+    };
+  };
+};

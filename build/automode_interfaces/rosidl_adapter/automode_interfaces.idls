@@ -1,0 +1,3 @@
+/home/ben/ros2_ws/automodeROS/build/automode_interfaces/rosidl_adapter/automode_interfaces:action/Behavior.idl
+/home/ben/ros2_ws/automodeROS/build/automode_interfaces/rosidl_adapter/automode_interfaces:action/Condition.idl
+/home/ben/ros2_ws/automodeROS/build/automode_interfaces/rosidl_adapter/automode_interfaces:msg/RobotState.idl

@@ -1,0 +1,7 @@
+{
+  "package_name": "vicon_receiver",
+  "non_idl_tuples": [
+    "/home/ben/ros2_ws/automodeROS/src/vicon_receiver:msg/Position.msg",
+    "/home/ben/ros2_ws/automodeROS/src/vicon_receiver:msg/PositionList.msg"
+  ]
+}

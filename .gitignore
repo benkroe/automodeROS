@@ -2,6 +2,7 @@
 # build/  
 # install/  
 # log/
+# build/
 /data
 
 # Python
@@ -17,7 +18,7 @@ env.bak/
 venv.bak/
 *.egg-info/
 dist/
-build/
+
 .eggs/
 
 # C++
