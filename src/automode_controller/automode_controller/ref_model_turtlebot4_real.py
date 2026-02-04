@@ -145,8 +145,8 @@ class TurtleBot4ReferenceNode(Node):
 
 
         self._light_sensor_angle_map = {
-            'light_sensor_front_left': math.radians(-45.0),
-            'light_sensor_front_right': math.radians(45.0),
+            'light_sensor_front_left': math.radians(45.0),
+            'light_sensor_front_right': math.radians(-45.0),
             'light_sensor_back': math.radians(180.0)
         }
 
