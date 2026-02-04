@@ -13,6 +13,7 @@ setup(
         # Launch files
         ('share/' + package_name + '/launch', [
             'launch/automode_tb4.launch.py',
+            'launch/automode_tb4_real.launch.py',
             'launch/config_turt_gz_foraging.yaml',
             'launch/config_foraging.yaml',
             'launch/config_aggregation.yaml',
