@@ -35,16 +35,18 @@ NEIGHBOUR_DETECTION_RANGE=1000
 class Arena:
     def __init__(self):
         # Arena edge points (approximate polygon)
-        self.arena_points = [
-            (663, 1596),    # door - right
-            (-1368, 2036),  # door - left
-            (-1569, -418),  # window - left
-            (470, -124)     # window - right
-        ]
+        # self.arena_points = [
+        #     (663, 1596),    # door - right
+        #     (-1368, 2036),  # door - left
+        #     (-1569, -418),  # window - left
+        #     (470, -124)     # window - right
+        # ]
         # Define color regions (example: white, black, gray)
         # For simplicity, use bounding boxes for each region
-        self.white_box = (0, 600, 0, 1600)    # Example: right upper area
-        self.black_box = (-1600, -1300, -500, 2100)  # Example: left side
+        self.white_box = (-700, 600, 1700, 2100)    # Example: right upper area, y over 1700
+        self.black_box = (-1600, -1300, -500, 2100)  # Example: left sid
+        self.black_spot = (-200, -100, -700, -600)   # Black spot around x=-139, y=-682
+        self.black_spot2 = (1150, 1250, -500, -400)  # Black spot around x=1207, y=-473
         # The rest is gray
 
     def get_color(self, x, y):
@@ -54,6 +56,14 @@ class Arena:
             return "white"
         # Black region (example: left side)
         xb_min, xb_max, yb_min, yb_max = self.black_box
+        if xb_min <= x <= xb_max and yb_min <= y <= yb_max:
+            return "black"
+        # Black spot
+        xb_min, xb_max, yb_min, yb_max = self.black_spot
+        if xb_min <= x <= xb_max and yb_min <= y <= yb_max:
+            return "black"
+        # Black spot 2
+        xb_min, xb_max, yb_min, yb_max = self.black_spot2
         if xb_min <= x <= xb_max and yb_min <= y <= yb_max:
             return "black"
         # Otherwise gray
@@ -173,7 +183,9 @@ class TurtleBot4ReferenceNode(Node):
             self.robots[pos.subject_name] = (x, y, theta)
             # If this is our robot, update floor color
             if pos.subject_name == SUBJECT_NAME:  # Or use self.subject_name if configurable
-                self.latest_floor_color = self.arena.get_color(x, y)
+                color = self.arena.get_color(x, y)
+                self.latest_floor_color = color
+
 
     def _ir_intensities_cb(self, msg: IrIntensityVector):
         self._publish_robot_state()
@@ -318,7 +330,7 @@ class TurtleBot4ReferenceNode(Node):
         stamped = TwistStamped()
         stamped.header.stamp = self.get_clock().now().to_msg()
         stamped.twist = twist
-        #self._cmd_vel_pub.publish(stamped)
+        self._cmd_vel_pub.publish(stamped)
 
 
         self.latest_wheels_speed = [left, right]

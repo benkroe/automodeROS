@@ -20,7 +20,7 @@ setup(
             'launch/config_dispersion.yaml',
         ]),
     ],
-    install_requires=['setuptools'],
+    install_requires=['setuptools', 'pytrees', 'numpy'],
     zip_safe=True,
     maintainer='ben',
     maintainer_email='ben.kr@live.com',
