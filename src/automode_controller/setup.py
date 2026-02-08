@@ -12,6 +12,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         # Launch files
         ('share/' + package_name + '/launch', [
+            'launch/automode_simulator.launch.py',
             'launch/automode_tb4.launch.py',
             'launch/automode_tb4_real.launch.py',
             'launch/config_turt_gz_foraging.yaml',

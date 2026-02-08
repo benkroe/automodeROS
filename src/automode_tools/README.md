@@ -10,6 +10,53 @@ AutoMoDe-Tools contains utilities for:
 - Evaluating swarm performance and collecting data
 - Visualizing and scoring mission outcomes
 
+## Simulator
+
+The simulator provides a physics-based simulation of 4 TurtleBot4 robots in a 4x4m arena, including sensor simulation (proximity, light, floor color, neighbors) and visualization. It acts as a demonstrator, that with the implementation, for training or testing, not always a complete simulator is needed and that small simulators for individual parts may enable faster training. 
+
+### simulator.py
+Standalone simulation script that runs the physics engine and publishes sensor data.
+
+**Usage:**
+```bash
+cd src/automode_tools/automode_tools
+python3 simulator.py
+```
+
+**Features:**
+- Differential drive kinematics
+- Wall collision detection
+- Sensor simulation: proximity (front-facing, 25cm range), light, floor color, neighbor detection
+- Publishes RobotState messages, clock, and RViz markers
+
+### automode_simulator.launch.py
+Launch file that starts the AutoMoDe controller nodes with simulation time enabled.
+
+**Usage:**
+```bash
+ros2 launch automode_tools automode_simulator.launch.py robot_namespace:=tb1
+```
+
+**What it launches:**
+- Controller nodes (BT/FSM parser, behavior/condition action servers)
+- RViz with simulation time enabled for visualization
+- Uses `use_sim_time=true` for accelerated or real-time simulation
+
+**Purpose:** Provides a complete simulation environment for testing AutoMoDe controllers without physical robots.
+
+### Starting RViz Separately
+If not using the launch file, start RViz with simulation time:
+
+```bash
+rviz2
+```
+
+In RViz:
+- Set Fixed Frame to "world"
+- Add a Marker display and set Topic to "/visualization_marker_array"
+
+This will show the arena, robots, and light source.
+
 ## Test Nodes
 
 ### behavior_test_node.py
