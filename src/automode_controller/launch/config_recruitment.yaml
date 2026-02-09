@@ -1,0 +1,18 @@
+# Launch-level defaults for automode_tb4.launch.py - Recruitment Mission
+robot_namespace: ""
+module_package: "basic_modules"
+
+# Which controller to start: 'fsm' or 'bt'
+controller_type: "fsm"
+
+# FSM config - Single state: recruitment with optimized params for clustering
+# Parameters: sigma (0.1-1.0: Gaussian spread for recruitment curve width),
+# mu (1.0-5.0: optimal neighbor count for peak recruitment),
+# qmax_r (0.0-1.0: max recruitment probability),
+# qmax_l (0.0-0.01: max leaving probability),
+# kl (0.1-2.0: social stabilization strength),
+# rwm (10-200: random walk modulation duration)
+fsm_config: "--fsm-config --nstates 1 --s0 9 --sigma0 0.3 --mu0 1.0 --qmax_r0 0.8 --qmax_l0 0.001 --kl0 1.0 --rwm0 100 --n0 0"
+
+ref_model: "ref_model_turtlebot4_gz_nav"
+

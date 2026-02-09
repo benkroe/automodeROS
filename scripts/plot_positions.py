@@ -4,6 +4,9 @@ import csv
 import matplotlib.pyplot as plt
 import os
 
+# Increase font size for better readability
+plt.rcParams.update({'font.size': 14})
+
 # Path to the CSV file
 csv_file_path = '/home/ben/ros2_ws/automodeROS/data/foraging_fsm_01.csv'
 
@@ -45,8 +48,8 @@ for robot, color in zip(['tb1', 'tb2', 'tb3', 'tb4'], colors):
     if x_vals:
         plt.plot(x_vals, y_vals, color=color, marker='o', markersize=2, label=f'{robot} trajectory')
         # Mark start and end
-        plt.scatter(x_vals[0], y_vals[0], color=color, marker='^', s=100, label=f'{robot} start')
-        plt.scatter(x_vals[-1], y_vals[-1], color=color, marker='v', s=100, label=f'{robot} end')
+        # plt.scatter(x_vals[0], y_vals[0], color=color, marker='^', s=100, label=f'{robot} start')
+        # plt.scatter(x_vals[-1], y_vals[-1], color=color, marker='v', s=100, label=f'{robot} end')
 
 plt.xlabel('X Position')
 plt.ylabel('Y Position')

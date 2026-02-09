@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+# Increase font size for better readability
+plt.rcParams.update({'font.size': 14})
+
 # Path to the CSV file
 csv_file_path = '/home/ben/ros2_ws/automodeROS/data/foraging_fsm_01.csv'
 

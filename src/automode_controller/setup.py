@@ -20,6 +20,7 @@ setup(
             'launch/config_aggregation.yaml',
             'launch/config_flocking.yaml',
             'launch/config_dispersion.yaml',
+            'launch/config_recruitment.yaml',
         ]),
     ],
     install_requires=['setuptools', 'pytrees', 'numpy'],

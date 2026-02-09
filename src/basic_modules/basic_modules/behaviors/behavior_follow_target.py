@@ -20,7 +20,7 @@ class Behavior(BehaviorBase):
         self._base_speed = 0.7        # nominal forward speed baseline
         self._min_speed = 0.0
         self._max_speed = 1.0
-        self._obstacle_threshold = 3.0  # if proximity magnitude above -> stop (reuse existing convention)
+        self._obstacle_threshold = 0.8  # if proximity magnitude above -> stop (normalized 0-1)
 
     @staticmethod
     def get_description() -> Dict[str, Any]:

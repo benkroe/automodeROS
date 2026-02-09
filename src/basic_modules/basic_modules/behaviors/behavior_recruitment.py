@@ -41,8 +41,12 @@ class Behavior(BehaviorBase):
         self._forward_speed = 0.3
         self._turn_speed = 1.0
         self._approach_turn_speed = 0.5  # slower turning when approaching target
-        self._obstacle_threshold = 9.99
+        self._obstacle_threshold = 0.1   # if proximity magnitude above -> turn (normalized 0-1)
         self._leaving_speed = -0.5     # negative = backward/away
+        
+        # Metrics logging
+        self._last_log_time = 0.0
+        self._log_interval = 5.0  # Log metrics every 5 seconds
 
     @staticmethod
     def get_description() -> Dict[str, Any]:
@@ -145,6 +149,11 @@ class Behavior(BehaviorBase):
             neighbour_count = self._last_robot_state.neighbour_count
             target_visible = target_magnitude > 0.0  # target visible if magnitude > 0
 
+        # Periodic metrics logging for stabilization/balancing analysis
+        if current_time - self._last_log_time >= self._log_interval:
+            self._node.get_logger().info(f"[Recruitment Metrics] STATE: {self._state}, n={neighbour_count}, time={current_time:.2f}")
+            self._last_log_time = current_time
+
         # FSM transitions
         if self._state == "free":
             # FREE → RECRUITED: recruit if target is close enough
@@ -154,14 +163,16 @@ class Behavior(BehaviorBase):
                 if random.random() < p_join:
                     self._state = "recruited"
                     self._node.get_logger().info(
-                        f"[Recruitment] FREE → RECRUITED: target close (mag={target_magnitude:.3f}), n={neighbour_count}, p_join={p_join:.3f}"
+                        f"[Recruitment] FREE -> RECRUITED: target close (mag={target_magnitude:.3f}), n={neighbour_count}, p_join={p_join:.3f}"
                     )
+                    # Log for stabilization/redistribution metrics
+                    self._node.get_logger().info(f"[Recruitment Metrics] JOIN: n={neighbour_count}, time={current_time:.2f}")
         
         elif self._state == "recruited":
             # RECRUITED → LEAVING: leave based on density
             if not target_visible:
                 self._state = "free"
-                self._node.get_logger().info(f"[Recruitment] RECRUITED → FREE: target lost")
+                self._node.get_logger().info(f"[Recruitment] RECRUITED -> FREE: target lost")
             else:
                 # Compute leaving probability (exponentially suppressed by neighbors)
                 p_leave = self._exponential_leaving(neighbour_count)
@@ -169,14 +180,16 @@ class Behavior(BehaviorBase):
                     self._state = "leaving"
                     self._leaving_turn_time = current_time + 1.5  # Turn for 1.5 seconds (approx 180 degrees)
                     self._node.get_logger().info(
-                        f"[Recruitment] RECRUITED → LEAVING: n={neighbour_count}, p_leave={p_leave:.3f}"
+                        f"[Recruitment] RECRUITED -> LEAVING: n={neighbour_count}, p_leave={p_leave:.3f}"
                     )
+                    # Log for balancing/redistribution metrics
+                    self._node.get_logger().info(f"[Recruitment Metrics] LEAVE: n={neighbour_count}, time={current_time:.2f}")
         
         elif self._state == "leaving":
             # LEAVING → FREE: return to exploring when target no longer visible
             if not target_visible:
                 self._state = "free"
-                self._node.get_logger().info(f"[Recruitment] LEAVING → FREE: target no longer visible")
+                self._node.get_logger().info(f"[Recruitment] LEAVING -> FREE: target no longer visible")
 
         # Execute behavior based on current state
         msg = self._Float32MultiArray()
@@ -205,7 +218,7 @@ class Behavior(BehaviorBase):
                 if self._turning_time > current_time:
                     msg.data = self._last_turn_direction
                     self._pub.publish(msg)
-                elif proximity_magnitude < self._obstacle_threshold and proximity_magnitude != 0.0:
+                elif proximity_magnitude > self._obstacle_threshold and proximity_magnitude != 0.0:
                     # Obstacle detected, turn
                     if proximity_angle < 0:
                         turn_direction = [self._turn_speed, -self._turn_speed]  # Turn left
@@ -250,3 +263,4 @@ class Behavior(BehaviorBase):
         self._pub = None
         self._sub = None
         self._Float32MultiArray = None
+        self._last_log_time = current_time

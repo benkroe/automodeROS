@@ -17,6 +17,7 @@ setup(
             'launch/start_aggregation.launch.py',
             'launch/start_flocking.launch.py',
             'launch/start_dispersion.launch.py',
+            'launch/start_recruitment.launch.py',
         ]),
     ],
     install_requires=['setuptools'],
