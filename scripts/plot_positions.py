@@ -8,7 +8,7 @@ import os
 plt.rcParams.update({'font.size': 14})
 
 # Path to the CSV file
-csv_file_path = '/home/ben/ros2_ws/automodeROS/data/foraging_fsm_01.csv'
+csv_file_path = '/home/ben/ros2_ws/automodeROS/data/recruitment/positions_log.csv'
 
 # Check if file exists
 if not os.path.exists(csv_file_path):
@@ -59,7 +59,7 @@ plt.grid(True)
 plt.axis('equal')  # Equal aspect ratio
 
 # Save the plot
-output_path = '/home/ben/ros2_ws/automodeROS/data/robot_trajectories.png'
+output_path = '/home/ben/ros2_ws/automodeROS/data/recruitment/robot_trajectories.png'
 plt.savefig(output_path)
 print(f"Plot saved to {output_path}")
 

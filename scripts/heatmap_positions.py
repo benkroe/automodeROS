@@ -9,7 +9,7 @@ import os
 plt.rcParams.update({'font.size': 14})
 
 # Path to the CSV file
-csv_file_path = '/home/ben/ros2_ws/automodeROS/data/foraging_fsm_01.csv'
+csv_file_path = '/home/ben/ros2_ws/automodeROS/data/recruitment/positions_log.csv'
 
 # Check if file exists
 if not os.path.exists(csv_file_path):
@@ -54,7 +54,7 @@ plt.title('Heat Map of Robot Positions')
 plt.grid(True, alpha=0.3)
 
 # Save the plot
-output_path = '/home/ben/ros2_ws/automodeROS/data/robot_heatmap.png'
+output_path = '/home/ben/ros2_ws/automodeROS/data/recruitment/robot_heatmap.png'
 plt.savefig(output_path)
 print(f"Heat map saved to {output_path}")
 

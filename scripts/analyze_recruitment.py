@@ -66,6 +66,19 @@ def analyze_recruitment_log(log_file):
     for robot in data:
         data[robot].sort(key=lambda x: x['time'])
 
+    # Add leave events for transitions from recruited to free
+    for robot in data:
+        prev_state = None
+        for d in data[robot]:
+            if prev_state == 'recruited' and d['state'] == 'free':
+                events.append({
+                    'type': 'leave',
+                    'robot': robot,
+                    'time': d['time'],
+                    'n': d['n']
+                })
+            prev_state = d['state']
+
     return data, events
 
 def compute_metrics(data, events):
