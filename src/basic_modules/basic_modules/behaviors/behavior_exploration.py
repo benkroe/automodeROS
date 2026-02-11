@@ -17,7 +17,7 @@ class Behavior(BehaviorBase):
         self._Float32MultiArray = None
         self._turning_time = 0
 
-        self._obstacle_threshold = 0.8  # Proximity magnitude threshold for obstacle detection (normalized 0-1)
+        self._obstacle_threshold = 0.2  # Proximity magnitude threshold for obstacle detection (normalized 0-1)
         self._forward_speed = 0.3       # Forward movement speed
         self._turn_speed = 1.0         # Turning speed (will calibrate later)
 

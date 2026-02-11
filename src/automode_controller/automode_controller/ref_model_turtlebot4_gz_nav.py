@@ -20,15 +20,15 @@ ARUCO_DICT = cv2.aruco.DICT_4X4_50
 ARUCO_MARKER_ID = 1
 ARUCO_MARKER_SIZE = 0.35  # meters (physical size)
 
-# Camera parameters (estimated for OakD RGB camera)
+# Camera parameters 
 # Approximate values for OakD-Lite RGB camera
 CAMERA_FOCAL_LENGTH = 450.0  # pixels (approximate for 640x480 resolution)
 CAMERA_CX = 320.0  # principal point x
 CAMERA_CY = 240.0  # principal point y
 
 # Distance normalization for magnitude calculation
-MIN_DETECTION_DISTANCE = 0.3  # meters (minimum distance to normalize)
-MAX_DETECTION_DISTANCE = 5.0  # meters (maximum distance to normalize)
+MIN_DETECTION_DISTANCE = 0.2  
+MAX_DETECTION_DISTANCE = 15.0  
 
 ROBOT_ID = 1  # Default robot ID (change if used)
 

@@ -80,6 +80,7 @@ def include_all(context, *args, **kwargs):
         executable='position_collector',
         name='position_collector',
         output='screen',
+        parameters=[{'use_sim_time': True}],
     )
     includes.append(position_collector_node)
 
