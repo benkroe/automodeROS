@@ -142,7 +142,7 @@ cd ..
 ```bash
 git clone https://github.com/benkroe/automodeROS.git
 cd automodeROS
-pip install -r requirements.txt
+pip install -r requirements.txt        # simulation / development dependencies
 colcon build --symlink-install
 source install/setup.bash
 ```
@@ -164,7 +164,11 @@ The entire software stack runs **on each TurtleBot4's on-board computer**. The c
 
 ### Prerequisites
 
-- The full repository is cloned and built on each robot (same steps as the installation above).
+- The full repository is cloned and built on each robot (same steps as the installation above). Install the real-robot Python dependencies instead of the simulation ones:
+  ```bash
+  pip install -r requirements_real.txt
+  ```
+  This includes the Adafruit VEML7700 I2C library and other hardware drivers needed for the physical light sensors.
 - The Vicon system is running and publishing position data. The reference model (`ref_model_turtlebot4_real`) uses Vicon positions to determine the robot's location and — since the real TurtleBot4 has no ground colour sensor — to infer the floor colour from its position in the arena.
 
 ### Starting the controller (per robot, via SSH)

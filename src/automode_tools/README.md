@@ -89,11 +89,11 @@ In RViz2:
 
 The simulator publishes markers for the arena boundary, the robots, the light source, and the floor colour patches. Robot positions update in real time as the controller drives them.
 
-### Editor integration
+### Editor integration (Automode-Vizualiser)
 
 | Executable | Description |
 |------------|-------------|
-| `categories_creator` | Queries the `behaviors/list_srv` and `conditions/list_srv` services and generates `nodeCategories.json` and `edgeCategories.json` files for the [AutoMoDe-Editor](https://github.com/demiurge-project/AutoMoDe-Editor). Run this after adding new modules to `basic_modules` to keep the editor in sync. **The `behavior_node` and `condition_node` must already be running with the updated module package loaded** before executing this tool, as it relies on their list services to discover the available modules. |
+| `categories_creator` | Queries the `behaviors/list_srv` and `conditions/list_srv` services and generates `nodeCategories.json` and `edgeCategories.json` files for the [AutoMoDe-Editor](https://github.com/demiurge-project/AutoMoDe-Editor) by Jonas Kuckling. Run this after adding new modules to `basic_modules` to keep the editor in sync. **The `behavior_node` and `condition_node` must already be running with the updated module package loaded** before executing this tool, as it relies on their list services to discover the available modules. |
 
 ### Real-robot utilities
 
