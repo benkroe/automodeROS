@@ -1,1 +1,22 @@
-irace/parameters.txt
+# irace parameter file for foraging FSM optimisation
+#
+# Behavior types (from fsm_rules.yaml):
+#   0=exploration  1=stop  2=phototaxis  3=anti-phototaxis  4=attraction  5=repulsion
+#
+# Condition types:
+#   0=floor_color  1=white_floor  2=black_floor
+#   3=neighbour_count  4=inverted_neighbours_count  5=fixed_probability
+#
+# Target offset: 0 or 1 → next-state index when condition is true (3-state FSM)
+
+s0_behavior  ""  c  (0, 1, 2, 3, 4, 5)
+s1_behavior  ""  c  (0, 1, 2, 3, 4, 5)
+s2_behavior  ""  c  (0, 1, 2, 3, 4, 5)
+
+c0_type      ""  c  (0, 1, 2, 3, 4, 5)
+c1_type      ""  c  (0, 1, 2, 3, 4, 5)
+c2_type      ""  c  (0, 1, 2, 3, 4, 5)
+
+t0_offset    ""  c  (0, 1)
+t1_offset    ""  c  (0, 1)
+t2_offset    ""  c  (0, 1)

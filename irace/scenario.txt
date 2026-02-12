@@ -1,6 +1,6 @@
 # irace scenario file for foraging optimization
 # Target runner: the script that evaluates configurations
-targetRunner = "/home/ben/ros2_ws/automodeROS/target-runner"
+targetRunner = "/home/ben/ros2_ws/automodeROS/irace/target-runner"
 
 # Parameters to tune
 parameterFile = "/home/ben/ros2_ws/automodeROS/irace/parameters.txt"
