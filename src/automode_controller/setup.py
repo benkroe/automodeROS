@@ -27,8 +27,8 @@ setup(
     zip_safe=True,
     maintainer='ben',
     maintainer_email='ben.kr@live.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='AutoMoDe controller nodes for FSM and Behavior Tree-based swarm robotics on TurtleBot4',
+    license='MIT',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [

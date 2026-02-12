@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
 
-# TODO:
-#   1. All methods for action client with multiple action requests (possible -should be)
-#   2. Datastructure for the FSM --> other file finished
-#   3. Creator of the FSM --> also other field not yet done but simple example
-#   4. Start and stop of actions
-#   5. Switch of states
-
-
 from action_msgs.msg import GoalStatus
 from automode_interfaces.action import Condition
 from automode_interfaces.action import Behavior

@@ -8,6 +8,10 @@ class GroupEvaluator(Node):
     def __init__(self):
         super().__init__('group_evaluator')
 
+        # Robot namespace to monitor — override via 'robot_namespace' ROS param
+        self.declare_parameter('robot_namespace', 'tb1')
+        robot_ns = self.get_parameter('robot_namespace').get_parameter_value().string_value
+
         # Subscribe to tb1 robotState
         self._last_state = None
         self._in_group = False
@@ -15,7 +19,7 @@ class GroupEvaluator(Node):
 
         self._sub = self.create_subscription(
             RobotState,
-            '/tb1/robotState',
+            f'/{robot_ns}/robotState',
             self._robot_state_cb,
             10
         )

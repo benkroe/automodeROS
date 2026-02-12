@@ -15,7 +15,6 @@ import math
 import numpy as np
 
 ROBOT_ID = 1  # Default robot ID (change if used)
-SUBJECT_NAME = f"turtlebot4_11"
 
 PROXIMITY_MAX_RANGE = 2.0  # meters (reduced for IR realism)
 
@@ -74,6 +73,10 @@ class Arena:
 class TurtleBot4ReferenceNode(Node):
     def __init__(self):
         super().__init__('turtlebot4_reference_node_gz')
+
+        # Identify which physical robot this node is running on (set via 'subject_name' ROS param)
+        self.declare_parameter('subject_name', 'turtlebot4_11')
+        self.subject_name = self.get_parameter('subject_name').get_parameter_value().string_value
 
         self.arena = Arena()
         self.robots = {} 
@@ -182,7 +185,7 @@ class TurtleBot4ReferenceNode(Node):
             theta = pos.z_rot_euler  # Or use quaternion if you prefer
             self.robots[pos.subject_name] = (x, y, theta)
             # If this is our robot, update floor color
-            if pos.subject_name == SUBJECT_NAME:  # Or use self.subject_name if configurable
+            if pos.subject_name == self.subject_name:
                 color = self.arena.get_color(x, y)
                 self.latest_floor_color = color
 
@@ -247,7 +250,7 @@ class TurtleBot4ReferenceNode(Node):
         return mag, angle_rad
 
     def compute_neighbours(self):
-        my_pose = self.robots.get(SUBJECT_NAME, None)
+        my_pose = self.robots.get(self.subject_name, None)
         if my_pose is None:
             return 0, 0.0
         my_x, my_y, my_theta = my_pose
@@ -255,7 +258,7 @@ class TurtleBot4ReferenceNode(Node):
         sum_dx = 0.0
         sum_dy = 0.0
         for name, (x, y, theta) in self.robots.items():
-            if name == SUBJECT_NAME:
+            if name == self.subject_name:
                 continue
             dx = x - my_x
             dy = y - my_y

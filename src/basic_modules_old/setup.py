@@ -14,9 +14,9 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='ben',
-    maintainer_email='ben@example.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer_email='ben.kroener@uni-kn.de',
+    description='Legacy behavior and condition modules, superseded by basic_modules',
+    license='MIT',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [

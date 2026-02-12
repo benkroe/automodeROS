@@ -14,9 +14,9 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='ben',
-    maintainer_email='ben@example.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer_email='ben.kroener@uni-kn.de',
+    description='Basic behavior and condition modules for AutoMoDe FSM/BT configurations',
+    license='MIT',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [

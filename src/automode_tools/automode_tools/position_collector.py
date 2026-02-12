@@ -23,8 +23,9 @@ class PositionCollectorNode(Node):
         # Timer to collect and write every 0.1s
         self.create_timer(0.1, self._collect_positions)
 
-        # Open CSV file
-        data_dir = '/home/ben/ros2_ws/automodeROS/data'
+        # Open CSV file — default to a 'data' folder next to the package; override via ROS param
+        self.declare_parameter('data_dir', os.path.join(os.path.expanduser('~'), 'ros2_ws', 'automodeROS', 'data'))
+        data_dir = self.get_parameter('data_dir').get_parameter_value().string_value
         os.makedirs(data_dir, exist_ok=True)
         self.csv_file_path = os.path.join(data_dir, 'positions_log.csv')
         self.csv_file = open(self.csv_file_path, 'w', newline='')

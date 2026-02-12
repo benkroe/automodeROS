@@ -24,8 +24,8 @@ setup(
     zip_safe=True,
     maintainer='ben',
     maintainer_email='ben.kroener@uni-kn.de',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='Tools, scorers, simulator, and testing utilities for AutoMoDe on TurtleBot4',
+    license='MIT',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [

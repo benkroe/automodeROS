@@ -1,6 +1,6 @@
 # Using Modules in Automode FSM Configurations
 
-FSM configuration files (see [`fsm_configs.txt`](../scripe/fsm_configs.txt)) reference behavior and condition modules by their type IDs and allow passing parameters. The Automode controller dynamically loads the correct module based on the type mapping and injects parameters as specified.
+FSM configuration files reference behavior and condition modules by their type IDs and allow passing parameters. The Automode controller dynamically loads the correct module based on the type mapping and injects parameters as specified.
 
 ## Example FSM Config Snippet
 
@@ -101,4 +101,4 @@ To add new behaviors or conditions:
 - The controller automatically discovers and loads modules at runtime.
 - Parameters in the FSM config are mapped to module parameters by name or position.
 
-See [`fsm_configs.txt`](../scripe/fsm_configs.txt) for example configurations.
+See the `irace/` directory in the repository root for example FSM configurations.

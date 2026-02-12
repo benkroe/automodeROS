@@ -12,7 +12,9 @@ class LightSensorNode(Node):
 
         super().__init__('light_sensor_node')
 
-        self.robot_name = "turtlebot4_11"
+        # Robot name used for topic paths — override via 'robot_name' ROS param
+        self.declare_parameter('robot_name', 'turtlebot4_11')
+        self.robot_name = self.get_parameter('robot_name').get_parameter_value().string_value
 
         self.light_sensors_list = [f'/{self.robot_name}/light_sensor_front_left', f'/{self.robot_name}/light_sensor_front_right', f'/{self.robot_name}/light_sensor_back']
 

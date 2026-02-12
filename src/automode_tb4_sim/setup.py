@@ -27,7 +27,7 @@ setup(
     maintainer='ben',
     maintainer_email='ben.kr@live.com',
     description='Simulation and sensor nodes for TurtleBot4 in Gazebo',
-    license='TODO: License declaration',
+    license='MIT',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
